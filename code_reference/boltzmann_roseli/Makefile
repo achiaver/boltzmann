@@ -1,12 +1,12 @@
 CC=gcc
 
-all: clean simboltz comppat
+all: simboltz CompPatternsEnergies
 
 simboltz:
 	${CC} -g simboltz.c boltz_functs.c check_point_found_patterns.c random.c -o simboltz -lm
 
 
-comppat:
+CompPatternsEnergies:
 	${CC} -g CompPatternsEnergies.c -o CompPatternsEnergies -lm
 
 
