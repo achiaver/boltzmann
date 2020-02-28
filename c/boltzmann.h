@@ -4,19 +4,20 @@
 #include <stddef.h>
 
 struct visible {
-    size_t length;
-    double b[];
+  size_t length;
+  double b[];
 };
 
 struct hidden {
-    double activation;
-    double strength;
-    double kvec[];
+  double activation;
+  double strength;
+  double kvec[];
 };
 
 struct parameters {
-    size_t N;           // Size of Representation layer
-    size_t M;           // Size of Knowledge layer
+  size_t N;           // Size of Visible layer
+  size_t M;           // Size of Hidden layer
+  
 };
 
 #endif /* __BOLTZMANN_H__ */
