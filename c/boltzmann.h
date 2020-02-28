@@ -3,12 +3,12 @@
 
 #include <stddef.h>
 
-struct node {
+struct visible {
     size_t length;
     double b[];
 };
 
-struct katom {
+struct hidden {
     double activation;
     double strength;
     double kvec[];
