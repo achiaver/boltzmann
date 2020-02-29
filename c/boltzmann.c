@@ -5,7 +5,6 @@
 
 int main(int argc, char *argv[])
 {
-
     /* Boltzmann Machine parameters */
     struct parameters params = {
         .N = 3,
