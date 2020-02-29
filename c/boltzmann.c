@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
     double *tmp_input;
     tmp_input = &sample_input;
 
+
     for(size_t j=0; j < data_count; j++) {
         for (size_t i=0; i< params.N; i++) {
             printf("%1.0f ", *tmp_input++);
