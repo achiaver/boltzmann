@@ -9,8 +9,8 @@ struct weights {
 
 struct visible {
     size_t length;
-    double b[];
-    struct weights *vw;
+//    double b[];
+//    struct weights *vw;
 };
 
 struct hidden {
@@ -18,7 +18,7 @@ struct hidden {
     double activation;
     double strength;
     double kvec[];
-    struct weights *hw;
+//    struct weights *hw;
 };
 
 /*
