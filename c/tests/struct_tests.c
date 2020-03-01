@@ -20,7 +20,7 @@ void change_person(struct person_info *person) {
     person->birth_year = 2987;
     strcpy(person->first_name, "Future Artur");
     strcpy(person->last_name, "Grover");
-    strcpy(person->country, "BRf");
+    strcpy(person->country, "BR");
 
     print_person(*person);
 }
