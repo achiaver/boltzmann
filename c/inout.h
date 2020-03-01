@@ -3,6 +3,10 @@
 
 #include <stddef.h>
 
+
+
+
+
 struct weights {
     double w;
 };
