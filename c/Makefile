@@ -1,6 +1,6 @@
 
 all:
-	gcc boltzmann.c -o boltzmann -lm
+	gcc -g boltzmann.c -o boltzmann -lm
 
 clean:
 	rm -rf boltzmann *.o
