@@ -3,50 +3,40 @@
 
 #include <stddef.h>
 
+void print_parameters(struct parameters param) {
+    printf("\n \
+            Number of visible units at visible layer: \t\t\t\t\t %zu \n \
+            Number of hidden units at hidden layer: \t\t\t\t\t %zu \n \
+            Learning rate for weights: \t\t\t\t\t %lf \n \
+            Learning rate for visible units biases: \t\t\t\t\t %lf \n \
+            Learning rate for hidden units biases: \t\t\t\t\t %lf \n \
+            Maximum number of epochs: \t\t\t\t\t %d \n",
+            param.N,
+            param.M,
+            param.epsilonw,
+            param.epsilonvb,
+            param.epsilonhb,
+            param.maxepochs);
+} /* end print_parameters */
 
+void input_parameters(struct parameters *param) {
+    FILE *infile;
+    infile = fopen("in_parameters.dat", "r");
 
+    fscanf(infile, "%*s%zu%*s \
+                    %*s%zu%*s \
+                    %*s%lf%*s \
+                    %*s%lf%*s \
+                    %*s%lf%*s \
+                    %*s%d%*s",
+                    param->N,
+                    param->M,
+                    param->epsilonw,
+                    param->epsilonvb,
+                    param->epsilonhb,
+                    param->maxepochs);
 
-
-struct weights {
-    double w;
-};
-
-struct visible {
-    size_t length;
-    double b[];
-    struct weights *vw;
-};
-
-struct hidden {
-    size_t lenght;
-    double activation;
-    double strength;
-    double kvec[];
-    struct weights *hw;
-};
-
-/*
-    Parameters of the whole network which will not be
-    changed during training and testing.
-    =================================================
-    N - number of visible units in visible layer
-    M - number of hidden units in hidden layer
-    epsilon__ - learning rate
-    =================================================
-    w - refers to weights
-    vb - refers to visible units biases
-    hb - refers to hidden units biases
-*/
-struct parameters {
-    size_t N;           // Size of Visible layer
-    size_t M;           // Size of Hidden layer
-    double epsilonw;    // Learning rate for weights
-    double epsilonvb;   // Learning rate for biases of visible units (Hinton ref.)
-    double epsilonhb;   // Learning rate for biases of hidden units (Hinton ref.)
-    int maxepochs;
-};
+    fclose(infile);
+} /* end input_parameters*/
 
 #endif /* __INOUT_H__ */
-
-
-asdfasdf

@@ -1,4 +1,5 @@
 #include "boltzmann.h"
+#include "inout.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -6,10 +7,17 @@
 int main(int argc, char *argv[])
 {
     /* Boltzmann Machine parameters */
-    struct parameters params = {
-        .N = 3,
-        .M = 6
+    struct parameters param = {
+        .N = 0,
+        .M = 0,
+        .epsilonw = 0.0,
+        .epsilonvb = 0.0,
+        .epsilonhb = 0.0,
+        .maxepochs = 0
     };
+
+    input_parameters(&param);
+    print_parameters(param);
 
     /* Sample of initial values for training */
     double sample_input[][3] = {
@@ -25,7 +33,7 @@ int main(int argc, char *argv[])
 
 
     for(size_t j=0; j < data_count; j++) {
-        for (size_t i=0; i< params.N; i++) {
+        for (size_t i=0; i< param.N; i++) {
             printf("%1.0f ", *tmp_input++);
         }
         printf("\n");
