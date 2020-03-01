@@ -11,7 +11,7 @@ void print_parameters(struct parameters param) {
             Learning rate for weights: \t\t\t\t\t %lf \n \
             Learning rate for visible units biases: \t\t\t\t\t %lf \n \
             Learning rate for hidden units biases: \t\t\t\t\t %lf \n \
-            Maximum number of epochs: \t\t\t\t\t %d \n",
+            Maximum number of epochs: \t\t\t\t\t %d \n\n",
             param.N,
             param.M,
             param.epsilonw,
@@ -30,12 +30,12 @@ void input_parameters(struct parameters *param) {
                     %*s%lf%*s \
                     %*s%lf%*s \
                     %*s%d%*s",
-                    param->N,
-                    param->M,
-                    param->epsilonw,
-                    param->epsilonvb,
-                    param->epsilonhb,
-                    param->maxepochs);
+                    &param->N,
+                    &param->M,
+                    &param->epsilonw,
+                    &param->epsilonvb,
+                    &param->epsilonhb,
+                    &param->maxepochs);
 
     fclose(infile);
 } /* end input_parameters*/
