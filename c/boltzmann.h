@@ -3,22 +3,36 @@
 
 #include <stddef.h>
 
-struct weights {
-    double w;
-};
+//struct weights {
+//    double w;
+//};
+//
+//struct visible {
+//    size_t length;
+////    double b[];
+////    struct weights *vw;
+//};
+//
+//struct hidden {
+//    size_t lenght;
+//    double activation;
+//    double strength;
+//    double kvec[];
+////    struct weights *hw;
+//};
 
-struct visible {
-    size_t length;
-//    double b[];
-//    struct weights *vw;
-};
 
-struct hidden {
-    size_t lenght;
+struct node {
     double activation;
-    double strength;
-    double kvec[];
-//    struct weights *hw;
+    double *weight;
+    double *bias;
+    double h_in;
+};
+
+struct layer {
+    int num_nodes;
+    int kind;
+    struct node *node;
 };
 
 /*
