@@ -21,7 +21,6 @@
 ////    struct weights *hw;
 //};
 
-
 struct node {
     double activation;
     double *weight;
