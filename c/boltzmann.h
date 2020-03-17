@@ -30,7 +30,7 @@ struct node {
 };
 
 struct layer {
-    int num_nodes;
+    size_t num_nodes;
     int kind;
     struct node *node;
 };
