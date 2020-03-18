@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     print_parameters(param);
 
 
+    struct layer* network = create_network();
 
     /* Sample of initial values for training */
     double sample_input[][3] = {

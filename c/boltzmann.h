@@ -2,6 +2,7 @@
 #define __BOLTZMANN_H__
 
 #include <stddef.h>
+#include <stdlib.h>
 
 //struct weights {
 //    double w;
@@ -30,7 +31,7 @@ struct node {
 
 struct layer {
     size_t num_nodes;
-    int kind;
+//    int kind;
     struct node *node;
 };
 
@@ -59,7 +60,7 @@ struct layer* create_layer(int kind) {
     struct layer* layer = malloc(sizeof (struct layer));
     if (layer != NULL) {
         layer->num_nodes = 0;
-        layer->kind = kind;
+//        layer->kind = kind;
         layer->node = NULL;
     }
     return layer;
@@ -72,6 +73,7 @@ struct layer* create_network() {
             network[i] = create_layer(i);
         }
     }
+    return network;
 }
 
 
