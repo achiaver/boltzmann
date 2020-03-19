@@ -48,6 +48,7 @@ struct layer {
     hb - refers to hidden units biases
 */
 struct parameters {
+    size_t num_layers;
     size_t N;           // Size of Visible layer
     size_t M;           // Size of Hidden layer
     double epsilonw;    // Learning rate for weights

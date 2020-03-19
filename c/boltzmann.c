@@ -15,10 +15,17 @@ struct layer* create_layer(int kind) {
 }
 
 struct layer* create_network() {
-    struct layer* network = malloc(sizeof (struct layer) * 2);
+    struct layer* network = malloc(sizeof (struct layer) * num_layers);
     if (network != NULL) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < num_layers; i++) {
             network[i].num_nodes = 0;
+        }
+
+        for (int i = 0; i < num_layers; i++) {
+            network[i].node = malloc(sizeof (struct node) * (network[i].num_nodes + 1));
+            if (network[i].node != NULL) {
+
+            }
         }
 
 //        for (int i = 0; i < )
