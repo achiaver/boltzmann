@@ -4,6 +4,30 @@
 #include <string.h>
 
 
+struct layer* create_layer(int kind) {
+    struct layer* layer = malloc(sizeof (struct layer));
+    if (layer != NULL) {
+        layer->num_nodes = 0;
+//        layer->kind = kind;
+        layer->node = NULL;
+    }
+    return layer;
+}
+
+struct layer* create_network() {
+    struct layer* network = malloc(sizeof (struct layer) * 2);
+    if (network != NULL) {
+        for (int i = 0; i < 2; i++) {
+            network[i].num_nodes = 0;
+        }
+
+//        for (int i = 0; i < )
+    }
+    return network;
+}
+
+
+
 int main(int argc, char *argv[])
 {
     /* Boltzmann Machine parameters */

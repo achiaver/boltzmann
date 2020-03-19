@@ -56,26 +56,6 @@ struct parameters {
     int maxepochs;
 };
 
-struct layer* create_layer(int kind) {
-    struct layer* layer = malloc(sizeof (struct layer));
-    if (layer != NULL) {
-        layer->num_nodes = 0;
-//        layer->kind = kind;
-        layer->node = NULL;
-    }
-    return layer;
-}
-
-struct layer* create_network() {
-    struct layer* network = malloc(sizeof (struct layer) * 2);
-    if (network != NULL) {
-        for (int i = 0; i < 2; i++) {
-            network[i] = create_layer(i);
-        }
-    }
-    return network;
-}
-
 
 
 #endif /* __BOLTZMANN_H__ */
