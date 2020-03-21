@@ -1,4 +1,5 @@
 .DS_Store
+code_reference/
 .ipynb_checkpoints/
 venv
 pycache/
