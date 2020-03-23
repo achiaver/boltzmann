@@ -51,7 +51,7 @@ struct parameters {
     double epsilonw;    // Learning rate for weights
     double epsilonvb;   // Learning rate for biases of visible units (Hinton ref.)
     double epsilonhb;   // Learning rate for biases of hidden units (Hinton ref.)
-    int maxepochs;
+    int maxepochs;      // Maximum number of epochs
     size_t num_layers;  // Number of layers
     size_t N;           // Number of units in Visible layer
     size_t M;           // Number of units in Hidden layer

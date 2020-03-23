@@ -1,7 +1,7 @@
-#include "boltzmann.h"
-#include "inout.h"
 #include <stdio.h>
 #include <string.h>
+#include "boltzmann.h"
+#include "stats_functions.h"
 
 
 //struct layer* create_layer(int kind) {

@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stddef.h>
+#include "boltzmann.h"
 #include "stats_functions.h"
 
 void print_parameters(struct parameters param) {
@@ -16,22 +19,24 @@ void print_parameters(struct parameters param) {
             param.maxepochs);
 } /* end print_parameters */
 
-void input_parameters(struct parameters *param) {
+void input_parameters(struct parameters* param) {
     FILE *infile;
     infile = fopen("in_parameters.dat", "r");
 
-    fscanf(infile, "%*s%zu%*s \
+    fscanf(infile, "%*s%lf%*s \
+                    %*s%lf%*s \
+                    %*s%lf%*s \
+                    %*s%d%*s \
                     %*s%zu%*s \
-                    %*s%lf%*s \
-                    %*s%lf%*s \
-                    %*s%lf%*s \
-                    %*s%d%*s",
-                    &param->N,
-                    &param->M,
+                    %*s%zu%*s \
+                    %*s%zu%*s",
                     &param->epsilonw,
                     &param->epsilonvb,
                     &param->epsilonhb,
-                    &param->maxepochs);
+                    &param->maxepochs,
+                    &param->num_layers,
+                    &param->N,
+                    &param->M);
 
     fclose(infile);
 } /* end input_parameters*/
