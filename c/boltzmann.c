@@ -15,7 +15,7 @@
 //}
 
 struct layer* create_network(struct parameters param) {
-    struct layer* network = malloc(sizeof (struct layer) * param.num_layers);
+    struct layer* network = malloc(sizeof (struct layer) * (param.num_layers));
     if (network != NULL) {
         for (int i = 0; i < param.num_layers; i++) {
             if (i == 0) {
@@ -27,11 +27,13 @@ struct layer* create_network(struct parameters param) {
         }
 
         for (int i = 0; i < param.num_layers; i++) {
-            network[i].node = malloc(sizeof (struct node) * (network[i].num_nodes + 1));
+            network[i].node = malloc(sizeof (struct node) * (network[i].num_nodes));
             if (network[i].node != NULL) {
                 for (int j = 0; j <= network[i].num_nodes; j++) {
-
-
+                    network[i].node[j].activation = 0;
+                    network[i].node[j].weight = 0;
+                    network[i].node[j].bias = 0;
+                    network[i].node[j].h_in = 0;
                 }
             }
         }
@@ -60,6 +62,9 @@ int main(int argc, char *argv[])
     print_parameters(param);
 
     struct layer* network = create_network(param);
+
+
+
 
     /* Sample of initial values for training */
     double sample_input[][3] = {
