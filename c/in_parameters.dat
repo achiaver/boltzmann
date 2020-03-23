@@ -1,6 +1,7 @@
-num_units_visible_layer_(N)                         16          <size_t>
-num_units_hidden_layeri_(M)                         10          <size_t>
 learning_rate_weights_(epsilonw)                    0.004       <double>
 learning_rate_visible_units_biases_(epsilonvb)      0.0         <double>
 learning_rate_hidden_units_biases_(epsilonhb)       0.0         <double>
 maximum_number_of_epochs_(maxepochs)                20          <integer>
+num_of_layers_(num_layers)                           2          <size_t>
+num_units_visible_layer_(N)                          3          <size_t>
+num_units_hidden_layeri_(M)                          2          <size_t>
