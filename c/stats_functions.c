@@ -1,8 +1,4 @@
-#ifndef __INOUT_H__
-#define __INOUT_H__
-
-#include <stdio.h>
-#include <stddef.h>
+#include "stats_functions.h"
 
 void print_parameters(struct parameters param) {
     printf("\n \
@@ -39,5 +35,3 @@ void input_parameters(struct parameters *param) {
 
     fclose(infile);
 } /* end input_parameters*/
-
-#endif /* __INOUT_H__ */
