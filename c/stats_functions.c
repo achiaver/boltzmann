@@ -42,3 +42,12 @@ void input_parameters(struct parameters* param) {
 
     fclose(infile);
 } /* end input_parameters*/
+
+void network_status(struct layer network) {
+    for (int i = 0; i < network)
+
+    printf("\n \
+            Visible Layer: \n \
+            Number of units -> \t %zu \n \
+            Number of ")
+}
