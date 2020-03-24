@@ -25,7 +25,7 @@
 struct node {
     double activation;
     double *weight;
-    double *bias;
+    double bias;
     double h_in;
 };
 
