@@ -14,7 +14,25 @@
 //    return layer;
 //}
 
-struct layer* create_network(struct parameters param) {
+struct layer* create_layer(struct parameters param) {
+    struct layer* layer = malloc(sizeof (struct layer) * (param.num_layers));
+    if (layer != NULL) {
+        for (int i = 0; i < param.num_layers; i++) {
+            
+        }
+    }
+    return layer;
+}
+
+struct network* create_network(struct parameters param) {
+    struct network* network = malloc(sizeof (struct network));
+    if (network != NULL) {
+        network.num_layers = param.num_layers;
+        struct layer* network.layer = create_layer(param);
+    }
+    return network;
+}
+
     struct layer* network = malloc(sizeof (struct layer) * (param.num_layers));
     if (network != NULL) {
         for (int i = 0; i < param.num_layers; i++) {
@@ -61,7 +79,7 @@ int main(int argc, char *argv[])
     input_parameters(&param);
     print_parameters(param);
 
-    struct layer* network = create_network(param);
+    struct network* network = create_network(param);
 
 
 
