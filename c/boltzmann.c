@@ -14,6 +14,8 @@
 //    return layer;
 //}
 
+// PRECISO ACABAR DE ARRUMAR AS FUNÇÕES PARA CRIAR CADA CAMADA E CADA NODE.
+
 struct layer* create_layer(struct parameters param) {
     struct layer* layer = malloc(sizeof (struct layer) * (param.num_layers));
     if (layer != NULL) {
@@ -33,6 +35,9 @@ struct network* create_network(struct parameters param) {
     return network;
 }
 
+// ========================================================
+// ========================================================
+// ========================================================
     struct layer* network = malloc(sizeof (struct layer) * (param.num_layers));
     if (network != NULL) {
         for (int i = 0; i < param.num_layers; i++) {
