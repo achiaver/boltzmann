@@ -4,6 +4,6 @@
 
 void print_parameters(struct parameters param);
 void input_parameters(struct parameters* param);
-void network_status(struct layer network);
+void print_network_status(struct network network);
 
 #endif /* __INOUT_H__ */

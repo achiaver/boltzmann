@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     print_parameters(param);
 
     struct network* network = create_network(param);
-
+    print_network_status(network);
 
 
 
