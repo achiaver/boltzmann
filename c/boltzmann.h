@@ -63,7 +63,7 @@ struct layer {
 struct network {
     size_t num_layers;
     struct layer* layer;
-}
+};
 
 /*
     Parameters of the whole network which will not be
