@@ -20,7 +20,21 @@ struct layer* create_layer(struct parameters param) {
     struct layer* layer = malloc(sizeof (struct layer) * (param.num_layers));
     if (layer != NULL) {
         for (int i = 0; i < param.num_layers; i++) {
-            
+            layer[i].num_nodes = param.num_nodes_array[i];
+            layer[i].node = malloc(sizeof (struct layer) * (layer[i].num_nodes));
+            if (layer[i].node != NULL) {
+                for (int j = 0; j < layer[i].num_nodes; j++) {
+                    layer[i].node[j].activation = 0;
+                    layer[i].node[j].bias = 0;
+                    layer[i].node[j].h_in = 0;
+                    if (&layer[i+1] != NULL) {
+                        layer[i].node[j].weight = malloc(sizeof (double) * (layer[i+1].num_nodes));
+                        for (int k = 0; k < layer[i+1].num_nodes; k++) {
+                            layer[i].node[j].weight[k] = 0.0;
+                        }
+                    }
+                }
+            }
         }
     }
     return layer;
@@ -29,39 +43,8 @@ struct layer* create_layer(struct parameters param) {
 struct network* create_network(struct parameters param) {
     struct network* network = malloc(sizeof (struct network));
     if (network != NULL) {
-        network.num_layers = param.num_layers;
-        struct layer* network.layer = create_layer(param);
-    }
-    return network;
-}
-
-// ========================================================
-// ========================================================
-// ========================================================
-    struct layer* network = malloc(sizeof (struct layer) * (param.num_layers));
-    if (network != NULL) {
-        for (int i = 0; i < param.num_layers; i++) {
-            if (i == 0) {
-                network[i].num_nodes = param.N;
-            }
-            if (i == 1) {
-                network[i].num_nodes = param.M;
-            }
-        }
-
-        for (int i = 0; i < param.num_layers; i++) {
-            network[i].node = malloc(sizeof (struct node) * (network[i].num_nodes));
-            if (network[i].node != NULL) {
-                for (int j = 0; j <= network[i].num_nodes; j++) {
-                    network[i].node[j].activation = 0;
-                    network[i].node[j].weight = 0;
-                    network[i].node[j].bias = 0;
-                    network[i].node[j].h_in = 0;
-                }
-            }
-        }
-
-//        for (int i = 0; i < )
+        network->num_layers = param.num_layers;
+        network->layer = create_layer(param);
     }
     return network;
 }

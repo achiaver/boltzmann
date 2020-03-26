@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include "boltzmann.h"
 #include "stats_functions.h"
@@ -29,25 +30,28 @@ void input_parameters(struct parameters* param) {
                     %*s%lf%*s \
                     %*s%lf%*s \
                     %*s%d%*s \
-                    %*s%zu%*s \
-                    %*s%zu%*s \
-                    %*s%zu%*s",
+                    %*s%zu%*s ",
                     &param->epsilonw,
                     &param->epsilonvb,
                     &param->epsilonhb,
                     &param->maxepochs,
-                    &param->num_layers,
-                    &param->N,
-                    &param->M);
+                    &param->num_layers);
+
+    param->num_nodes_array = malloc(sizeof (size_t) * (param->num_layers));
+    if (param->num_nodes_array != NULL) {
+        for (int i = 0; i < param->num_layers; i++) {
+            fscanf(infile, "%*s%zu%*s", &param->num_nodes_array[i]);
+        }
+    }
 
     fclose(infile);
 } /* end input_parameters*/
 
-void network_status(struct layer network) {
-    for (int i = 0; i < network)
-
-    printf("\n \
-            Visible Layer: \n \
-            Number of units -> \t %zu \n \
-            Number of ")
-}
+//void network_status(struct layer network) {
+//    for (int i = 0; i < network)
+//
+//    printf("\n \
+//            Visible Layer: \n \
+//            Number of units -> \t %zu \n \
+//            Number of ");
+//}
