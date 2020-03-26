@@ -10,16 +10,18 @@ void print_parameters(struct parameters param) {
             Learning rate for visible units biases: \t %lf \n \
             Learning rate for hidden units biases: \t %lf \n \
             Maximum number of epochs: \t %d \n \
-            Number of layers of the network: \t %zu \n \
-            Number of visible units at visible layer: \t %zu \n \
-            Number of hidden units at hidden layer: \t %zu \n\n",
+            Number of layers of the network: \t %zu \n",
             param.epsilonw,
             param.epsilonvb,
             param.epsilonhb,
             param.maxepochs,
-            param.num_layers,
-            param.N,
-            param.M);
+            param.num_layers);
+
+    for (int i = 0; i < param.num_layers; i++) {
+        printf("Number of nodes at layer %d: \t %zu \n", i, param.num_nodes_array[i]);
+    }
+
+    printf("\n");
 } /* end print_parameters */
 
 void input_parameters(struct parameters* param) {
