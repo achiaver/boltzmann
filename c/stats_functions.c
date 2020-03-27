@@ -56,9 +56,11 @@ void print_network_status(struct network network) {
         for (int j = 0; j < network.layer[i].num_nodes; j++) {
             printf("\t node %2d - weights -> ", j);
             for (int k = 0; k < network.layer[i+1].num_nodes; k++) {
-                printf("%f ", network.layer[i].node[j].weight[k]);
+                printf("%.4f \t", network.layer[i].node[j].weight[k]);
             }
+            printf("\n");
         }
+        printf("\n");
     }
 }
 
