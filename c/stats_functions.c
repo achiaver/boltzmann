@@ -52,9 +52,12 @@ void input_parameters(struct parameters* param) {
 void print_network_status(struct network network) {
     printf("---- NETWORK STATUS ----\n");
     for (int i = 0; i < network.num_layers; i++) {
-        printf("\t Layer %2d \n", i);
+        printf("Layer %2d \n", i);
         for (int j = 0; j < network.layer[i].num_nodes; j++) {
-            printf("\t node %2d - weights -> ", j);
+            printf("\t node %2d \n", j);
+            printf("\t\t- activation %2f \n", network.layer[i].node[j].activation);
+            printf("\t\t- bias %f \n", network.layer[i].node[j].bias);
+            printf("\t\t- weights -> ");
             for (int k = 0; k < network.layer[i+1].num_nodes; k++) {
                 printf("%.4f \t", network.layer[i].node[j].weight[k]);
             }
