@@ -58,21 +58,20 @@ void print_network_status(struct network network) {
             printf("\t\t- activation %2f \n", network.layer[i].node[j].activation);
             printf("\t\t- bias %f \n", network.layer[i].node[j].bias);
             printf("\t\t- weights -> ");
-            for (int k = 0; k < network.layer[i+1].num_nodes; k++) {
-                printf("%.4f \t", network.layer[i].node[j].weight[k]);
+            if (i == 0) {
+                for (int k = 0; k < network.layer[i+1].num_nodes; k++) {
+                    printf("%.4f \t", network.layer[i].node[j].weight[k]);
+                }
+                printf("\n");
             }
-            printf("\n");
+            if (i > 0) {
+                for (int k = 0; k < network.layer[i-1].num_nodes; k++) {
+                    printf("%.4f \t", network.layer[i].node[j].weight[k]);
+                }
+                printf("\n");
+            }
         }
         printf("\n");
     }
 }
 
-
-//void network_status(struct layer network) {
-//    for (int i = 0; i < network)
-//
-//    printf("\n \
-//            Visible Layer: \n \
-//            Number of units -> \t %zu \n \
-//            Number of ");
-//}

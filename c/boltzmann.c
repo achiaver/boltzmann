@@ -24,20 +24,34 @@ struct layer* create_layer(struct parameters param) {
             layer[i].node = malloc(sizeof (struct layer) * (layer[i].num_nodes));
             if (layer[i].node != NULL) {
                 for (int j = 0; j < layer[i].num_nodes; j++) {
+                    printf("i - %d \t j - %d \n", i, j);
                     layer[i].node[j].activation = 0;
                     layer[i].node[j].bias = 0;
                     layer[i].node[j].h_in = 0;
 //                    if (&layer[i+1] != NULL) {AQUI PRECISO PENSAR EM COMO CONSIDERAR MAIS DE DUAS CAMADAS
 //                                              ACHO QUE A OPCAO MAIS FACIL VAI SER USANDO DOIS VETORES DE PESOS
 //                                              UM PARA OS PESOS DA ENTRADA W^(I) E UM PARA PESOS DA SAIDA W^(O)}
-                    layer[i].node[j].weight = malloc(sizeof (double) * (layer[i+1].num_nodes));
-                    for (int k = 0; k < layer[i+1].num_nodes; k++) {
-                        layer[i].node[j].weight[k] = 0.0;
+//                  NAO ESTA ENTRANDO NESSE IF...???
+                    if (i == 0 ) {
+                        layer[i].node[j].weight = malloc(sizeof (double) * (layer[i+1].num_nodes));
+                        for (int k = 0; k < layer[i+1].num_nodes; k++) {
+                            printf("i - %d \t j - %d \t k - %d \n", i, j, k);
+                            layer[i].node[j].weight[k] = 2.2; //(double) (10 * (j+1)) + (k+1);
+//                            printf("%f \n", layer[i].node[j].weight[k]);
+                        }
+                    } 
+                    if (i > 0) {
+                        layer[i].node[j].weight = malloc(sizeof (double) * (layer[i-1].num_nodes));
+                        for (int k = 0; k < layer[i-1].num_nodes; k++) {
+                             printf("i - %d \t j - %d \t k - %d \n", i, j, k);
+                             layer[i].node[j].weight[k] = 42.0; //layer[i-1].node[k].weight[j];
+//                             printf("%f \n", layer[i].node[j].weight[k]);
+                        }
+                    }
                     }
                 }
             }
         }
-    }
     return layer;
 }
 
