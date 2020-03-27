@@ -27,11 +27,12 @@ struct layer* create_layer(struct parameters param) {
                     layer[i].node[j].activation = 0;
                     layer[i].node[j].bias = 0;
                     layer[i].node[j].h_in = 0;
-                    if (&layer[i+1] != NULL) {
-                        layer[i].node[j].weight = malloc(sizeof (double) * (layer[i+1].num_nodes));
-                        for (int k = 0; k < layer[i+1].num_nodes; k++) {
-                            layer[i].node[j].weight[k] = 0.0;
-                        }
+//                    if (&layer[i+1] != NULL) {AQUI PRECISO PENSAR EM COMO CONSIDERAR MAIS DE DUAS CAMADAS
+//                                              ACHO QUE A OPCAO MAIS FACIL VAI SER USANDO DOIS VETORES DE PESOS
+//                                              UM PARA OS PESOS DA ENTRADA W^(I) E UM PARA PESOS DA SAIDA W^(O)}
+                    layer[i].node[j].weight = malloc(sizeof (double) * (layer[i+1].num_nodes));
+                    for (int k = 0; k < layer[i+1].num_nodes; k++) {
+                        layer[i].node[j].weight[k] = 0.0;
                     }
                 }
             }
