@@ -20,6 +20,7 @@ struct layer* create_layer(struct parameters param) {
     struct layer* layer = malloc(sizeof (struct layer) * (param.num_layers));
     if (layer != NULL) {
         for (int i = 0; i < param.num_layers; i++) {
+            printf("i - %d \n", i);
             layer[i].num_nodes = param.num_nodes_array[i];
             layer[i].node = malloc(sizeof (struct layer) * (layer[i].num_nodes));
             if (layer[i].node != NULL) {
@@ -32,25 +33,31 @@ struct layer* create_layer(struct parameters param) {
 //                                              ACHO QUE A OPCAO MAIS FACIL VAI SER USANDO DOIS VETORES DE PESOS
 //                                              UM PARA OS PESOS DA ENTRADA W^(I) E UM PARA PESOS DA SAIDA W^(O)}
 //                  NAO ESTA ENTRANDO NESSE IF...???
-                    if (i == 0 ) {
+//                    i = 0;
+                    if (i == 0) {
                         layer[i].node[j].weight = malloc(sizeof (double) * (layer[i+1].num_nodes));
-                        for (int k = 0; k < layer[i+1].num_nodes; k++) {
-                            printf("i - %d \t j - %d \t k - %d \n", i, j, k);
-                            layer[i].node[j].weight[k] = 2.2; //(double) (10 * (j+1)) + (k+1);
-//                            printf("%f \n", layer[i].node[j].weight[k]);
+                        if (layer[i].node[j].weight != NULL) {
+                            for (int k = 0; k < layer[i+1].num_nodes; k++) {
+                                printf("i - %d \t j - %d \t k - %d \n", i, j, k);
+                                layer[i].node[j].weight[k] = 2.2; //(double) (10 * (j+1)) + (k+1);
+                                printf("%f \n", layer[i].node[j].weight[k]);
+                            }
                         }
-                    } 
+                    }
                     if (i > 0) {
                         layer[i].node[j].weight = malloc(sizeof (double) * (layer[i-1].num_nodes));
-                        for (int k = 0; k < layer[i-1].num_nodes; k++) {
-                             printf("i - %d \t j - %d \t k - %d \n", i, j, k);
-                             layer[i].node[j].weight[k] = 42.0; //layer[i-1].node[k].weight[j];
-//                             printf("%f \n", layer[i].node[j].weight[k]);
+                        if (layer[i].node[j].weight != NULL) {
+                            for (int k = 0; k < layer[i-1].num_nodes; k++) {
+                                 printf("i - %d \t j - %d \t k - %d \n", i, j, k);
+                                 layer[i].node[j].weight[k] = 42; //layer[i-1].node[k].weight[j];
+                                 printf("%f \n", layer[i].node[j].weight[k]);
+                            }
                         }
                     }
                     }
                 }
-            }
+            printf("\n");
+        }
         }
     return layer;
 }
