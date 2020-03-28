@@ -4,24 +4,6 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-//struct weights {
-//    double w;
-//};
-//
-//struct visible {
-//    size_t length;
-////    double b[];
-////    struct weights *vw;
-//};
-//
-//struct hidden {
-//    size_t lenght;
-//    double activation;
-//    double strength;
-//    double kvec[];
-////    struct weights *hw;
-//};
-
 /*
     Node data structure.
     =================================================
@@ -33,14 +15,14 @@
  */
 struct node {
     double activation;
-    double* weight;
+    double * weight;
     double bias;
     double h_in;
 };
 
 
 /*
-    Layer data structure.
+   Layer data structure.
     =================================================
     num_nodes - number of nodes in one layer
     node - pointer to initial node of one layer
@@ -49,7 +31,7 @@ struct node {
 struct layer {
     size_t num_nodes;
 //    int kind;
-    struct node* node;
+    struct node * node;
 };
 
 
@@ -62,7 +44,7 @@ struct layer {
  */
 struct network {
     size_t num_layers;
-    struct layer* layer;
+    struct layer * layer;
 };
 
 /*
@@ -85,7 +67,7 @@ struct parameters {
     size_t num_layers;  // Number of layers
 //    size_t N;           // Number of units in Visible layer
 //    size_t M;           // Number of units in Hidden layer
-    size_t* num_nodes_array;
+    size_t * num_nodes_array;
 };
 
 
