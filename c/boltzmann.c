@@ -21,7 +21,7 @@ struct layer * create_layer(struct parameters parameters_bm) {
     struct layer * layer_bm = malloc(sizeof (*layer_bm) * (parameters_bm.num_layers));
     if (!layer_bm) 
     {
-        perror("create_layer: malloc: layer: %s \n", strerror(errno));
+        printf("create_layer: malloc: layer: %s \n", strerror(errno));
         exit(2);
     }
 
@@ -32,7 +32,7 @@ struct layer * create_layer(struct parameters parameters_bm) {
         layer_bm[i].node = malloc(sizeof (struct node) * (layer_bm[i].num_nodes));
         if (!layer_bm[i].node) 
         {
-            perror("create_layer: malloc: node: %s\n", strerror(errno));
+            printf("create_layer: malloc: node: %s\n", strerror(errno));
             exit(2);
         }
 
@@ -49,36 +49,38 @@ struct layer * create_layer(struct parameters parameters_bm) {
 //            i = 0;
             if (i == 0) 
             {
-                layer_bm[i].node[j].weight = malloc(sizeof (double) * (layer_bm[i+1].num_nodes));
+                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (parameters_bm.num_nodes_array[i+1]));
                 if (!layer_bm[i].node[j].weight)
                 {
-                    perror("create_layer: malloc: node %d: weight: %s \n", j,  strerror(errno));
+                    printf("create_layer: malloc: node %d: weight: %s \n", j,  strerror(errno));
                     exit(2);
                 }
 
-                for (int k = 0; k < layer_bm[i+1].num_nodes; k++) 
+                for (int k = 0; k < parameters_bm.num_nodes_array[i+1]; k++) 
                 {
-                    printf("i - %d \t j - %d \t k - %d \n", i, j, k);
-                    layer_bm[i].node[j].weight[k] = 2.2; //(double) (10 * (j+1)) + (k+1);
-                    printf("%f \n", layer_bm[i].node[j].weight[k]);
+                    printf("i - %d \t j - %d \t k - %d \t", i, j, k);
+                    layer_bm[i].node[j].weight[k] = (double) (10 * (j+1)) + (k+1);
+                    printf("weight_%d%d - %f \n", (j+1), (k+1), layer_bm[i].node[j].weight[k]);
                 }
             } else 
             {
-                layer_bm[i].node[j].weight = malloc(sizeof (double) * (layer_bm[i-1].num_nodes));
+                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (parameters_bm.num_nodes_array[i-1]));
                 if (!layer_bm[i].node[j].weight)
                 {
-                    perror("create_layer: malloc: node %d: weight: %s\n", j, strerror(errno));
+                    printf("create_layer: malloc: node %d: weight: %s\n", j, strerror(errno));
                     exit(2);
                 }
 
-                for (int k = ; k < layer_bm[i-1].num_nodes; k++) 
+                for (int k = 0; k < parameters_bm.num_nodes_array[i-1]; k++) 
                 {
-                    printf("i - %d \t j - %d \t k - %d \n", i, j, k);
-                    layer_bm[i].node[j].weight[k] = 42; //layer[i-1].node[k].weight[j];
-                    printf("%f \n", layer_bm[i].node[j].weight[k]);
+                    printf("i - %d \t j - %d \t k - %d \t", i, j, k);
+                    layer_bm[i].node[j].weight[k] = layer_bm[i-1].node[k].weight[j];
+                    printf("weight_%d%d - %f \n", (j+1), (k+1), layer_bm[i].node[j].weight[k]);
                 }
             }
+            printf("\n");
         }
+        printf("\n");
     }
     printf("\n");
     return layer_bm;
@@ -87,7 +89,7 @@ struct layer * create_layer(struct parameters parameters_bm) {
 struct network * create_network(struct parameters parameters_bm) {
     struct network * network_bm = malloc(sizeof (*network_bm));
     if (!network_bm) {
-        perror("create_network: malloc: network: %s \n", strerror(errno));
+        printf("create_network: malloc: network: %s \n", strerror(errno));
         exit(2);
     }
     network_bm->num_layers = parameters_bm.num_layers;
