@@ -4,19 +4,6 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 
-
-//struct layer* create_layer(int kind) {
-//    struct layer* layer = malloc(sizeof (struct layer));
-//    if (layer != NULL) {
-//        layer->num_nodes = 0;
-////        layer->kind = kind;
-//        layer->node = NULL;
-//    }
-//    return layer;
-//}
-
-// PRECISO ACABAR DE ARRUMAR AS FUNÇÕES PARA CRIAR CADA CAMADA E CADA NODE.
-
 struct layer * create_layer(struct parameters parameters_bm) {
     struct layer * layer_bm = malloc(sizeof (*layer_bm) * (parameters_bm.num_layers));
     if (!layer_bm) 
@@ -42,11 +29,7 @@ struct layer * create_layer(struct parameters parameters_bm) {
             layer_bm[i].node[j].activation = 0;
             layer_bm[i].node[j].bias = 0;
             layer_bm[i].node[j].h_in = 0;
-//            if (&layer[i+1] != NULL) {AQUI PRECISO PENSAR EM COMO CONSIDERAR MAIS DE DUAS CAMADAS
-//                                      ACHO QUE A OPCAO MAIS FACIL VAI SER USANDO DOIS VETORES DE PESOS
-//                                      UM PARA OS PESOS DA ENTRADA W^(I) E UM PARA PESOS DA SAIDA W^(O)}
-//          NAO ESTA ENTRANDO NESSE IF...???
-//            i = 0;
+
             if (i == 0) 
             {
                 layer_bm[i].node[j].weight = malloc(sizeof (double *) * (parameters_bm.num_nodes_array[i+1]));
@@ -96,6 +79,8 @@ struct network * create_network(struct parameters parameters_bm) {
     network_bm->layer = create_layer(parameters_bm);
     return network_bm;
 }
+
+
 
 
 
