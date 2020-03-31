@@ -4,7 +4,8 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 
-struct layer * create_layer(struct parameters parameters_bm) {
+struct layer * create_layer(struct parameters parameters_bm) 
+{
     struct layer * layer_bm = malloc(sizeof (*layer_bm) * (parameters_bm.num_layers));
     if (!layer_bm) 
     {
@@ -69,7 +70,8 @@ struct layer * create_layer(struct parameters parameters_bm) {
     return layer_bm;
 }
 
-struct network * create_network(struct parameters parameters_bm) {
+struct network * create_network(struct parameters parameters_bm) 
+{
     struct network * network_bm = malloc(sizeof (*network_bm));
     if (!network_bm) {
         printf("create_network: malloc: network: %s \n", strerror(errno));
@@ -81,6 +83,10 @@ struct network * create_network(struct parameters parameters_bm) {
 }
 
 
+void read_csv() 
+{
+    
+}
 
 
 
