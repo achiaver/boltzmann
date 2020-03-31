@@ -15,7 +15,7 @@
  */
 struct node {
     double activation;
-    double * weight;
+    double * weight; // Talvez seja interessante fazer uma struct apenas para os pesos...
     double bias;
     double h_in;
 };
