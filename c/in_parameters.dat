@@ -1,3 +1,5 @@
+test_dataset_rows_dimension(dataset_rows)            2          <integer>
+test_dataset_cols_dimension(dataset_cols)            3          <integer>
 learning_rate_weights_(epsilonw)                    0.004       <double>
 learning_rate_visible_units_biases_(epsilonvb)      0.0         <double>
 learning_rate_hidden_units_biases_(epsilonhb)       0.0         <double>

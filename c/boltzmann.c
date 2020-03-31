@@ -83,9 +83,35 @@ struct network * create_network(struct parameters parameters_bm)
 }
 
 
-void read_csv() 
+void read_csv(double * datavar, char dataset) 
 {
-    
+    char buffer[1024];
+    char * record, * line;
+    FILE * fp = fopen(dataset, "r");
+
+    if (!fp)
+    {
+        printf("read_csv : %s \n", strerror(errno));
+        exit(2);
+    }
+
+    int rows = 0;
+    int cols = 0;
+    int cols_aux = 0;
+    while (!(line = fgets(buffer, sizeof(buffer), fp))) 
+    {
+        record = strtok(line, ",");
+        while (!record) 
+        {
+            datavar[rows][cols] = atof(record);
+            cols = cols + 1;
+        }
+        rows = rows + 1;
+        cols_aux = cols;
+        cols = 0;
+    }
+
+
 }
 
 
