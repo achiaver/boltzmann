@@ -4,7 +4,7 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 
-struct layer * create_layer(struct parameters parameters_bm) 
+struct layer * create_layer (struct parameters parameters_bm) 
 {
     struct layer * layer_bm = malloc(sizeof (*layer_bm) * (parameters_bm.num_layers));
     if (!layer_bm) 
@@ -70,7 +70,7 @@ struct layer * create_layer(struct parameters parameters_bm)
     return layer_bm;
 }
 
-struct network * create_network(struct parameters parameters_bm) 
+struct network * create_network (struct parameters parameters_bm) 
 {
     struct network * network_bm = malloc(sizeof (*network_bm));
     if (!network_bm) {
@@ -83,7 +83,7 @@ struct network * create_network(struct parameters parameters_bm)
 }
 
 
-void read_csv(double * datavar, char dataset) 
+void read_csv(struct parameters parameters_bm, double * dataset) 
 {
     char buffer[1024];
     char * record, * line;
@@ -114,6 +114,21 @@ void read_csv(double * datavar, char dataset)
 
 }
 
+double * allocate_dataset (struct parameters parameters_bm)
+{
+    double * dataset = malloc(sizeof (dataset) * (parameters_bm.dataset_rows));
+    if (!dataset)
+    {
+        printf("allocate_dataset : dataset %s \n", strerror(errno));
+        exit(2);
+    }
+
+    read_csv(parameters_bm, dataset);
+
+
+
+    return dataset;
+}
 
 
 int main(int argc, char *argv[])
@@ -134,6 +149,8 @@ int main(int argc, char *argv[])
 
     struct network * network_bm = create_network(parameters_bm);
     print_network_status(*network_bm);
+
+    double * dataset = allocate_dataset(parameters_bm);
 
 
 

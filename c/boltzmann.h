@@ -34,6 +34,12 @@ struct layer {
     struct node * node;
 };
 
+struct weight {
+    size_t set;     // Number of weight sets this number is equal to (the number of layers - 1)
+    size_t dim_2;   // Dimension of weight set, dim_1 is equal to number of nodes of layer 1
+    size_t dim_3;   // Dimension of weight set, dim_2 is equal to number of nodes of layer 2
+    double value;   // Value of the weight connection between two nodes
+};
 
 /*
     Network data structure.
@@ -45,6 +51,7 @@ struct layer {
 struct network {
     size_t num_layers;
     struct layer * layer;
+//    struct weight * weights;
 };
 
 /*
@@ -60,13 +67,15 @@ struct network {
     hb - refers to hidden units biases
  */
 struct parameters {
-    double epsilonw;    // Learning rate for weights
-    double epsilonvb;   // Learning rate for biases of visible units (Hinton ref.)
-    double epsilonhb;   // Learning rate for biases of hidden units (Hinton ref.)
-    int maxepochs;      // Maximum number of epochs
-    size_t num_layers;  // Number of layers
-//    size_t N;           // Number of units in Visible layer
-//    size_t M;           // Number of units in Hidden layer
+    size_t dataset_rows;    // Amount of examples the dataset have, each row is a pattern
+    size_t dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
+    double epsilonw;        // Learning rate for weights
+    double epsilonvb;       // Learning rate for biases of visible units (Hinton ref.)
+    double epsilonhb;       // Learning rate for biases of hidden units (Hinton ref.)
+    int maxepochs;          // Maximum number of epochs
+    size_t num_layers;      // Number of layers
+//    size_t N;             // Number of units in Visible layer
+//    size_t M;             // Number of units in Hidden layer
     size_t * num_nodes_array;
 };
 
