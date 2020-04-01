@@ -4,19 +4,19 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 
-struct layer * create_layer (struct parameters parameters_bm) 
+struct layer * create_layer (struct parameters param) 
 {
-    struct layer * layer_bm = malloc(sizeof (*layer_bm) * (parameters_bm.num_layers));
+    struct layer * layer_bm = malloc(sizeof (*layer_bm) * (param.num_layers));
     if (!layer_bm) 
     {
         printf("create_layer: malloc: layer: %s \n", strerror(errno));
         exit(2);
     }
 
-    for (int i = 0; i < parameters_bm.num_layers; i++) 
+    for (int i = 0; i < param.num_layers; i++) 
     {
         printf("i - %d \n", i);
-        layer_bm[i].num_nodes = parameters_bm.num_nodes_array[i];
+        layer_bm[i].num_nodes = param.num_nodes_array[i];
         layer_bm[i].node = malloc(sizeof (struct node) * (layer_bm[i].num_nodes));
         if (!layer_bm[i].node) 
         {
@@ -33,14 +33,14 @@ struct layer * create_layer (struct parameters parameters_bm)
 
             if (i == 0) 
             {
-                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (parameters_bm.num_nodes_array[i+1]));
+                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (param.num_nodes_array[i+1]));
                 if (!layer_bm[i].node[j].weight)
                 {
                     printf("create_layer: malloc: node %d: weight: %s \n", j,  strerror(errno));
                     exit(2);
                 }
 
-                for (int k = 0; k < parameters_bm.num_nodes_array[i+1]; k++) 
+                for (int k = 0; k < param.num_nodes_array[i+1]; k++) 
                 {
                     printf("i - %d \t j - %d \t k - %d \t", i, j, k);
                     layer_bm[i].node[j].weight[k] = (double) (10 * (j+1)) + (k+1);
@@ -48,14 +48,14 @@ struct layer * create_layer (struct parameters parameters_bm)
                 }
             } else 
             {
-                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (parameters_bm.num_nodes_array[i-1]));
+                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (param.num_nodes_array[i-1]));
                 if (!layer_bm[i].node[j].weight)
                 {
                     printf("create_layer: malloc: node %d: weight: %s\n", j, strerror(errno));
                     exit(2);
                 }
 
-                for (int k = 0; k < parameters_bm.num_nodes_array[i-1]; k++) 
+                for (int k = 0; k < param.num_nodes_array[i-1]; k++) 
                 {
                     printf("i - %d \t j - %d \t k - %d \t", i, j, k);
                     layer_bm[i].node[j].weight[k] = layer_bm[i-1].node[k].weight[j];
@@ -70,24 +70,24 @@ struct layer * create_layer (struct parameters parameters_bm)
     return layer_bm;
 }
 
-struct network * create_network (struct parameters parameters_bm) 
+struct network * create_network (struct parameters param) 
 {
     struct network * network_bm = malloc(sizeof (*network_bm));
     if (!network_bm) {
         printf("create_network: malloc: network: %s \n", strerror(errno));
         exit(2);
     }
-    network_bm->num_layers = parameters_bm.num_layers;
-    network_bm->layer = create_layer(parameters_bm);
+    network_bm->num_layers = param.num_layers;
+    network_bm->layer = create_layer(param);
     return network_bm;
 }
 
 
-void read_csv(struct parameters parameters_bm, double * dataset) 
+void read_csv(struct parameters param, double * dataset) 
 {
     char buffer[1024];
     char * record, * line;
-    FILE * fp = fopen(dataset, "r");
+    FILE * fp = fopen("dataset/dataset.csv", "r");
 
     if (!fp)
     {
@@ -95,9 +95,17 @@ void read_csv(struct parameters parameters_bm, double * dataset)
         exit(2);
     }
 
-    int rows = 0;
-    int cols = 0;
-    int cols_aux = 0;
+    for (int i = 0; i < param.dataset_rows; i++)
+    {
+        line = fgets(buffer, sizeof(buffer), fp);
+        record = strtok(line, ",");
+        
+        for (int j = 0; i < param.dataset_cols; j++)
+        {
+        
+        }
+
+    }
     while (!(line = fgets(buffer, sizeof(buffer), fp))) 
     {
         record = strtok(line, ",");
@@ -114,16 +122,25 @@ void read_csv(struct parameters parameters_bm, double * dataset)
 
 }
 
-double * allocate_dataset (struct parameters parameters_bm)
+double * allocate_dataset (struct parameters param)
 {
-    double * dataset = malloc(sizeof (dataset) * (parameters_bm.dataset_rows));
+    double * dataset = malloc(sizeof (*dataset) * (param.dataset_rows));
     if (!dataset)
     {
         printf("allocate_dataset : dataset %s \n", strerror(errno));
         exit(2);
     }
+    for (int i = 0; i < param.dataset_rows; i++) 
+    {
+        dataset[i] = malloc(sizeof (dataset) * (param.dataset_cols));
+        if (!dataset[i])
+        {
+            printf("allocate_dataset : dataset[%d] %s \n", i, strerror(errno));
+            exit(2);
+        }
+    }
 
-    read_csv(parameters_bm, dataset);
+    read_csv(param, dataset);
 
 
 

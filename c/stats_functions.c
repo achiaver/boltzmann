@@ -4,7 +4,7 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 
-void print_parameters(struct parameters param) 
+void print_parameters (struct parameters param) 
 {
     printf("\n \
     \t Number of examples in the dataset: \t %zu \n \
@@ -30,7 +30,7 @@ void print_parameters(struct parameters param)
     printf("\n");
 } /* end print_parameters */
 
-void input_parameters(struct parameters* param) 
+void input_parameters (struct parameters* param) 
 {
     FILE *infile;
     infile = fopen("in_parameters.dat", "r");
@@ -62,7 +62,7 @@ void input_parameters(struct parameters* param)
     fclose(infile);
 } /* end input_parameters*/
 
-void print_network_status(struct network network) 
+void print_network_status (struct network network) 
 {
     printf("---- NETWORK STATUS ----\n");
     for (int i = 0; i < network.num_layers; i++) 
