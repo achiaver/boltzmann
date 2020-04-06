@@ -1,4 +1,4 @@
-// MATRIX_H
+// __MATRIX_H__
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
@@ -16,5 +16,7 @@ void            matrix_print_line   (struct matrix*);
 void            matrix_shape        (struct matrix*);
 void            matrix_set          (struct matrix*, size_t, size_t, double);
 double          matrix_get          (struct matrix*, size_t, size_t);
-#endif /* MATRIX_H */
+struct matrix * matrix_read_data    (char * filename, size_t rows, size_t cols);
+
+#endif /* __MATRIX_H__ */
 

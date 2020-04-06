@@ -1,9 +1,6 @@
 #ifndef __BOLTZMANN_H__
 #define __BOLTZMANN_H__
 
-#include <stddef.h>
-#include <stdlib.h>
-
 /*
     Node data structure.
     =================================================
