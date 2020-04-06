@@ -94,7 +94,7 @@ matrix_get(struct matrix *m, size_t row, size_t col)
 struct matrix *
 matrix_read_data (char * filename, size_t rows, size_t cols)
 {
-    struct matrix * m = matrix_create(rows, cols);
+    struct matrix * m_data = matrix_create(rows, cols);
 
     char buffer[1024];
     int row = 0;
@@ -115,14 +115,64 @@ matrix_read_data (char * filename, size_t rows, size_t cols)
 
         for (data = strtok(buffer, ","); data && *data; col++, data = strtok(NULL, ",\n"))
         {
-            matrix_set(m, row, col, atof(data));
+            matrix_set(m_data, row, col, atof(data));
         }
         free(line);
     }
 
     fclose(fp);
-    return m;
+    return m_data;
 } /* matrix_read_data */
+
+
+struct matrix *
+matrix_sum (struct matrix * A, struct matrix * B)
+{
+    if ((A->rows != B->rows) || (A->cols != B->cols))
+    {
+        fprintf(stderr, "matrix_sum: matrices dimension are not compatible: %s %d", __FILE__, __LINE__);
+        exit(1);
+    }
+
+    struct matrix * m_sum = matrix_create(A->rows, A->cols);
+
+    for (int row = 0; row < A->rows; row++) 
+    {
+        for (int col = 0; col < A->cols; col++)
+        {
+            matrix_set(m_sum, row, col, matrix_get(A, row, col) + matrix_get(B, row, col));
+        }
+    }
+
+    return m_sum;
+} /* matrix_sum */
+
+// PENSAR EM COMO ESCREVER A MULTIPLICACAO DE MATRIZES USANDO GET, SET E SUM 
+struct matrix *
+matrix_product (struct matrix * A, struct matrix * B)
+{
+    if ((A->cols != B->rows))
+    {
+        fprintf(stderr, "matrix_product: matrices dimension are not compatible: %s %d", __FILE__, __LINE__);
+        exit(1);
+    }
+
+    struct matrix * m_product = matrix_create(A->rows, B->cols);
+    matrix_zero(m_product);
+
+    for (int row = 0; row < A->rows; row++)
+    {
+        for (int col1 = 0; col1 < B->cols; col1++)
+        {
+            for (int col2 = 0; col2 > A->cols; col2++)
+            {
+                matrix_set(m_product, row, col, )
+            }
+        }
+    }
+
+    return m_product;
+}
 
 
 int main (int args, char * argv[]) {
@@ -132,7 +182,10 @@ int main (int args, char * argv[]) {
     matrix_shape(data);
 
     matrix_print(data);
+    printf("\n\n");
 
+    struct matrix * C = matrix_sum(data, data);
+    matrix_print(C);
 
 //    double res;
 //    size_t cols = 3, rows = 4;
