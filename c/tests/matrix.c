@@ -1,34 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-
-// MATRIX_H
-#ifndef MATRIX_H
-#define MATRIX_H
-
-struct matrix {
-    size_t rows;
-    size_t cols;
-    double * elem;
-};
-
-struct matrix * matrix_create       (size_t, size_t);
-void            matrix_destroy      (struct matrix*);
-void            matrix_zero         (struct matrix*);
-void            matrix_print        (struct matrix*);
-void            matrix_print_line   (struct matrix*);
-void            matrix_shape        (struct matrix*);
-void            matrix_set          (struct matrix*, size_t, size_t, double);
-double          matrix_get          (struct matrix*, size_t, size_t);
-#endif /* MATRIX_H */
-
-// END MATRIX_H
+#include <string.h>
+#include "matrix.h"
 
 
 struct matrix *
 matrix_create( size_t rows, size_t cols)
 {
-
     struct matrix * m = malloc (sizeof (*m));
     if(!m)
     {
@@ -47,7 +25,8 @@ matrix_create( size_t rows, size_t cols)
     }
 
     return m;
-}
+} /* matrix_create */
+
 
 void
 matrix_destroy(struct matrix *m)
@@ -56,14 +35,16 @@ matrix_destroy(struct matrix *m)
         free(m->elem);
         free(m);
     }
-}
+} /* matrix_destroy */
+
 
 void
 matrix_zero(struct matrix *m)
 {
     for (size_t e = 0; e < (m->rows * m->cols); e++)
         m->elem[e] = 0.;
-}
+} /* matrix_zero */
+
 
 void
 matrix_print(struct matrix *m)
@@ -72,11 +53,11 @@ matrix_print(struct matrix *m)
     {
         for( size_t col = 0; col < m->cols; col++) 
         {
-            printf("%f, ", matrix_get(m, row, col));
+            printf("%f, \t", matrix_get(m, row, col));
         }
         printf("\n");
     }
-}
+} /* matrix_print */
 
 
 void
@@ -84,58 +65,104 @@ matrix_print_line(struct matrix *m)
 {
     for (size_t row = 0; row < m->rows; row++) 
         for( size_t col = 0; col < m->cols; col++) 
-            printf("%f, ", matrix_get(m, row, col));
+            printf("%f, \t", matrix_get(m, row, col));
     printf("\n");
-}
+} /* matrix_print_line */
+
 
 void
 matrix_shape(struct matrix *m)
 {
     printf("[%zu, %zu]\n", m->rows, m->cols);
-}
+} /* matrix_shape */
 
 
 void
 matrix_set(struct matrix *m, size_t row, size_t col, double value)
 {
     m->elem[(row*m->cols) + col] = value;
-}
+} /* matrix_set */
+
 
 double
 matrix_get(struct matrix *m, size_t row, size_t col)
 {
     return m->elem[(row*m->cols) + col];
-}
+} /* matrix_get */
+
+
+struct matrix *
+matrix_read_data (char * filename, size_t rows, size_t cols)
+{
+    struct matrix * m = matrix_create(rows, cols);
+
+    char buffer[1024];
+    int row = 0;
+
+    FILE * fp = fopen(filename, "r");
+
+    if (!fp)
+    {
+        fprintf(stderr, "fopen: %s %d", __FILE__, __LINE__);
+        exit(2);
+    }
+
+    while (fgets(buffer, sizeof(buffer), fp) && (row < rows))
+    {
+        char *line = strdup(buffer);
+        int col;
+        const char * data;
+
+        for (data = strtok(buffer, ","); data && *data; col++, data = strtok(NULL, ",\n"))
+        {
+            matrix_set(m, row, col, atof(data));
+        }
+        free(line);
+    }
+
+    fclose(fp);
+    return m;
+} /* matrix_read_data */
 
 
 int main (int args, char * argv[]) {
 
-    double res;
-    size_t cols = 4, rows = 3;
 
-    struct matrix *my_matrix = matrix_create(cols, rows);
-    matrix_zero(my_matrix);
+    struct matrix * data = matrix_read_data("../dataset/example.csv", 4, 5);
+    matrix_shape(data);
 
-    printf("\n");
-    matrix_shape(my_matrix);
-    printf("\n");
-    matrix_print_line(my_matrix);
-    printf("\n");
-    matrix_print(my_matrix);
-    printf("\n");
+    matrix_print(data);
 
-    matrix_set(my_matrix, 1, 2, 42.42);
-    res = matrix_get(my_matrix, 1, 2);
 
-    printf("\n");
-    printf("%f\n", res);
-    printf("\n");
-    matrix_print_line(my_matrix);
-    printf("\n");
-    matrix_print(my_matrix);
-    printf("\n");
+//    double res;
+//    size_t cols = 3, rows = 4;
 
-    matrix_destroy(my_matrix);
+//    struct matrix *my_matrix = matrix_create(rows, cols);
+//    matrix_zero(my_matrix);
+
+//    printf("\n");
+//    matrix_shape(my_matrix);
+//    printf("\n");
+//    matrix_print_line(my_matrix);
+//    printf("\n");
+//    matrix_print(my_matrix);
+//    printf("\n");
+//
+//    matrix_set(my_matrix, 1, 2, 42.42);
+//    matrix_set(my_matrix, 1, 3, 42);
+//    res = matrix_get(my_matrix, 1, 2);
+//
+//    printf("\n");
+//    printf("%f\n", res);
+//    printf("\n");
+//    matrix_print_line(my_matrix);
+//    printf("\n");
+//    matrix_print(my_matrix);
+//    printf("\n");
+//    matrix_destroy(my_matrix);
+
+    matrix_destroy(data);
+
 
     return 0;
 }
