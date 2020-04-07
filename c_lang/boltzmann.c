@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <stdlib.h>
 #include "boltzmann.h"
 #include "stats_functions.h"
+#include "matrix.h"
 
-struct layer * create_layer (struct parameters param) 
+
+struct layer * 
+create_layer (struct parameters * param) 
 {
     struct layer * layer_bm = malloc(sizeof (*layer_bm) * (param.num_layers));
     if (!layer_bm) 
@@ -68,9 +72,11 @@ struct layer * create_layer (struct parameters param)
     }
     printf("\n");
     return layer_bm;
-}
+} /* end of create_layer */
 
-struct network * create_network (struct parameters param) 
+
+struct network * 
+create_network (struct parameters * param) 
 {
     struct network * network_bm = malloc(sizeof (*network_bm));
     if (!network_bm) {
@@ -80,50 +86,13 @@ struct network * create_network (struct parameters param)
     network_bm->num_layers = param.num_layers;
     network_bm->layer = create_layer(param);
     return network_bm;
-}
+} /* end of create_network */
 
 
-void read_csv(struct parameters param, double * dataset) 
+struct matrix *
+allocate_dataset ()
 {
-    char buffer[1024];
-    char * record, * line;
-    FILE * fp = fopen("dataset/dataset.csv", "r");
-
-    if (!fp)
-    {
-        printf("read_csv : %s \n", strerror(errno));
-        exit(2);
-    }
-
-    for (int i = 0; i < param.dataset_rows; i++)
-    {
-        line = fgets(buffer, sizeof(buffer), fp);
-        record = strtok(line, ",");
-        
-        for (int j = 0; i < param.dataset_cols; j++)
-        {
-        
-        }
-
-    }
-    while (!(line = fgets(buffer, sizeof(buffer), fp))) 
-    {
-        record = strtok(line, ",");
-        while (!record) 
-        {
-            datavar[rows][cols] = atof(record);
-            cols = cols + 1;
-        }
-        rows = rows + 1;
-        cols_aux = cols;
-        cols = 0;
-    }
-
-
-}
-
-double * allocate_dataset (struct parameters param)
-{
+    struct matrix * data = 
     double * dataset = malloc(sizeof (*dataset) * (param.dataset_rows));
     if (!dataset)
     {
@@ -160,8 +129,8 @@ int main(int argc, char *argv[])
 //        .maxepochs = 0
 //    };
 
-    struct parameters parameters_bm;
-    input_parameters(&parameters_bm);
+    struct parameters * parameters_bm;
+    input_parameters(parameters_bm);
     print_parameters(parameters_bm);
 
     struct network * network_bm = create_network(parameters_bm);
