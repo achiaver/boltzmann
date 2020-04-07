@@ -97,20 +97,13 @@ allocate_dataset (char * filename, size_t rows, size_t cols)
 }
 
 
-int main(int argc, char *argv[])
+int 
+main(int argc, char *argv[])
 {
-    /* Boltzmann Machine parameters */
-//    struct parameters param = {
-//        .N = 0,
-//        .M = 0,
-//        .epsilonw = 0.0,
-//        .epsilonvb = 0.0,
-//        .epsilonhb = 0.0,
-//        .maxepochs = 0
-//    };
 
-    struct parameters * param;
-    input_parameters(param);
+
+    char * parameters_file = "in_parameters.dat";
+    struct parameters * param = parameters_input(parameters_file);
     printf("ESCREVEU PARAMETROS!!!\n");
 
     print_parameters(param);

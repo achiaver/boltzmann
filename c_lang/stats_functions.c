@@ -5,14 +5,82 @@
 #include "stats_functions.h"
 
 
+
 struct parameters *
 parameters_create ()
 {
-    struct parameters * param = malloc(sizeof(*param));
+    struct parameters * param = malloc (sizeof (*param));
+    if(!param)
+    {
+        fprintf(stderr, "parameters_create: malloc: %s %d", __FILE__, __LINE__);
+        exit(2);
+    }
 
+    param->filename = "";
+    param->dataset_rows = 0;
+    param->dataset_cols = 0;
+    param->epsilonw = 0.;
+    param->epsilonvb = 0.;
+    param->epsilonhb = 0.;
+    param->maxepochs = 0;
+    param->num_layers = 0;
 
     return param;
 }
+
+
+struct parameters *
+parameters_input (char * parameters_file)
+{
+    
+    printf("Consegui dar fopen no arquivo %s", parameters_file);
+
+    FILE * fp = fopen(parameters_file, "r");
+
+    if(!fp)
+    {
+        fprintf(stderr, "parameters_input: fopen: %s %d", __FILE__, __LINE__);
+        exit(2);
+    }
+
+    printf("parameters_input -> agora vou criar o espaço para os parametros");
+
+    struct parameters * param = parameters_create();
+
+    fscanf(fp, "%*s%s%*s \
+                %*s%zu%*s \
+                %*s%zu%*s \
+                %*s%lf%*s \
+                %*s%lf%*s \
+                %*s%lf%*s \
+                %*s%d%*s \
+                %*s%zu%*s ",
+                param->filename,
+                &param->dataset_rows,
+                &param->dataset_cols,
+                &param->epsilonw,
+                &param->epsilonvb,
+                &param->epsilonhb,
+                &param->maxepochs,
+                &param->num_layers);
+
+    printf("\n%s\n", param->filename);
+
+    param->num_nodes_array = malloc (sizeof (size_t) * (param->num_layers));
+    if (!param->num_nodes_array)
+    {
+        fprintf(stderr, "parameters_input: malloc: %s %d", __FILE__, __LINE__);
+        exit(2);
+    }
+
+    for (int i = 0; i < param->num_layers; i++)
+    {
+        fscanf(fp, "%*s%zu%*s", &param->num_nodes_array[i]);
+    }
+    fclose(fp);
+
+    return param;
+} /* end parameters_input*/
 
 
 void 
@@ -42,41 +110,6 @@ print_parameters (struct parameters * param)
     printf("\n");
 } /* end print_parameters */
 
-
-void 
-input_parameters (struct parameters * param) 
-{
-    FILE *infile;
-    infile = fopen("in_parameters.dat", "r");
-
-    fscanf(infile, "%*s%s%*s \
-                    %*s%zu%*s \
-                    %*s%zu%*s \
-                    %*s%lf%*s \
-                    %*s%lf%*s \
-                    %*s%lf%*s \
-                    %*s%d%*s \
-                    %*s%zu%*s ",
-                    param->filename,
-                    &param->dataset_rows,
-                    &param->dataset_cols,
-                    &param->epsilonw,
-                    &param->epsilonvb,
-                    &param->epsilonhb,
-                    &param->maxepochs,
-                    &param->num_layers);
-
-    param->num_nodes_array = malloc(sizeof (size_t) * (param->num_layers));
-    if (param->num_nodes_array != NULL) 
-    {
-        for (int i = 0; i < param->num_layers; i++) 
-        {
-            fscanf(infile, "%*s%zu%*s", &param->num_nodes_array[i]);
-        }
-    }
-
-    fclose(infile);
-} /* end input_parameters*/
 
 
 void
