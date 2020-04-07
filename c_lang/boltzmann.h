@@ -31,12 +31,6 @@ struct layer {
     struct node * node;
 };
 
-struct weight {
-    size_t set;     // Number of weight sets this number is equal to (the number of layers - 1)
-    size_t dim_2;   // Dimension of weight set, dim_1 is equal to number of nodes of layer 1
-    size_t dim_3;   // Dimension of weight set, dim_2 is equal to number of nodes of layer 2
-    double value;   // Value of the weight connection between two nodes
-};
 
 /*
     Network data structure.
@@ -48,7 +42,7 @@ struct weight {
 struct network {
     size_t num_layers;
     struct layer * layer;
-//    struct weight * weights;
+//    struct matrix * weights;
 };
 
 /*
@@ -64,6 +58,7 @@ struct network {
     hb - refers to hidden units biases
  */
 struct parameters {
+    char * filename;
     size_t dataset_rows;    // Amount of examples the dataset have, each row is a pattern
     size_t dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
     double epsilonw;        // Learning rate for weights

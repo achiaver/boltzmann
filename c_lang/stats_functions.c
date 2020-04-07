@@ -4,7 +4,19 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 
-void print_parameters (struct parameters param) 
+
+struct parameters *
+parameters_create ()
+{
+    struct parameters * param = malloc(sizeof(*param));
+
+
+    return param;
+}
+
+
+void 
+print_parameters (struct parameters * param) 
 {
     printf("\n \
     \t Number of examples in the dataset: \t %zu \n \
@@ -14,34 +26,38 @@ void print_parameters (struct parameters param)
     \t Learning rate of the hidden units biases: \t %lf \n \
     \t Maximum number of epochs: \t %d \n \
     \t Number of layers of the network: \t %zu \n",
-    param.dataset_rows,
-    param.dataset_cols,
-    param.epsilonw,
-    param.epsilonvb,
-    param.epsilonhb,
-    param.maxepochs,
-    param.num_layers);
+    param->dataset_rows,
+    param->dataset_cols,
+    param->epsilonw,
+    param->epsilonvb,
+    param->epsilonhb,
+    param->maxepochs,
+    param->num_layers);
 
-    for (int i = 0; i < param.num_layers; i++) 
+    for (int i = 0; i < param->num_layers; i++) 
     {
-        printf("\t Number of nodes at layer %d: \t %zu \n", i, param.num_nodes_array[i]);
+        printf("\t Number of nodes at layer %d: \t %zu \n", i, param->num_nodes_array[i]);
     }
 
     printf("\n");
 } /* end print_parameters */
 
-void input_parameters (struct parameters* param) 
+
+void 
+input_parameters (struct parameters * param) 
 {
     FILE *infile;
     infile = fopen("in_parameters.dat", "r");
 
-    fscanf(infile, "%*s%zu%*s \
+    fscanf(infile, "%*s%s%*s \
+                    %*s%zu%*s \
                     %*s%zu%*s \
                     %*s%lf%*s \
                     %*s%lf%*s \
                     %*s%lf%*s \
                     %*s%d%*s \
                     %*s%zu%*s ",
+                    param->filename,
                     &param->dataset_rows,
                     &param->dataset_cols,
                     &param->epsilonw,
@@ -62,30 +78,32 @@ void input_parameters (struct parameters* param)
     fclose(infile);
 } /* end input_parameters*/
 
-void print_network_status (struct network network) 
+
+void
+print_network_status (struct network * network) 
 {
     printf("---- NETWORK STATUS ----\n");
-    for (int i = 0; i < network.num_layers; i++) 
+    for (int i = 0; i < network->num_layers; i++) 
     {
         printf("Layer %2d \n", i);
-        for (int j = 0; j < network.layer[i].num_nodes; j++) 
+        for (int j = 0; j < network->layer[i].num_nodes; j++) 
         {
             printf("\t node %2d \n", j);
-            printf("\t\t- activation %2f \n", network.layer[i].node[j].activation);
-            printf("\t\t- bias %f \n", network.layer[i].node[j].bias);
+            printf("\t\t- activation %2f \n", network->layer[i].node[j].activation);
+            printf("\t\t- bias %f \n", network->layer[i].node[j].bias);
             printf("\t\t- weights -> ");
             if (i == 0) 
             {
-                for (int k = 0; k < network.layer[i+1].num_nodes; k++) 
+                for (int k = 0; k < network->layer[i+1].num_nodes; k++) 
                 {
-                    printf("%.4f \t", network.layer[i].node[j].weight[k]);
+                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
                 }
                 printf("\n");
             } else
             {
-                for (int k = 0; k < network.layer[i-1].num_nodes; k++) 
+                for (int k = 0; k < network->layer[i-1].num_nodes; k++) 
                 {
-                    printf("%.4f \t", network.layer[i].node[j].weight[k]);
+                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
                 }
                 printf("\n");
             }
