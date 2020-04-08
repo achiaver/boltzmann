@@ -1,4 +1,3 @@
-dataset_filename_(filename)        "dataset/three_node_test.csv" <string>
 dataset_rows_dimension_(dataset_rows)                8           <integer>
 dataset_cols_dimension_(dataset_cols)                3           <integer>
 learning_rate_weights_(epsilonw)                    0.004        <double>
