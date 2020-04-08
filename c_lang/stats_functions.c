@@ -16,7 +16,7 @@ parameters_create ()
         exit(2);
     }
 
-    param->filename = "";
+    param->dataset_file = "";
     param->dataset_rows = 0;
     param->dataset_cols = 0;
     param->epsilonw = 0.;
@@ -30,9 +30,9 @@ parameters_create ()
 
 
 struct parameters *
-parameters_input (char * parameters_file)
+parameters_input (char * parameters_file, char * data_file)
 {
-    
+
     printf("Consegui dar fopen no arquivo %s", parameters_file);
 
     FILE * fp = fopen(parameters_file, "r");
@@ -47,15 +47,14 @@ parameters_input (char * parameters_file)
 
     struct parameters * param = parameters_create();
 
-    fscanf(fp, "%*s%s%*s \
-                %*s%zu%*s \
+    param->dataset_file = data_file;
+    fscanf(fp, "%*s%zu%*s \
                 %*s%zu%*s \
                 %*s%lf%*s \
                 %*s%lf%*s \
                 %*s%lf%*s \
                 %*s%d%*s \
                 %*s%zu%*s ",
-                param->filename,
                 &param->dataset_rows,
                 &param->dataset_cols,
                 &param->epsilonw,
@@ -64,7 +63,7 @@ parameters_input (char * parameters_file)
                 &param->maxepochs,
                 &param->num_layers);
 
-    printf("\n%s\n", param->filename);
+    printf("\n%s\n", param->dataset_file);
 
     param->num_nodes_array = malloc (sizeof (size_t) * (param->num_layers));
     if (!param->num_nodes_array)
@@ -83,8 +82,8 @@ parameters_input (char * parameters_file)
 } /* end parameters_input*/
 
 
-void 
-print_parameters (struct parameters * param) 
+void
+print_parameters (struct parameters * param)
 {
     printf("\n \
     \t Number of examples in the dataset: \t %zu \n \
@@ -102,7 +101,7 @@ print_parameters (struct parameters * param)
     param->maxepochs,
     param->num_layers);
 
-    for (int i = 0; i < param->num_layers; i++) 
+    for (int i = 0; i < param->num_layers; i++)
     {
         printf("\t Number of nodes at layer %d: \t %zu \n", i, param->num_nodes_array[i]);
     }
@@ -113,28 +112,28 @@ print_parameters (struct parameters * param)
 
 
 void
-print_network_status (struct network * network) 
+print_network_status (struct network * network)
 {
     printf("---- NETWORK STATUS ----\n");
-    for (int i = 0; i < network->num_layers; i++) 
+    for (int i = 0; i < network->num_layers; i++)
     {
         printf("Layer %2d \n", i);
-        for (int j = 0; j < network->layer[i].num_nodes; j++) 
+        for (int j = 0; j < network->layer[i].num_nodes; j++)
         {
             printf("\t node %2d \n", j);
             printf("\t\t- activation %2f \n", network->layer[i].node[j].activation);
             printf("\t\t- bias %f \n", network->layer[i].node[j].bias);
             printf("\t\t- weights -> ");
-            if (i == 0) 
+            if (i == 0)
             {
-                for (int k = 0; k < network->layer[i+1].num_nodes; k++) 
+                for (int k = 0; k < network->layer[i+1].num_nodes; k++)
                 {
                     printf("%.4f \t", network->layer[i].node[j].weight[k]);
                 }
                 printf("\n");
             } else
             {
-                for (int k = 0; k < network->layer[i-1].num_nodes; k++) 
+                for (int k = 0; k < network->layer[i-1].num_nodes; k++)
                 {
                     printf("%.4f \t", network->layer[i].node[j].weight[k]);
                 }
