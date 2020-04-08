@@ -58,7 +58,7 @@ struct network {
     hb - refers to hidden units biases
  */
 struct parameters {
-    char * filename;
+    char * dataset_file;
     size_t dataset_rows;    // Amount of examples the dataset have, each row is a pattern
     size_t dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
     double epsilonw;        // Learning rate for weights
