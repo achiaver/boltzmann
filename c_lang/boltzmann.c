@@ -72,6 +72,15 @@ layer_create (struct parameters * param)
 } /* end of layer_create */
 
 
+struct matrix *
+weight_create(struct parameters * param)
+{
+    struct matrix * weight = matrix_create() 
+
+
+    return weight;
+} /* end of weight_create*/
+
 struct network *
 network_create (struct parameters * param)
 {
@@ -82,8 +91,9 @@ network_create (struct parameters * param)
     }
     network_bm->num_layers = param->num_layers;
     network_bm->layer = layer_create(param);
+    network_bm->weight = weight_create(param);
     return network_bm;
-} /* end of create_network */
+} /* end of network_create */
 
 
 struct matrix *
@@ -91,7 +101,7 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 {
     struct matrix * data = matrix_read_data(filename, rows, cols);
     return data;
-}
+} /* end of dataset_allocate*/
 
 
 int
