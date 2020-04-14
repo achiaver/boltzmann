@@ -75,9 +75,8 @@ layer_create (struct parameters * param)
 struct matrix *
 weight_create(struct parameters * param)
 {
-    struct matrix * weight = matrix_create() 
-
-
+    struct matrix * weight = matrix_create(param->num_nodes_array[0], param->num_nodes_array[1]); 
+    matrix_randomize(weight);
     return weight;
 } /* end of weight_create*/
 
@@ -91,7 +90,7 @@ network_create (struct parameters * param)
     }
     network_bm->num_layers = param->num_layers;
     network_bm->layer = layer_create(param);
-    network_bm->weight = weight_create(param);
+    network_bm->weights = weight_create(param);
     return network_bm;
 } /* end of network_create */
 
@@ -116,12 +115,14 @@ main(int argc, char *argv[])
 
     print_parameters(param);
 
-    struct network * network_bm = network_create(param);
-    print_network_status(network_bm);
+    struct network * net = network_create(param);
+    print_network_status(net);
 
     struct matrix* dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
+
+    matrix_print(net->weights);
 
 
     return 0;

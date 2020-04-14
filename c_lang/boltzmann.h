@@ -42,7 +42,7 @@ struct layer {
 struct network {
     size_t num_layers;
     struct layer * layer;
-//    struct matrix * weights;
+    struct matrix * weights;
 };
 
 /*
