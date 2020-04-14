@@ -19,7 +19,6 @@ create_layer (struct parameters * param)
 
     for (int i = 0; i < param->num_layers; i++)
     {
-        printf("i - %d \n", i);
         layer_bm[i].num_nodes = param->num_nodes_array[i];
         layer_bm[i].node = malloc(sizeof (struct node) * (layer_bm[i].num_nodes));
         if (!layer_bm[i].node)
@@ -30,7 +29,6 @@ create_layer (struct parameters * param)
 
         for (int j = 0; j < layer_bm[i].num_nodes; j++)
         {
-            printf("i - %d \t j - %d \n", i, j);
             layer_bm[i].node[j].activation = 0;
             layer_bm[i].node[j].bias = 0;
             layer_bm[i].node[j].h_in = 0;
