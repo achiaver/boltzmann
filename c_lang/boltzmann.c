@@ -10,12 +10,12 @@
 double drand48();
 
 struct layer *
-create_layer (struct parameters * param)
+layer_create (struct parameters * param)
 {
     struct layer * layer_bm = malloc(sizeof (*layer_bm) * (param->num_layers));
     if (!layer_bm)
     {
-        printf("create_layer: malloc: layer: %s \n", strerror(errno));
+        printf("layer_create: malloc: layer: %s \n", strerror(errno));
         exit(2);
     }
     srand48(time(NULL));
@@ -25,7 +25,7 @@ create_layer (struct parameters * param)
         layer_bm[i].node = malloc(sizeof (struct node) * (layer_bm[i].num_nodes));
         if (!layer_bm[i].node)
         {
-            printf("create_layer: malloc: node: %s\n", strerror(errno));
+            printf("layer_create: malloc: node: %s\n", strerror(errno));
             exit(2);
         }
 
@@ -40,7 +40,7 @@ create_layer (struct parameters * param)
                 layer_bm[i].node[j].weight = malloc(sizeof (double *) * (param->num_nodes_array[i+1]));
                 if (!layer_bm[i].node[j].weight)
                 {
-                    printf("create_layer: malloc: node %d: weight: %s \n", j,  strerror(errno));
+                    printf("layer_create: malloc: node %d: weight: %s \n", j,  strerror(errno));
                     exit(2);
                 }
 
@@ -54,7 +54,7 @@ create_layer (struct parameters * param)
                 layer_bm[i].node[j].weight = malloc(sizeof (double *) * (param->num_nodes_array[i-1]));
                 if (!layer_bm[i].node[j].weight)
                 {
-                    printf("create_layer: malloc: node %d: weight: %s\n", j, strerror(errno));
+                    printf("layer_create: malloc: node %d: weight: %s\n", j, strerror(errno));
                     exit(2);
                 }
 
@@ -69,25 +69,25 @@ create_layer (struct parameters * param)
     }
     printf("\n");
     return layer_bm;
-} /* end of create_layer */
+} /* end of layer_create */
 
 
 struct network *
-create_network (struct parameters * param)
+network_create (struct parameters * param)
 {
     struct network * network_bm = malloc(sizeof (*network_bm));
     if (!network_bm) {
-        printf("create_network: malloc: network: %s \n", strerror(errno));
+        printf("network_create: malloc: network: %s \n", strerror(errno));
         exit(2);
     }
     network_bm->num_layers = param->num_layers;
-    network_bm->layer = create_layer(param);
+    network_bm->layer = layer_create(param);
     return network_bm;
 } /* end of create_network */
 
 
 struct matrix *
-allocate_dataset (char * filename, size_t rows, size_t cols)
+dataset_allocate (char * filename, size_t rows, size_t cols)
 {
     struct matrix * data = matrix_read_data(filename, rows, cols);
     return data;
@@ -100,18 +100,16 @@ main(int argc, char *argv[])
     
     srand48(time(NULL));
 
-
-
     char * parameters_file = "in_parameters.dat";
     char * dataset_file = "dataset/three_node_test.csv";
     struct parameters * param = parameters_input(parameters_file, dataset_file);
 
     print_parameters(param);
 
-    struct network * network_bm = create_network(param);
+    struct network * network_bm = network_create(param);
     print_network_status(network_bm);
 
-    struct matrix* dataset = allocate_dataset(param->dataset_file, param->dataset_rows, param->dataset_cols);
+    struct matrix* dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
 
