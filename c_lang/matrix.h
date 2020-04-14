@@ -11,6 +11,7 @@ struct matrix {
 struct matrix * matrix_create         (size_t, size_t);
 void            matrix_destroy        (struct matrix*);
 void            matrix_zero           (struct matrix*);
+void            matrix_randomize      (struct matrix*);
 void            matrix_print          (struct matrix*);
 void            matrix_print_line     (struct matrix*);
 void            matrix_shape          (struct matrix*);

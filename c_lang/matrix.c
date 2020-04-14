@@ -5,7 +5,7 @@
 
 
 struct matrix *
-matrix_create( size_t rows, size_t cols)
+matrix_create(size_t rows, size_t cols)
 {
     struct matrix * m = malloc (sizeof (*m));
     if(!m)
@@ -44,6 +44,13 @@ matrix_zero(struct matrix *m)
     for (size_t e = 0; e < (m->rows * m->cols); e++)
         m->elem[e] = 0.;
 } /* end of matrix_zero */
+
+void
+matrix_randomize(struct matrix *m)
+{
+    for (size_t e = 0; e < (m->rows * m->cols); e++)
+        m->elem[e] = drand48();
+} /* end of matrix_randomize */
 
 
 void
@@ -92,7 +99,7 @@ matrix_get(struct matrix *m, size_t row, size_t col)
 
 
 struct matrix *
-matrix_read_data (char * filename, size_t rows, size_t cols)
+matrix_read_data(char * filename, size_t rows, size_t cols)
 {
     struct matrix * m_data = matrix_create(rows, cols);
 
@@ -125,7 +132,7 @@ matrix_read_data (char * filename, size_t rows, size_t cols)
 
 
 struct matrix *
-matrix_sum (struct matrix * A, struct matrix * B)
+matrix_sum(struct matrix * A, struct matrix * B)
 {
     if ((A->rows != B->rows) || (A->cols != B->cols))
     {
@@ -148,7 +155,7 @@ matrix_sum (struct matrix * A, struct matrix * B)
 
 
 struct matrix *
-matrix_product (struct matrix * A, struct matrix * B)
+matrix_product(struct matrix * A, struct matrix * B)
 {
     if ((A->cols != B->rows))
     {
@@ -179,7 +186,7 @@ matrix_product (struct matrix * A, struct matrix * B)
 
 
 struct matrix *
-matrix_product_scalar (struct matrix * A, double scalar)
+matrix_product_scalar(struct matrix * A, double scalar)
 {
     struct matrix * m_prod_scalar = matrix_create(A->rows, A->cols);
 
