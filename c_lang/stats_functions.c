@@ -32,9 +32,6 @@ parameters_create ()
 struct parameters *
 parameters_input (char * parameters_file, char * data_file)
 {
-
-    printf("Consegui dar fopen no arquivo %s", parameters_file);
-
     FILE * fp = fopen(parameters_file, "r");
 
     if(!fp)
@@ -42,8 +39,6 @@ parameters_input (char * parameters_file, char * data_file)
         fprintf(stderr, "parameters_input: fopen: %s %d", __FILE__, __LINE__);
         exit(2);
     }
-
-    printf("parameters_input -> agora vou criar o espaço para os parametros");
 
     struct parameters * param = parameters_create();
 
@@ -62,8 +57,6 @@ parameters_input (char * parameters_file, char * data_file)
                 &param->epsilonhb,
                 &param->maxepochs,
                 &param->num_layers);
-
-    printf("\n%s\n", param->dataset_file);
 
     param->num_nodes_array = malloc (sizeof (size_t) * (param->num_layers));
     if (!param->num_nodes_array)
@@ -85,6 +78,7 @@ parameters_input (char * parameters_file, char * data_file)
 void
 print_parameters (struct parameters * param)
 {
+    printf("---- IN PARAMETERS ----\n");
     printf("\n \
     \t Number of examples in the dataset: \t %zu \n \
     \t Dimension size of the dataset: \t %zu \n \

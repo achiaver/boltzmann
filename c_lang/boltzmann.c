@@ -103,7 +103,6 @@ main(int argc, char *argv[])
     char * parameters_file = "in_parameters.dat";
     char * dataset_file = "dataset/three_node_test.csv";
     struct parameters * param = parameters_input(parameters_file, dataset_file);
-    printf("ESCREVEU PARAMETROS!!!\n");
 
     print_parameters(param);
 
@@ -111,28 +110,9 @@ main(int argc, char *argv[])
     print_network_status(network_bm);
 
     struct matrix* dataset = allocate_dataset(param->dataset_file, param->dataset_rows, param->dataset_cols);
+    printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
 
 
-    /* Sample of initial values for training */
-    double sample_input[][3] = {
-        { 1.f, 1.f, 0.f },
-        { 1.f, 1.f, 0.f },
-        { 1.f, 0.f, 0.f },
-        { 1.f, 0.f, 1.f },
-    };
-
-//    size_t data_count = sizeof sample_input / sizeof *sample_input;
-//    double *tmp_input;
-//    tmp_input = &sample_input;
-//
-//
-//    for(size_t j=0; j < data_count; j++) {
-//        for (size_t i=0; i< param->N; i++) {
-//            printf("%1.0f ", *tmp_input++);
-//        }
-//        printf("\n");
-//    }
-//
     return 0;
 }
