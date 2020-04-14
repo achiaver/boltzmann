@@ -5,7 +5,9 @@
 #include "boltzmann.h"
 #include "stats_functions.h"
 #include "matrix.h"
+#include <time.h> 
 
+double drand48();
 
 struct layer *
 create_layer (struct parameters * param)
@@ -16,7 +18,7 @@ create_layer (struct parameters * param)
         printf("create_layer: malloc: layer: %s \n", strerror(errno));
         exit(2);
     }
-
+    srand48(time(NULL));
     for (int i = 0; i < param->num_layers; i++)
     {
         layer_bm[i].num_nodes = param->num_nodes_array[i];
@@ -44,9 +46,8 @@ create_layer (struct parameters * param)
 
                 for (int k = 0; k < param->num_nodes_array[i+1]; k++)
                 {
-//                    printf("i - %d \t j - %d \t k - %d \t", i, j, k);
-                    layer_bm[i].node[j].weight[k] = (double) (10 * (j+1)) + (k+1);
-//                    printf("weight_%d%d - %f \n", (j+1), (k+1), layer_bm[i].node[j].weight[k]);
+//                    layer_bm[i].node[j].weight[k] = (double) (10 * (j+1)) + (k+1);
+                    layer_bm[i].node[j].weight[k] = drand48();
                 }
             } else
             {
@@ -59,9 +60,7 @@ create_layer (struct parameters * param)
 
                 for (int k = 0; k < param->num_nodes_array[i-1]; k++)
                 {
-//                    printf("i - %d \t j - %d \t k - %d \t", i, j, k);
                     layer_bm[i].node[j].weight[k] = layer_bm[i-1].node[k].weight[j];
-//                    printf("weight_%d%d - %f \n", (j+1), (k+1), layer_bm[i].node[j].weight[k]);
                 }
             }
             printf("\n");
@@ -98,6 +97,9 @@ allocate_dataset (char * filename, size_t rows, size_t cols)
 int
 main(int argc, char *argv[])
 {
+    
+    srand48(time(NULL));
+
 
 
     char * parameters_file = "in_parameters.dat";
