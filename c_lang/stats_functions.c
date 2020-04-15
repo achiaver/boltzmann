@@ -76,7 +76,7 @@ parameters_input (char * parameters_file, char * data_file)
 
 
 void
-print_parameters (struct parameters * param)
+parameters_print (struct parameters * param)
 {
     printf("---- IN PARAMETERS ----\n");
     printf("\n \
@@ -101,12 +101,12 @@ print_parameters (struct parameters * param)
     }
 
     printf("\n");
-} /* end print_parameters */
+} /* end parameters_print */
 
 
 
 void
-print_network_status (struct network * network)
+network_print (struct network * network)
 {
     printf("---- NETWORK STATUS ----\n");
     for (int i = 0; i < network->num_layers; i++)
@@ -117,24 +117,24 @@ print_network_status (struct network * network)
             printf("\t node %2d \n", j);
             printf("\t\t- activation %2f \n", network->layer[i].node[j].activation);
             printf("\t\t- bias %f \n", network->layer[i].node[j].bias);
-            printf("\t\t- weights -> ");
-            if (i == 0)
-            {
-                for (int k = 0; k < network->layer[i+1].num_nodes; k++)
-                {
-                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
-                }
-                printf("\n");
-            } else
-            {
-                for (int k = 0; k < network->layer[i-1].num_nodes; k++)
-                {
-                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
-                }
-                printf("\n");
-            }
+//            printf("\t\t- weights -> ");
+//            if (i == 0)
+//            {
+//                for (int k = 0; k < network->layer[i+1].num_nodes; k++)
+//                {
+//                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
+//                }
+//                printf("\n");
+//            } else
+//            {
+//                for (int k = 0; k < network->layer[i-1].num_nodes; k++)
+//                {
+//                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
+//                }
+//                printf("\n");
+//            }
         }
-        printf("\n");
+//        printf("\n");
     }
 } /* end print_network_status*/
 
