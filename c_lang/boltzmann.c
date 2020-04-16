@@ -33,7 +33,7 @@ layer_create (struct parameters * param)
         {
             layer_bm[i].node[j].activation = 0;
             layer_bm[i].node[j].bias = 0;
-            layer_bm[i].node[j].h_in = 0;
+            layer_bm[i].node[j].sum_info = 0;
 
 //            if (i == 0)
 //            {
