@@ -118,6 +118,5 @@ main(int argc, char *argv[])
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
 
-
     return 0;
 }
