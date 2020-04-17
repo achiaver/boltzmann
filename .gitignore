@@ -41,5 +41,7 @@ temp_frequency_visited_stored_pattern_GSA
 temp_init_stored_patterns
 temp_init_stored_patterns_GSA
 
+*/tests/simboltz.c
+
 *.out
 *.dSYM*
