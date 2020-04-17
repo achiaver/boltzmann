@@ -2,8 +2,6 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
-int iseed = -42;
-
 struct matrix {
     size_t rows;
     size_t cols;

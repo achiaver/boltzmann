@@ -4,6 +4,8 @@
 #include "matrix.h"
 #include "ran3.h"
 
+int iseed = -42;
+
 struct matrix *
 matrix_create(size_t rows, size_t cols)
 {

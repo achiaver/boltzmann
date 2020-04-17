@@ -120,6 +120,16 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
     return data;
 } /* end of dataset_allocate*/
 
+double
+sigmoid (struct network * net, size_t layer, size_t node) 
+{
+    double sig = 0.;
+    
+
+
+    return sig;
+}
+
 
 int
 main(int argc, char *argv[])
@@ -144,10 +154,16 @@ main(int argc, char *argv[])
     {
         for (int k = 0; k < param->dataset_cols; k++)
         {
-            net->layer[0]->node[k]->activation = dataset->elem;
-                ;
+            net->layers[0].nodes[k].activation = matrix_get(dataset, l, k);
         }
-            
+
+        for (int k = 0; k < net->layers[1].num_nodes; k++)
+        {
+            net->layers[1].nodes[k].activation = sigmoid(net, 1, k); 
+        }
+        printf("---- Dataset pattern %d  ----\n", l);
+        network_print(net);
+        printf("\n\n");
     }
 
     return 0;
