@@ -112,11 +112,11 @@ network_print (struct network * network)
     for (int i = 0; i < network->num_layers; i++)
     {
         printf("Layer %2d \n", i);
-        for (int j = 0; j < network->layer[i].num_nodes; j++)
+        for (int j = 0; j < network->layers[i].num_nodes; j++)
         {
             printf("\t node %2d \n", j);
-            printf("\t\t- activation %2f \n", network->layer[i].node[j].activation);
-            printf("\t\t- bias %f \n", network->layer[i].node[j].bias);
+            printf("\t\t- activation %2f \n", network->layers[i].nodes[j].activation);
+            printf("\t\t- bias %f \n", network->layers[i].nodes[j].bias);
 //            printf("\t\t- weights -> ");
 //            if (i == 0)
 //            {

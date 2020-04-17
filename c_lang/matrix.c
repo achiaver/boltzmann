@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "matrix.h"
-
+#include "ran3.h"
 
 struct matrix *
 matrix_create(size_t rows, size_t cols)
@@ -49,7 +49,8 @@ void
 matrix_randomize(struct matrix *m)
 {
     for (size_t e = 0; e < (m->rows * m->cols); e++)
-        m->elem[e] = drand48();
+//        m->elem[e] = drand48();
+        m->elem[e] = ran3(&iseed);
 } /* end of matrix_randomize */
 
 

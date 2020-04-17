@@ -29,7 +29,7 @@ struct node {
 struct layer {
     size_t num_nodes;
 //    int kind;
-    struct node * node;
+    struct node * nodes;
 };
 
 
@@ -43,7 +43,7 @@ struct layer {
  */
 struct network {
     size_t num_layers;
-    struct layer * layer;
+    struct layer * layers;
     struct matrix * weights;
 };
 
