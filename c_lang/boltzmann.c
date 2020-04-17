@@ -7,7 +7,7 @@
 #include "matrix.h"
 #include "ran3.h"
 #include <time.h> 
-
+#include <math.h>
 
 struct node *
 node_create (size_t num_nodes) 
@@ -121,11 +121,17 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 } /* end of dataset_allocate*/
 
 double
-sigmoid (struct network * net, size_t layer, size_t node) 
+sigmoid (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
 {
     double sig = 0.;
-    
+    double exp_argument = 0.;
 
+    for (int i = 0; i < net->layers[layer_other].num_nodes; i++)
+    {
+        exp_argument = exp_argument + net->layers[layer_other].nodes[i].activation * matrix_get(net->weights, i, node_to_update);
+    }
+    exp_argument = exp_argument + net->layers[layer_current].nodes[node_to_update].bias;
+    sig = sig + 1 / (1 + exp(-exp_argument));
 
     return sig;
 }
@@ -159,7 +165,7 @@ main(int argc, char *argv[])
 
         for (int k = 0; k < net->layers[1].num_nodes; k++)
         {
-            net->layers[1].nodes[k].activation = sigmoid(net, 1, k); 
+            net->layers[1].nodes[k].activation = sigmoid(net, k, 1, 0); 
         }
         printf("---- Dataset pattern %d  ----\n", l);
         network_print(net);
