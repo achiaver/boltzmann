@@ -120,6 +120,7 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
     return data;
 } /* end of dataset_allocate*/
 
+
 double
 sigmoid (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
 {
@@ -134,7 +135,7 @@ sigmoid (struct network * net, size_t node_to_update, size_t layer_current, size
     sig = sig + 1 / (1 + exp(-exp_argument));
 
     return sig;
-}
+} /* end of sigmoid*/
 
 
 int
