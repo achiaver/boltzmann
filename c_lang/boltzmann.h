@@ -81,6 +81,8 @@ struct parameters {
     int maxepochs;          // Maximum number of epochs
     size_t num_layers;      // Number of layers
     size_t * num_nodes_array;
+//    size_t N;
+//    size_t M;
 };
 
 
