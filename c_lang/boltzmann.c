@@ -6,7 +6,7 @@
 #include "stats_functions.h"
 #include "matrix.h"
 #include "ran3.h"
-#include <time.h> 
+#include <time.h>
 #include <math.h>
 
 struct node *
@@ -140,7 +140,7 @@ node_activation_update (struct network * net, size_t node_to_update, size_t laye
                        (net->layers[layer_other].nodes[i].activation * matrix_get(net->weights, i, node_to_update));
     }
     exp_argument = exp_argument + net->layers[layer_current].nodes[node_to_update].bias;
-    sig = sigmoid(-exp_argument, 1.0);
+    sig = sigmoid(exp_argument, 1.0);
 
     return sig;
 } /* end of node_update*/
@@ -149,8 +149,7 @@ node_activation_update (struct network * net, size_t node_to_update, size_t laye
 int
 main(int argc, char *argv[])
 {
-    
-//    srand48(time(NULL));
+    srand48(time(NULL));
 
     char * parameters_file = "in_parameters.dat";
     char * dataset_file = "dataset/three_node_test.csv";
