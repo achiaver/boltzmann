@@ -176,7 +176,7 @@ main(int argc, char *argv[])
         {
             update = node_activation_update(net, k, 1, 0);
             printf("update - %f\n", update);
-            if (update < 0.5)
+            if (update <= 0.5)
             {
                 net->layers[1].nodes[k].activation = 0.;
             } else
