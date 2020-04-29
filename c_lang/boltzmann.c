@@ -44,47 +44,6 @@ layer_create (struct parameters * param)
     {
         layer_bm[i].num_nodes = param->num_nodes_array[i];
         layer_bm[i].nodes = node_create(layer_bm[i].num_nodes);
-       // layer_bm[i].nodes = malloc( sizeof (struct node) * (layer_bm[i].num_nodes));
-//        if (!layer_bm[i].nodes)
-//        {
-//            printf("layer_create: malloc: node: %s\n", strerror(errno));
-//            exit(2);
-//        }
-//
-//        for (int j = 0; j < layer_bm[i].num_nodes; j++)
-//        {
-//            layer_bm[i].nodes[j].activation = 0;
-//            layer_bm[i].nodes[j].bias = 0;
-//            layer_bm[i].nodes[j].sum_info = 0;
-//
-//            if (i == 0)
-//            {
-//                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (param->num_nodes_array[i+1]));
-//                if (!layer_bm[i].node[j].weight)
-//                {
-//                    printf("layer_create: malloc: node %d: weight: %s \n", j,  strerror(errno));
-//                    exit(2);
-//                }
-//
-//                for (int k = 0; k < param->num_nodes_array[i+1]; k++)
-//                {
-//                    layer_bm[i].node[j].weight[k] = drand48();
-//                }
-//            } else
-//            {
-//                layer_bm[i].node[j].weight = malloc(sizeof (double *) * (param->num_nodes_array[i-1]));
-//                if (!layer_bm[i].node[j].weight)
-//                {
-//                    printf("layer_create: malloc: node %d: weight: %s\n", j, strerror(errno));
-//                    exit(2);
-//                }
-//
-//                for (int k = 0; k < param->num_nodes_array[i-1]; k++)
-//                {
-//                    layer_bm[i].node[j].weight[k] = layer_bm[i-1].node[k].weight[j];
-//                }
-//            }
-//        }
     }
     return layer_bm;
 } /* end of layer_create */
