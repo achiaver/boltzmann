@@ -6,14 +6,12 @@
     Node data structure.
     =================================================
     activation - 0 (off) or 1 (on); indicates node status
-    weight - connection value between one node and the other nodes
     bias - bias value of one node
     sum_info - weighted sum of information on node is receiving
     =================================================
  */
 struct node {
     double activation;
-//    double * weight; // Talvez seja interessante fazer uma struct apenas para os pesos...
     double bias;
     double sum_info;
 };
@@ -28,7 +26,6 @@ struct node {
  */
 struct layer {
     size_t num_nodes;
-//    int kind;
     struct node * nodes;
 };
 

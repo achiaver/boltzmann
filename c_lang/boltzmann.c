@@ -129,7 +129,7 @@ sigmoid (double expoent, double temp)
 
 
 double
-node_activation_update (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
+node_update_activation (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
 {
     double sig = 0.;
     double exp_argument = 0.;
@@ -145,6 +145,16 @@ node_activation_update (struct network * net, size_t node_to_update, size_t laye
     return sig;
 } /* end of node_update*/
 
+
+void
+node_update ( struct network * net, size_t layer, size_t dim)
+{
+    double update = 0.;
+    for (int k = 0; k < net->layers[layer].num_nodes; k++)
+    {
+        net->layers[layer];
+    }
+}
 
 int
 main(int argc, char *argv[])
@@ -174,7 +184,7 @@ main(int argc, char *argv[])
 
         for (int k = 0; k < net->layers[1].num_nodes; k++)
         {
-            update = node_activation_update(net, k, 1, 0);
+            update = node_update_activation(net, k, 1, 0);
             printf("update - %f\n", update);
             if (update <= 0.5)
             {
