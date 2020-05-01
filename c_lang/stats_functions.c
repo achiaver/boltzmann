@@ -58,8 +58,8 @@ parameters_input (char * parameters_file, char * data_file)
                 &param->maxepochs,
                 &param->num_layers);
 
-    param->num_nodes_array = malloc (sizeof (size_t) * (param->num_layers));
-    if (!param->num_nodes_array)
+    param->nodes_per_layer =  malloc (sizeof (param->nodes_per_layer) * (param->num_layers));
+    if (!param->nodes_per_layer)
     {
         fprintf(stderr, "parameters_input: malloc: %s %d", __FILE__, __LINE__);
         exit(2);
@@ -67,7 +67,7 @@ parameters_input (char * parameters_file, char * data_file)
 
     for (int i = 0; i < param->num_layers; i++)
     {
-        fscanf(fp, "%*s%zu%*s", &param->num_nodes_array[i]);
+        fscanf(fp, "%*s%zu%*s", &param->nodes_per_layer[i]);
     }
     fclose(fp);
 
@@ -97,7 +97,7 @@ parameters_print (struct parameters * param)
 
     for (int i = 0; i < param->num_layers; i++)
     {
-        printf("\t Number of nodes at layer %d: \t %zu \n", i, param->num_nodes_array[i]);
+        printf("\t Number of nodes at layer %d: \t %zu \n", i, param->nodes_per_layer[i]);
     }
 
     printf("\n");

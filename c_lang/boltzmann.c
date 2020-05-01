@@ -12,63 +12,116 @@
 struct node *
 node_create (size_t num_nodes) 
 {
-    struct node * nodes = malloc( sizeof (*nodes) * (num_nodes));
+    struct node * nodes = malloc( sizeof (*nodes));
     if (!nodes)
     {
-        printf("node_create: malloc: node: %s\n", strerror(errno));
+        printf("node_create: nodes: malloc: %s\n", strerror(errno));
         exit(2);
     }
-    
+
+    nodes->num_nodes = num_nodes;
+    nodes->activation = malloc( sizeof (nodes->activation) * num_nodes);
+    if(!nodes->activation)
+    {
+        printf("node_create: nodes->activation: malloc: %s\n", strerror(errno));
+        exit(2);
+    }
+
+    nodes->bias = malloc( sizeof (nodes->bias) * num_nodes);
+    if(!nodes->bias)
+    {
+        printf("node_create: nodes->bias: malloc: %s\n", strerror(errno));
+        exit(2);
+    }
+
+    nodes->sum_info = malloc( sizeof (nodes->sum_info) * num_nodes);
+    if(!nodes->sum_info)
+    {
+        printf("node_create: nodes->info: malloc: %s\n", strerror(errno));
+        exit(2);
+    }
+
     for (int i = 0; i < num_nodes; i++)
     {
-        nodes[i].activation = 0.;
-        nodes[i].bias = 0.;
-        nodes[i].sum_info = 0.;
+        nodes->activation[i] = 0.;
+        nodes->bias[i] = 0.;
+        nodes->sum_info[i] = 0.;
     }
 
     return nodes;
 }
 
 
-struct layer *
+//struct layer *
+////layer_create (struct parameters * param)
 //layer_create (struct parameters * param)
-layer_create (struct parameters * param)
-{
-    struct layer * layer_bm = malloc( sizeof (*layer_bm) * (param->num_layers));
-    if (!layer_bm)
-    {
-        printf("layer_create: malloc: layer: %s \n", strerror(errno));
-        exit(2);
-    }
-    for (int i = 0; i < param->num_layers; i++)
-    {
-        layer_bm[i].num_nodes = param->num_nodes_array[i];
-        layer_bm[i].nodes = node_create(layer_bm[i].num_nodes);
-    }
-    return layer_bm;
-} /* end of layer_create */
+//{
+//    struct layer * layer_bm = malloc( sizeof (*layer_bm) * (param->num_layers));
+//    if (!layer_bm)
+//    {
+//        printf("layer_create: malloc: layer: %s \n", strerror(errno));
+//        exit(2);
+//    }
+//    for (int i = 0; i < param->num_layers; i++)
+//    {
+//        layer_bm[i].num_nodes = param->num_nodes_array[i];
+//        layer_bm[i].nodes = node_create(layer_bm[i].num_nodes);
+//    }
+//    return layer_bm;
+//} /* end of layer_create */
 
 
 struct matrix *
-weight_create(struct parameters * param)
+weight_create(size_t visible, size_t hidden)
 {
-    struct matrix * weight = matrix_create(param->num_nodes_array[0], param->num_nodes_array[1]); 
+    struct matrix * weight = matrix_create(visible, hidden); 
     matrix_randomize(weight);
     return weight;
 } /* end of weight_create*/
 
+
 struct network *
 network_create (struct parameters * param)
 {
-    struct network * network_bm = malloc(sizeof (*network_bm));
-    if (!network_bm) {
+    size_t visible = 0;
+    size_t hidden = 0;
+
+    struct network * net = malloc(sizeof (*net));
+    if (!net) {
         printf("network_create: malloc: network: %s \n", strerror(errno));
         exit(2);
     }
-    network_bm->num_layers = param->num_layers;
-    network_bm->layers = layer_create(param);
-    network_bm->weights = weight_create(param);
-    return network_bm;
+    net->num_layers = param->num_layers;
+    net->nodes_per_layer = malloc(sizeof (*net->nodes_per_layer) * net->num_layers);
+    if(!net->nodes_per_layer)
+    {
+        printf("network_create: malloc: nodes_per_layer: %s \n", strerror(errno));
+        exit(2);
+    }
+    for (int i = 0; i < net->num_layers; i++)
+    {
+        net->nodes_per_layer[i] = param->nodes_per_layer[i];
+    }
+
+    if (net->num_layers == 2)
+    {
+        visible = net->nodes_per_layer[0];
+    } else if (net->num_layers == 3)
+    {
+        visible = net->nodes_per_layer[0] + net->nodes_per_layer[2];
+    } else
+    {
+        printf("network_create: node_create: IMPOSSIBLE number of layers\n");
+        exit(1);
+    }
+    hidden = net->nodes_per_layer[1];
+    net->nvisible = node_create(visible);
+    net->nhidden = node_create(hidden);
+    net->weights = weight_create(visible, hidden);
+
+//    net->layers = layer_create(param);
+   
+    return net;
 } /* end of network_create */
 
 
@@ -88,7 +141,8 @@ sigmoid (double expoent, double temp)
 
 
 double
-node_update_activation (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
+//node_update_activation (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
+node_update_activation (struct network * net, size_t layer, size_t node_to_update)
 {
     double sig = 0.;
     double exp_argument = 0.;
