@@ -9,6 +9,49 @@
 #include <time.h>
 #include <math.h>
 
+
+void
+node_set_activation (struct node * n, size_t node, double value)
+{
+    n->activation[node] = value;
+}
+
+
+double
+node_get_activation (struct node * n, size_t node)
+{
+    return n->activation[node];
+}
+
+
+void
+node_set_bias (struct node * n, size_t node, double value)
+{
+    n->bias[node] = value;
+}
+
+
+double
+node_get_bias (struct node * n, size_t node)
+{
+    return n->bias[node];
+}
+
+
+void
+node_set_sum_info (struct node * n, size_t node, double value)
+{
+    n->sum_info[node] = value;
+}
+
+
+double
+node_get_sum_info (struct node * n, size_t node)
+{
+    return n->sum_info[node];
+}
+
+
 struct node *
 node_create (size_t num_nodes) 
 {
@@ -60,7 +103,7 @@ node_create (size_t num_nodes)
 //    if (!layer_bm)
 //    {
 //        printf("layer_create: malloc: layer: %s \n", strerror(errno));
-//        exit(2);
+//        exit(2))
 //    }
 //    for (int i = 0; i < param->num_layers; i++)
 //    {
@@ -140,13 +183,19 @@ sigmoid (double expoent, double temp)
 } /* end of sigmoid*/
 
 
-double
+//double
 //node_update_activation (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
+void
 node_update_activation (struct network * net, size_t layer, size_t node_to_update)
 {
     double sig = 0.;
     double exp_argument = 0.;
 
+    if (layer == 0)
+    {
+        for (int )
+    }
+    
     for (int i = 0; i < net->layers[layer_other].num_nodes; i++)
     {
         exp_argument = exp_argument + \
