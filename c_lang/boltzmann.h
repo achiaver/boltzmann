@@ -11,8 +11,8 @@
     =================================================
  */
 struct node {
+    size_t num_nodes;
     double activation;
-    double bias;
     double sum_info;
 };
 
@@ -40,7 +40,9 @@ struct layer {
  */
 struct network {
     size_t num_layers;
-    struct layer * layers;
+    size_t * nodes_per_layer;
+    struct node * nvisible;
+    struct node * nhidden;
     struct matrix * weights;
     struct matrix * bias;
 };
@@ -78,9 +80,10 @@ struct parameters {
     double epsilonhb;       // Learning rate for biases of hidden units (Hinton ref.)
     int maxepochs;          // Maximum number of epochs
     size_t num_layers;      // Number of layers
-    size_t * num_nodes_array;
-//    size_t N;
-//    size_t M;
+//    size_t * num_nodes_array;
+    size_t Ni;              // Number of visible nodes input
+    size_t M;               // Number of hidden nodes
+    size_t No;              // Number of visible nodes output
 };
 
 
