@@ -42,6 +42,7 @@ struct network {
     size_t num_layers;
     struct layer * layers;
     struct matrix * weights;
+    struct matrix * bias;
 };
 
 
