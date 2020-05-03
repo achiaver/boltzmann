@@ -7,3 +7,4 @@ maximum_number_of_epochs_(maxepochs)                20           <integer>
 num_of_layers_(num_layers)                           2           <size_t>
 num_units_in_layer_(1)                               3           <size_t>
 num_units_in_layer_(2)                               2           <size_t>
+num_units_in_layer_(3)                               0           <size_t>
