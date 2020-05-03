@@ -106,35 +106,21 @@ parameters_print (struct parameters * param)
 
 
 void
-network_print (struct network * network)
+network_print (struct network * net)
 {
     printf("---- NETWORK STATUS ----\n");
-    for (int i = 0; i < network->num_layers; i++)
+    for (int i = 0; i < net->num_layers; i++)
     {
         printf("Layer %2d \n", i);
-        for (int j = 0; j < network->layers[i].num_nodes; j++)
+        for (int j = 0; j < net->nodes_per_layer[i]; j++)
         {
             printf("\t node %2d \n", j);
-            printf("\t\t- activation %2f \n", network->layers[i].nodes[j].activation);
-            printf("\t\t- bias %f \n", network->layers[i].nodes[j].bias);
-//            printf("\t\t- weights -> ");
-//            if (i == 0)
-//            {
-//                for (int k = 0; k < network->layer[i+1].num_nodes; k++)
-//                {
-//                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
-//                }
-//                printf("\n");
-//            } else
-//            {
-//                for (int k = 0; k < network->layer[i-1].num_nodes; k++)
-//                {
-//                    printf("%.4f \t", network->layer[i].node[j].weight[k]);
-//                }
-//                printf("\n");
-//            }
+            if (i == 0)
+            {
+                printf("\t\t- activation %2f \n", node_get_activation(net->nvisible, j);
+                printf("\t\t- bias %f \n", net->layers[i].nodes[j].bias);
+            }
         }
-//        printf("\n");
     }
 } /* end print_network_status*/
 
