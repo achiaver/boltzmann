@@ -102,25 +102,3 @@ parameters_print (struct parameters * param)
 
     printf("\n");
 } /* end parameters_print */
-
-
-
-void
-network_print (struct network * net)
-{
-    printf("---- NETWORK STATUS ----\n");
-    for (int i = 0; i < net->num_layers; i++)
-    {
-        printf("Layer %2d \n", i);
-        for (int j = 0; j < net->nodes_per_layer[i]; j++)
-        {
-            printf("\t node %2d \n", j);
-            if (i == 0)
-            {
-                printf("\t\t- activation %2f \n", node_get_activation(net->nvisible, j);
-                printf("\t\t- bias %f \n", net->layers[i].nodes[j].bias);
-            }
-        }
-    }
-} /* end print_network_status*/
-
