@@ -18,17 +18,17 @@ struct node {
 };
 
 
-/*  =================================================
-    Layer data structure.
-    =================================================
-    num_nodes - number of nodes in one layer
-    node - pointer to initial node of one layer
-    =================================================
- */
-struct layer {
-    size_t num_nodes;
-    struct node * nodes;
-};
+///*  =================================================
+//    Layer data structure.
+//    =================================================
+//    num_nodes - number of nodes in one layer
+//    node - pointer to initial node of one layer
+//    =================================================
+// */
+//struct layer {
+//    size_t num_nodes;
+//    struct node * nodes;
+//};
 
 
 /*  =================================================
