@@ -189,8 +189,6 @@ network_create (struct parameters * param)
     net->nhidden = node_create(hidden);
     net->weights = weight_create(visible, hidden);
 
-//    net->layers = layer_create(param);
-   
     return net;
 } /* end of network_create */
 
