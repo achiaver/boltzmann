@@ -31,6 +31,16 @@ node_set_bias (struct node * n, size_t node, double value)
 } /* end node_set_bias */
 
 
+void
+node_randomize_bias (struct node * n)
+{
+    for (size_t i = 0; i < n->num_nodes; i++)
+    {
+        n->bias[i] = drand48();
+    }
+} /* end of node_randomize_bias */
+
+
 double
 node_get_bias (struct node * n, size_t node)
 {
@@ -56,36 +66,36 @@ void
 node_copy (struct node * n1, struct node * n2)
 {
     *n2 = *n1;
-} /* end node_copy */
+} /* end of node_copy */
 
 
 struct node *
 node_create (size_t num_nodes) 
 {
-    struct node * nodes = malloc( sizeof (*nodes));
-    if (!nodes)
+    struct node * n = malloc( sizeof (*n));
+    if (!n)
     {
         printf("node_create: nodes: malloc: %s\n", strerror(errno));
         exit(2);
     }
 
-    nodes->num_nodes = num_nodes;
-    nodes->activation = malloc( sizeof (nodes->activation) * num_nodes);
-    if(!nodes->activation)
+    n->num_nodes = num_nodes;
+    n->activation = malloc( sizeof (n->activation) * num_nodes);
+    if(!n->activation)
     {
         printf("node_create: nodes->activation: malloc: %s\n", strerror(errno));
         exit(2);
     }
 
-    nodes->bias = malloc( sizeof (nodes->bias) * num_nodes);
-    if(!nodes->bias)
+    n->bias = malloc( sizeof (n->bias) * num_nodes);
+    if(!n->bias)
     {
         printf("node_create: nodes->bias: malloc: %s\n", strerror(errno));
         exit(2);
     }
 
-    nodes->sum_info = malloc( sizeof (nodes->sum_info) * num_nodes);
-    if(!nodes->sum_info)
+    n->sum_info = malloc( sizeof (n->sum_info) * num_nodes);
+    if(!n->sum_info)
     {
         printf("node_create: nodes->info: malloc: %s\n", strerror(errno));
         exit(2);
@@ -93,13 +103,14 @@ node_create (size_t num_nodes)
 
     for (int i = 0; i < num_nodes; i++)
     {
-        nodes->activation[i] = 0.;
-        nodes->bias[i] = 0.;
-        nodes->sum_info[i] = 0.;
+        n->activation[i] = 0.;
+//        n->bias[i] = 0.;
+        node_randomize_bias(n);
+        n->sum_info[i] = 0.;
     }
 
-    return nodes;
-}
+    return n;
+} /* end of node_create */
 
 
 void
