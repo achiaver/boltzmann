@@ -5,7 +5,6 @@
 #include "stats_functions.h"
 
 
-
 struct parameters *
 parameters_create ()
 {

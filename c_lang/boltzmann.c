@@ -14,42 +14,42 @@ void
 node_set_activation (struct node * n, size_t node, double value)
 {
     n->activation[node] = value;
-}
+} /* end node_set_activation */
 
 
 double
 node_get_activation (struct node * n, size_t node)
 {
     return n->activation[node];
-}
+} /* end node_get_activation */
 
 
 void
 node_set_bias (struct node * n, size_t node, double value)
 {
     n->bias[node] = value;
-}
+} /* end node_set_bias */
 
 
 double
 node_get_bias (struct node * n, size_t node)
 {
     return n->bias[node];
-}
+} /* end node_get_bias */
 
 
 void
 node_set_sum_info (struct node * n, size_t node, double value)
 {
     n->sum_info[node] = value;
-}
+} /* end node_set_sum_info */
 
 
 double
 node_get_sum_info (struct node * n, size_t node)
 {
     return n->sum_info[node];
-}
+} /* end node_get_sum_info */
 
 
 struct node *
@@ -93,25 +93,6 @@ node_create (size_t num_nodes)
 
     return nodes;
 }
-
-
-//struct layer *
-////layer_create (struct parameters * param)
-//layer_create (struct parameters * param)
-//{
-//    struct layer * layer_bm = malloc( sizeof (*layer_bm) * (param->num_layers));
-//    if (!layer_bm)
-//    {
-//        printf("layer_create: malloc: layer: %s \n", strerror(errno));
-//        exit(2))
-//    }
-//    for (int i = 0; i < param->num_layers; i++)
-//    {
-//        layer_bm[i].num_nodes = param->num_nodes_array[i];
-//        layer_bm[i].nodes = node_create(layer_bm[i].num_nodes);
-//    }
-//    return layer_bm;
-//} /* end of layer_create */
 
 
 void

@@ -5,9 +5,10 @@
 /*  =================================================
     Node data structure.
     =================================================
-    activation - 0 (off) or 1 (on); indicates node status
-    bias - bias value of one node
-    sum_info - weighted sum of information on node is receiving
+    num_nodes - number of nodes;
+    activation - vector of activation of the nodes; valeu 0 (off) or 1 (on);
+    bias - vector of bias value of each node;
+    sum_info - weighted sum of the information each node is receiving;
     =================================================
  */
 struct node {
@@ -18,25 +19,14 @@ struct node {
 };
 
 
-///*  =================================================
-//    Layer data structure.
-//    =================================================
-//    num_nodes - number of nodes in one layer
-//    node - pointer to initial node of one layer
-//    =================================================
-// */
-//struct layer {
-//    size_t num_nodes;
-//    struct node * nodes;
-//};
-
-
 /*  =================================================
     Network data structure.
     =================================================
-    num_layers - number of layers in the network
-    layer - pointer to layer of the network
-    weights - pointer to weights between two adjacent layers 
+    num_layers - number of layers of the network;
+    nodes_per_layer - vector with the number of nodes per each layer;
+    nvisible - struct of nodes for the visible units (both input and output);
+    nhidden - struct of nodes for the hidden units;
+    weights - pointer to weights between two adjacent layers;
     =================================================
  */
 struct network {
@@ -81,9 +71,6 @@ struct parameters {
     int maxepochs;          // Maximum number of epochs
     size_t num_layers;      // Number of layers
     size_t * nodes_per_layer;
-//    size_t Ni;              // Number of visible nodes input
-//    size_t M;               // Number of hidden nodes
-//    size_t No;              // Number of visible nodes output
 };
 
 
