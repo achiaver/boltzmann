@@ -52,6 +52,13 @@ node_get_sum_info (struct node * n, size_t node)
 } /* end node_get_sum_info */
 
 
+void
+node_copy (struct node * n1, struct node * n2)
+{
+    *n2 = *n1;
+} /* end node_copy */
+
+
 struct node *
 node_create (size_t num_nodes) 
 {
@@ -190,6 +197,8 @@ sigmoid (double expoent, double temp)
 {
     return (1 / (1 + exp(-expoent/temp)));
 } /* end of sigmoid*/
+
+
 
 
 ////double
