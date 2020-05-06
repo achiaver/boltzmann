@@ -211,7 +211,15 @@ double
 network_energy (struct network * net)
 {
     double energy = 0.;
-    for (int i = 0;  )
+    for (int i = 0; i < net->nvisible->num_nodes; i++)
+    {
+        for (int j = 0; j < net->nhidden->num_nodes; j++)
+        {
+            energy -= node_get_activation(net->nvisible, i) * \
+                      matrix_get(net->weights, i, j) * \
+                      node_get_activation(net->nhidden, j);
+        }
+    }
 
     return energy;
 }
