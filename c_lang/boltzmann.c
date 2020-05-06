@@ -3,9 +3,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "boltzmann.h"
-#include "stats_functions.h"
+#include "parameters.h"
 #include "matrix.h"
-#include "ran3.h"
 #include <time.h>
 #include <math.h>
 
@@ -198,7 +197,7 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 {
     struct matrix * data = matrix_read_data(filename, rows, cols);
     return data;
-} /* end )f dataset_allocate*/
+} /* end of dataset_allocate*/
 
 
 double
@@ -208,6 +207,14 @@ sigmoid (double expoent, double temp)
 } /* end of sigmoid*/
 
 
+double
+network_energy (struct network * net)
+{
+    double energy = 0.;
+    for (int i = 0;  )
+
+    return energy;
+}
 
 
 ////double
