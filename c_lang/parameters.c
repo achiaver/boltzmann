@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
-#include "boltzmann.h"
-#include "stats_functions.h"
+#include "parameters.h"
 
 
 struct parameters *
@@ -25,7 +24,7 @@ parameters_create ()
     param->num_layers = 0;
 
     return param;
-}
+} /* end parameters_create */
 
 
 struct parameters *
