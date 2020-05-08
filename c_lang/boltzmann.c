@@ -48,6 +48,31 @@ node_get_bias (struct node * n, size_t node)
 
 
 void
+node_print(struct node * n, int option)
+{
+    if (option == 0) // print only units activation
+    {
+        for (size_t node = 0; node < n->num_nodes; node++)
+        {
+            printf("- activation \t %f \n", node_get_activation(n, node));
+            printf("- bias \t %f \n", node_get_bias(n, node));
+        }
+        printf("\n");
+    } else if (option == 1)
+    {
+        for (size_t node = 0; node < n->num_nodes; node++)
+        {
+            printf("%f, \t", node_get_activation(n, node));
+        }
+        printf("\n");
+    } else 
+    {
+        printf("Not a node_print option\n");
+    }
+} /* end node_print */
+
+
+void
 node_set_sum_info (struct node * n, size_t node, double value)
 {
     n->sum_info[node] = value;
@@ -223,7 +248,6 @@ network_energy (struct network * net)
                       node_get_activation(net->nhidden, j);
         }
     }
-
     return energy;
 }
 
@@ -239,7 +263,7 @@ main(int argc, char *argv[])
     struct parameters * param = parameters_input(parameters_file, dataset_file);
     parameters_print(param);
 
-    struct matrix* dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
+    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
 
@@ -247,7 +271,29 @@ main(int argc, char *argv[])
     printf("\n\n");
     network_print(net);
 
+    struct node * visible = node_create(param->nodes_per_layer[0]);
+    struct node * hidden = node_create(param->nodes_per_layer[1]);
+    for (int i = 0; i < visible->num_nodes; i++)
+    {
+        node_set_activation(visible, i, matrix_get(dataset, 0, i));
+    }
+    node_print(visible, 1);
+    printf("\n");
+    
+    printf("\n---- UPDATE HIDDEN UNITS ----\n");
+    for (int i = 0; i < hidden->num_nodes; i++)
+    {
+        double sum = 0.;
+        double expo = 0.;
+        for (int j = 0; j < visible->num_nodes; j++)
+        {
+            sum -= node_get_activation(visible, j) * matrix_get(net->weights, i, j); 
+        }
+        sum -= node_get_bias(visible, i);
+        hidden->activation[i] = sum;
+    }
 
+    node_print(hidden, 1);
 
     return 0;
 }
