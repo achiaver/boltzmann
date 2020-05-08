@@ -137,6 +137,9 @@ network_print (struct network * net)
             }
         }
     }
+    printf("\n---- WEIGHTS VALUES ----\n");
+    matrix_print(net->weights);
+    printf("\n");
 } /* end network_print*/
 
 
@@ -236,13 +239,14 @@ main(int argc, char *argv[])
     struct parameters * param = parameters_input(parameters_file, dataset_file);
     parameters_print(param);
 
-    struct network * net = network_create(param);
-    network_print(net);
-    matrix_print(net->weights);
-
     struct matrix* dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
+
+    struct network * net = network_create(param);
+    printf("\n\n");
+    network_print(net);
+
 
 
     return 0;
