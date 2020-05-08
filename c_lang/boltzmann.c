@@ -225,41 +225,6 @@ network_energy (struct network * net)
 }
 
 
-////double
-////node_update_activation (struct network * net, size_t node_to_update, size_t layer_current, size_t layer_other)
-//void
-//node_update_activation (struct network * net, size_t layer, size_t node_to_update)
-//{
-//    double sig = 0.;
-//    double exp_argument = 0.;
-//
-//    if (layer == 0)
-//    {
-//        for (int )
-//    }
-//    
-//    for (int i = 0; i < net->layers[layer_other].num_nodes; i++)
-//    {
-//        exp_argument = exp_argument + \
-//                       (net->layers[layer_other].nodes[i].activation * matrix_get(net->weights, i, node_to_update));
-//    }
-//    exp_argument = exp_argument + net->layers[layer_current].nodes[node_to_update].bias;
-//    sig = sigmoid(exp_argument, 1.0);
-//
-//    return sig;
-//} /* end of node_update*/
-//
-//
-//void
-//node_update ( struct network * net, size_t layer, size_t dim)
-//{
-//    double update = 0.;
-//    for (int k = 0; k < net->layers[layer].num_nodes; k++)
-//    {
-//        net->layers[layer];
-//    }
-//}
-
 
 int
 main(int argc, char *argv[])
@@ -279,30 +244,6 @@ main(int argc, char *argv[])
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset);
 
-//    double update = 0.;
-//    for (int l = 0; l < param->dataset_rows; l++)
-//    {
-//        for (int k = 0; k < param->dataset_cols; k++)
-//        {
-//            net->layers[0].nodes[k].activation = matrix_get(dataset, l, k);
-//        }
-//
-//        for (int k = 0; k < net->layers[1].num_nodes; k++)
-//        {
-//            update = node_update_activation(net, k, 1, 0);
-//            printf("update - %f\n", update);
-//            if (update <= 0.5)
-//            {
-//                net->layers[1].nodes[k].activation = 0.;
-//            } else
-//            {
-//                net->layers[1].nodes[k].activation = 1.;
-//            }
-//        }
-//        printf("---- Dataset pattern %d  ----\n", l);
-//        network_print(net);
-//        printf("\n\n");
-//    }
 
     return 0;
 }
