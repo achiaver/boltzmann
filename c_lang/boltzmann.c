@@ -288,8 +288,11 @@ main(int argc, char *argv[])
     node_print(visible, 1);
     printf("\n");
 
-    double energy = state_energy(net->weights, visible, hidden);
-    double energy_compare = 0.;
+    double energy = state_energy(net->weights, visible, hidden); // holds the initial energy of the state of the system
+    double energy_compare = 0.; // after any update, energy_compare will have the immediate energy of the state
+    // energy and energy_compare will be compared, if there is a decrease in energy, update is kept,
+    // otherwise the previous value of the unit remains.
+
     printf("\n---- UPDATE HIDDEN UNITS ----\n");
     for (int i = 0; i < hidden->num_nodes; i++)
     {
@@ -308,11 +311,10 @@ main(int argc, char *argv[])
         {
             hidden->activation[i] = 1.;
         }
-    }
-    node_print(hidden, 1);
-
     energy_compare = state_energy(net->weights, visible, hidden);
     printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
+    }
+    node_print(hidden, 1);
 
     return 0;
 }
