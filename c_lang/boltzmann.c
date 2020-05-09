@@ -236,19 +236,27 @@ sigmoid (double expoent, double temp)
 
 
 double
-network_energy (struct network * net)
+state_energy (struct matrix * weights, struct node * visible, struct node * hidden)
 {
     double energy = 0.;
-    for (int i = 0; i < net->nvisible->num_nodes; i++)
+    for (int i = 0; i < visible->num_nodes; i++)
     {
-        for (int j = 0; j < net->nhidden->num_nodes; j++)
+        for (int j = 0; j < hidden->num_nodes; j++)
         {
-            energy -= node_get_activation(net->nvisible, i) * \
-                      matrix_get(net->weights, i, j) * \
-                      node_get_activation(net->nhidden, j);
+            energy -= node_get_activation(visible, i) * \
+                      matrix_get(weights, i, j) * \
+                      node_get_activation(hidden, j);
         }
     }
+    energy /= 2; 
     return energy;
+}
+
+
+double
+network_energy (struct network * net)
+{
+    return state_energy (net->weights, net->nvisible, net->nhidden);
 }
 
 
@@ -279,7 +287,9 @@ main(int argc, char *argv[])
     }
     node_print(visible, 1);
     printf("\n");
-    
+
+    double energy = state_energy(net->weights, visible, hidden);
+    double energy_compare = 0.;
     printf("\n---- UPDATE HIDDEN UNITS ----\n");
     for (int i = 0; i < hidden->num_nodes; i++)
     {
@@ -299,8 +309,10 @@ main(int argc, char *argv[])
             hidden->activation[i] = 1.;
         }
     }
-
     node_print(hidden, 1);
+
+    energy_compare = state_energy(net->weights, visible, hidden);
+    printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
 
     return 0;
 }
