@@ -61,7 +61,7 @@ matrix_print(struct matrix *m)
     {
         for( size_t col = 0; col < m->cols; col++)
         {
-            printf("%f, \t", matrix_get(m, row, col));
+            printf("%f \t", matrix_get(m, row, col));
         }
         printf("\n");
     }
