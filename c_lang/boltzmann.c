@@ -62,7 +62,7 @@ node_print(struct node * n, int option)
     {
         for (size_t node = 0; node < n->num_nodes; node++)
         {
-            printf("%f, \t", node_get_activation(n, node));
+            printf("%f \t", node_get_activation(n, node));
         }
         printf("\n");
     } else 
