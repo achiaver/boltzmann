@@ -280,6 +280,7 @@ main(int argc, char *argv[])
     network_print(net);
 
     struct node * visible = node_create(param->nodes_per_layer[0]);
+    struct node * visible_aux = node_create(param->nodes_per_layer[0]);
     struct node * hidden = node_create(param->nodes_per_layer[1]);
     for (int i = 0; i < visible->num_nodes; i++)
     {
@@ -292,15 +293,17 @@ main(int argc, char *argv[])
     double energy_compare = 0.; // after any update, energy_compare will have the immediate energy of the state
     // energy and energy_compare will be compared, if there is a decrease in energy, update is kept,
     // otherwise the previous value of the unit remains.
+    double sum = 0.;
+    double expo = 0.;
 
     printf("\n---- UPDATE HIDDEN UNITS ----\n");
-    for (int i = 0; i < hidden->num_nodes; i++)
+    for (size_t i = 0; i < hidden->num_nodes; i++)
     {
-        double sum = 0.;
-        double expo = 0.;
-        for (int j = 0; j < visible->num_nodes; j++)
+        for (size_t j = 0; j < visible->num_nodes; j++)
         {
-            sum += node_get_activation(visible, j) * matrix_get(net->weights, i, j); 
+            printf("%zu \t %zu\n", i, j);
+            printf("%f\n", matrix_get(net->weights, j, i));
+            sum += node_get_activation(visible, j) * matrix_get(net->weights, j, i); 
         }
         sum += node_get_bias(visible, i);
         expo = sigmoid(sum, 1);
@@ -315,6 +318,31 @@ main(int argc, char *argv[])
     printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
     }
     node_print(hidden, 1);
+
+    printf("\n---- UPDATE VISIBLE UNITS ----\n");
+    for (size_t i = 0; i < visible_aux->num_nodes; i++)
+    {
+        sum = 0.;
+        expo = 0.;
+        for (size_t j = 0; j < hidden->num_nodes; j++)
+        {
+            printf("%zu \t %zu\n", i, j);
+            printf("%f\n", matrix_get(net->weights, i, j));
+            sum += node_get_activation(hidden, j) * matrix_get(net->weights, i, j);
+        }
+        sum += node_get_bias(net->nvisible, i);
+        expo = sigmoid(sum, 1);
+        if (expo < 0.5)
+        {
+            visible_aux->activation[i] = 0.;
+        } else
+        {
+            visible_aux->activation[i] = 1.;
+        }
+    energy_compare = state_energy(net->weights, visible, hidden);
+    printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
+    }
+    node_print(visible_aux, 1);
 
     return 0;
 }
