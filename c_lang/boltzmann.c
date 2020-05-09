@@ -287,10 +287,17 @@ main(int argc, char *argv[])
         double expo = 0.;
         for (int j = 0; j < visible->num_nodes; j++)
         {
-            sum -= node_get_activation(visible, j) * matrix_get(net->weights, i, j); 
+            sum += node_get_activation(visible, j) * matrix_get(net->weights, i, j); 
         }
-        sum -= node_get_bias(visible, i);
-        hidden->activation[i] = sum;
+        sum += node_get_bias(visible, i);
+        expo = sigmoid(sum, 1);
+        if (expo < 0.5)
+        {
+            hidden->activation[i] = 0.;
+        } else
+        {
+            hidden->activation[i] = 1.;
+        }
     }
 
     node_print(hidden, 1);
