@@ -73,17 +73,17 @@ node_print(struct node * n, int option)
 
 
 void
-node_set_sum_info (struct node * n, size_t node, double value)
+node_set_z_in (struct node * n, size_t node, double value)
 {
-    n->sum_info[node] = value;
-} /* end node_set_sum_info */
+    n->z_in[node] = value;
+} /* end node_set_z_in */
 
 
 double
-node_get_sum_info (struct node * n, size_t node)
+node_get_z_in (struct node * n, size_t node)
 {
-    return n->sum_info[node];
-} /* end node_get_sum_info */
+    return n->z_in[node];
+} /* end node_get_z_in */
 
 
 void
@@ -118,8 +118,8 @@ node_create (size_t num_nodes)
         exit(2);
     }
 
-    n->sum_info = malloc( sizeof (n->sum_info) * num_nodes);
-    if(!n->sum_info)
+    n->z_in = malloc( sizeof (n->z_in) * num_nodes);
+    if(!n->z_in)
     {
         printf("node_create: nodes->info: malloc: %s\n", strerror(errno));
         exit(2);
@@ -130,7 +130,7 @@ node_create (size_t num_nodes)
         n->activation[i] = 0.;
 //        n->bias[i] = 0.;
         node_randomize_bias(n);
-        n->sum_info[i] = 0.;
+        n->z_in[i] = 0.;
     }
 
     return n;
@@ -247,6 +247,7 @@ state_energy (struct matrix * weights, struct node * visible, struct node * hidd
                       matrix_get(weights, i, j) * \
                       node_get_activation(hidden, j);
         }
+        energy -= node_get_bias(visible, i);
     }
     energy /= 2; 
     return energy;
@@ -301,8 +302,8 @@ main(int argc, char *argv[])
     {
         for (size_t j = 0; j < visible->num_nodes; j++)
         {
-            printf("%zu \t %zu\n", i, j);
-            printf("%f\n", matrix_get(net->weights, j, i));
+//            printf("%zu \t %zu\n", i, j);
+//            printf("%f\n", matrix_get(net->weights, j, i));
             sum += node_get_activation(visible, j) * matrix_get(net->weights, j, i); 
         }
         sum += node_get_bias(visible, i);
@@ -326,8 +327,8 @@ main(int argc, char *argv[])
         expo = 0.;
         for (size_t j = 0; j < hidden->num_nodes; j++)
         {
-            printf("%zu \t %zu\n", i, j);
-            printf("%f\n", matrix_get(net->weights, i, j));
+//            printf("%zu \t %zu\n", i, j);
+//            printf("%f\n", matrix_get(net->weights, i, j));
             sum += node_get_activation(hidden, j) * matrix_get(net->weights, i, j);
         }
         sum += node_get_bias(net->nvisible, i);

@@ -15,7 +15,7 @@ struct node {
     size_t num_nodes;
     double * activation;
     double * bias;
-    double * sum_info;
+    double * z_in;
 };
 
 
