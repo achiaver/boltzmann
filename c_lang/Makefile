@@ -1,6 +1,6 @@
 
 all:
-	gcc -g parameters.c matrix.c boltzmann.c -o boltzmann -lm
+	gcc -g -lm -Wall parameters.c matrix.c boltzmann.c -o boltzmann
 
 clean:
 	rm -rf boltzmann *.o
