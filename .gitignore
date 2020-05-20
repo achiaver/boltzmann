@@ -1,5 +1,5 @@
 .Makefile.swp
-
+.*.swp
 matrix
 boltzmann
 .DS_Store

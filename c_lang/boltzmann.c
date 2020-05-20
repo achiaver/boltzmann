@@ -104,21 +104,24 @@ node_create (size_t num_nodes)
     }
 
     n->num_nodes = num_nodes;
-    n->activation = malloc( sizeof (n->activation) * num_nodes);
+//    n->activation = malloc( sizeof (n->activation) * num_nodes);
+    n->activation = malloc( sizeof (double) * num_nodes);
     if(!n->activation)
     {
         printf("node_create: nodes->activation: malloc: %s\n", strerror(errno));
         exit(2);
     }
 
-    n->bias = malloc( sizeof (n->bias) * num_nodes);
+//    n->bias = malloc( sizeof (n->bias) * num_nodes);
+    n->bias = malloc( sizeof (double) * num_nodes);
     if(!n->bias)
     {
         printf("node_create: nodes->bias: malloc: %s\n", strerror(errno));
         exit(2);
     }
 
-    n->z_in = malloc( sizeof (n->z_in) * num_nodes);
+//    n->z_in = malloc( sizeof (n->z_in) * num_nodes);
+    n->z_in = malloc( sizeof (double) * num_nodes);
     if(!n->z_in)
     {
         printf("node_create: nodes->info: malloc: %s\n", strerror(errno));

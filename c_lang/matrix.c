@@ -17,7 +17,8 @@ matrix_create(size_t rows, size_t cols)
     m->rows = rows;
     m->cols = cols;
 
-    m->elem = malloc((m->rows * m->cols) * sizeof (m->elem));
+//    m->elem = malloc((m->rows * m->cols) * sizeof (m->elem));
+    m->elem = malloc((m->rows * m->cols) * sizeof (double));
     if(!m->elem)
     {
         fprintf(stderr, "malloc: %s %d", __FILE__, __LINE__);
