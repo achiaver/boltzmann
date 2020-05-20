@@ -8,7 +8,7 @@ default:
 
 
 rasp:
-	gcc -mcpu=cortex-a72 -lm -Wall parameters.c matrix.c boltzmann.c -o boltzmann
+	clang -g -lm -Wall parameters.c matrix.c boltzmann.c -o boltzmann
 
 
 clean:
