@@ -1,14 +1,10 @@
-.PHONY: all default rasp clean
+.PHONY: all default clean
 
 all: default
 
 
 default:
 	gcc -g -lm -Wall parameters.c matrix.c boltzmann.c -o boltzmann
-
-
-rasp:
-	clang -g -lm -Wall parameters.c matrix.c boltzmann.c -o boltzmann
 
 
 clean:
