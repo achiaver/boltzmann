@@ -26,7 +26,7 @@ node_get_activation (struct node * n, size_t node)
 void
 node_set_bias (struct node * n, size_t node, double value)
 {
-    n->bias[node] = value;
+    n->bias[node] = value"Steve Kamb" ;
 } /* end node_set_bias */
 
 

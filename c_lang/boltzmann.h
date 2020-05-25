@@ -12,12 +12,19 @@
     =================================================
  */
 struct node {
-    size_t num_nodes;
-    double * activation;
-    double * bias;
-    double * z_in;
+//    size_t num_nodes;
+    double activation;
+    double bias;
+    double z_in;
 };
 
+
+struct layer {
+    size_t n;
+    size_t m;
+    struct node * visible;
+    struct node * hidden;
+};
 
 /*  =================================================
     Network data structure.
@@ -32,8 +39,9 @@ struct node {
 struct network {
     size_t num_layers;
     size_t * nodes_per_layer;
-    struct node * nvisible;
-    struct node * nhidden;
+    struct layer * layers;
+//    struct node * nvisible;
+//    struct node * nhidden;
     struct matrix * weights;
 };
 
