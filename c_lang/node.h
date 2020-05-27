@@ -17,7 +17,7 @@ struct node {
     double z_in;
 };
 
-void node_set_activation (struct nodei, double);
+void node_set_activation (struct node, double);
 double node_get_activation (struct node, size_t node)
 
 void node_set_bias (struct node * n, size_t node, double value)
