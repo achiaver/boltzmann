@@ -11,30 +11,21 @@
     =================================================
  */
 struct node {
-//    size_t num_nodes;
     double activation;
     double bias;
     double z_in;
 };
 
-void node_set_activation (struct node, double);
-double node_get_activation (struct node, size_t node)
-
-void node_set_bias (struct node * n, size_t node, double value)
-
-void node_randomize_bias (struct node * n)
-
-double node_get_bias (struct node * n, size_t node)
-
-void node_print(struct node * n, int option)
-
-void node_set_z_in (struct node * n, size_t node, double value)
-
-double node_get_z_in (struct node * n, size_t node)
-
-void node_copy (struct node * n1, struct node * n2)
-
-struct node * node_create (size_t num_nodes) 
+void          node_set_activation   (struct node *, double);
+void          node_set_bias         (struct node *, double);
+void          node_set_z_in         (struct node *, double);
+void          node_randomize_bias   (struct node *);
+double        node_get_activation   (struct node *);
+double        node_get_bias         (struct node *);
+double        node_get_z_in         (struct node *);
+void          node_print            (struct node *, int);
+void          node_copy             (struct node *, struct node *);
+void          node_create           (struct node *);
 
 
 

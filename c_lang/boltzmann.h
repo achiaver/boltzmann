@@ -12,7 +12,6 @@
     =================================================
  */
 struct node {
-//    size_t num_nodes;
     double activation;
     double bias;
     double z_in;
