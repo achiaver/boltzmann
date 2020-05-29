@@ -3,7 +3,7 @@
 
 
 /*  =================================================
-    Node data structure.
+    Node structure.
     =================================================
     activation - vector of activation of the nodes; valeu 0 (off) or 1 (on);
     bias - vector of bias value of each node;
@@ -18,6 +18,7 @@ struct node {
 
 
 
+
 struct layer {
     size_t num_nodes;
     struct node * nodes;
@@ -25,7 +26,7 @@ struct layer {
 
 
 /*  =================================================
-    Network data structure.
+    Network structure.
     =================================================
     num_layers - number of layers of the network;
     nodes_per_layer - vector with the number of nodes per each layer;
@@ -57,6 +58,25 @@ double        node_get_z_in         (struct node *);
 void          node_print            (struct node *, int);
 void          node_copy             (struct node *, struct node *);
 void          node_create           (struct node *);
+
+
+/*  =================================================
+    Function Related to Layer structure.
+    =================================================
+ */
+void layer_create (struct layer *);
+void layer_delete (struct layer *);
+
+
+/*  =================================================
+    Function Related to Network structure.
+    =================================================
+ */
+struct network * network_create (struct parameters *);
+void network_delete (struct network *);
+void network_print (struct network *);
+
+
 
 
 #endif /* __BOLTZMANN_H__ */
