@@ -18,7 +18,13 @@ struct node {
 
 
 
-
+/*  =================================================
+    Layer structure.
+    =================================================
+    num_nodes - number of nodes in this layer.
+    nodes - weighted sum of the information each node is receiving from other nodes connected to it;
+    =================================================
+ */
 struct layer {
     size_t num_nodes;
     struct node * nodes;
@@ -36,8 +42,8 @@ struct layer {
     =================================================
  */
 struct network {
-    size_t num_layers;
-    size_t * nodes_per_layer;
+//    size_t num_layers;
+//    size_t * nodes_per_layer;
     struct node visible;
     struct node hidden;
     struct matrix * weights;
@@ -58,14 +64,6 @@ double        node_get_z_in         (struct node *);
 void          node_print            (struct node *, int);
 void          node_copy             (struct node *, struct node *);
 void          node_create           (struct node *);
-
-
-/*  =================================================
-    Function Related to Layer structure.
-    =================================================
- */
-void layer_create (struct layer *);
-void layer_delete (struct layer *);
 
 
 /*  =================================================
