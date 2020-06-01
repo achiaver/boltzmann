@@ -10,80 +10,74 @@
 
 
 void
-node_set_activation (struct node * n, size_t node, double value)
+node_set_activation (struct node * n, double value)
 {
-    n->activation[node] = value;
+    n->activation = value;
 } /* end node_set_activation */
 
 
-double
-node_get_activation (struct node * n, size_t node)
+void
+node_set_bias (struct node * n, double value)
 {
-    return n->activation[node];
-} /* end node_get_activation */
+    n->bias = value;
+} /* end node_set_bias */
 
 
 void
-node_set_bias (struct node * n, size_t node, double value)
+node_set_z_in (struct node * n, double value)
 {
-    n->bias[node] = value;
-} /* end node_set_bias */
+    n->z_in = value;
+} /* end node_set_z_in */
+
 
 
 void
 node_randomize_bias (struct node * n)
 {
-    for (size_t i = 0; i < n->num_nodes; i++)
-    {
-        n->bias[i] = drand48();
-    }
+    n->bias = drand48();
 } /* end of node_randomize_bias */
 
 
 double
-node_get_bias (struct node * n, size_t node)
+node_get_activation (struct node * n)
 {
-    return n->bias[node];
+    return n->activation;
+} /* end node_get_activation */
+
+
+double
+node_get_bias (struct node * n)
+{
+    return n->bias;
 } /* end node_get_bias */
+
+
+double
+node_get_z_in (struct node * n)
+{
+    return n->z_in;
+} /* end node_get_z_in */
 
 
 void
 node_print(struct node * n, int option)
 {
-    if (option == 0) // print only units activation
+    if (option == 0) // print all node status
     {
-        for (size_t node = 0; node < n->num_nodes; node++)
-        {
-            printf("- activation \t %f \n", node_get_activation(n, node));
-            printf("- bias \t %f \n", node_get_bias(n, node));
-        }
+        printf("- activation \t %f \n", node_get_activation(n));
+        printf("- bias \t %f \n", node_get_bias(n));
+        printf("- z_in \t %f \n", node_get_z_in(n));
         printf("\n");
-    } else if (option == 1)
+    } else if (option == 1) // print only node activation
     {
-        for (size_t node = 0; node < n->num_nodes; node++)
-        {
-            printf("%f \t", node_get_activation(n, node));
-        }
+        printf("- activation \t %f \n", node_get_activation(n));
         printf("\n");
     } else 
     {
         printf("Not a node_print option\n");
+        exit(1);
     }
 } /* end node_print */
-
-
-void
-node_set_z_in (struct node * n, size_t node, double value)
-{
-    n->z_in[node] = value;
-} /* end node_set_z_in */
-
-
-double
-node_get_z_in (struct node * n, size_t node)
-{
-    return n->z_in[node];
-} /* end node_get_z_in */
 
 
 void
@@ -93,50 +87,12 @@ node_copy (struct node * n1, struct node * n2)
 } /* end of node_copy */
 
 
-struct node *
-node_create (size_t num_nodes) 
+void
+node_create (struct node * n) 
 {
-    struct node * n = malloc( sizeof (*n));
-    if (!n)
-    {
-        printf("node_create: nodes: malloc: %s\n", strerror(errno));
-        exit(2);
-    }
-
-    n->num_nodes = num_nodes;
-//    n->activation = malloc( sizeof (n->activation) * num_nodes);
-    n->activation = malloc( sizeof (double) * num_nodes);
-    if(!n->activation)
-    {
-        printf("node_create: nodes->activation: malloc: %s\n", strerror(errno));
-        exit(2);
-    }
-
-//    n->bias = malloc( sizeof (n->bias) * num_nodes);
-    n->bias = malloc( sizeof (double) * num_nodes);
-    if(!n->bias)
-    {
-        printf("node_create: nodes->bias: malloc: %s\n", strerror(errno));
-        exit(2);
-    }
-
-//    n->z_in = malloc( sizeof (n->z_in) * num_nodes);
-    n->z_in = malloc( sizeof (double) * num_nodes);
-    if(!n->z_in)
-    {
-        printf("node_create: nodes->info: malloc: %s\n", strerror(errno));
-        exit(2);
-    }
-
-    for (int i = 0; i < num_nodes; i++)
-    {
-        n->activation[i] = 0.;
-//        n->bias[i] = 0.;
-        node_randomize_bias(n);
-        n->z_in[i] = 0.;
-    }
-
-    return n;
+    node_set_activation(n, 0.);
+    node_set_bias(n, 0.);
+    node_set_z_in(n, 0.);
 } /* end of node_create */
 
 
@@ -147,21 +103,21 @@ network_print (struct network * net)
     for (int i = 0; i < net->num_layers; i++)
     {
         printf("Layer %2d \n", i);
-        for (int j = 0; j < net->nodes_per_layer[i]; j++)
+        for (int j = 0; j < net->visible.num_nodes; j++)
         {
             printf("\t node %2d \n", j);
             if (i == 0)
             {
-                printf("\t\t- activation %2f \n", node_get_activation(net->nvisible, j));
-                printf("\t\t- bias %f \n", node_get_bias(net->nvisible, j));
+                printf("\t\t- activation %2f \n", node_get_activation(net->visible, j));
+                printf("\t\t- bias %f \n", node_get_bias(net->visible, j));
             } else if (i == 1)
             {
-                printf("\t\t- activation %2f \n", node_get_activation(net->nhidden, j));
-                printf("\t\t- bias %f \n", node_get_bias(net->nhidden, j));
+                printf("\t\t- activation %2f \n", node_get_activation(net->hidden, j));
+                printf("\t\t- bias %f \n", node_get_bias(net->hidden, j));
             } else if (i == 2)
             {
-                printf("\t\t- activation %2f \n", node_get_activation(net->nvisible, net->nodes_per_layer[0] + j));
-                printf("\t\t- bias %f \n", node_get_bias(net->nvisible, net->nodes_per_layer[0] + j));
+                printf("\t\t- activation %2f \n", node_get_activation(net->visible, net->nodes_per_layer[0] + j));
+                printf("\t\t- bias %f \n", node_get_bias(net->visible, net->nodes_per_layer[0] + j));
             }
         }
     }
@@ -215,8 +171,8 @@ network_create (struct parameters * param)
         exit(1);
     }
     hidden = net->nodes_per_layer[1];
-    net->nvisible = node_create(visible);
-    net->nhidden = node_create(hidden);
+    net->visible = node_create(visible);
+    net->hidden = node_create(hidden);
     net->weights = weight_create(visible, hidden);
 
     return net;
@@ -242,9 +198,9 @@ double
 state_energy (struct matrix * weights, struct node * visible, struct node * hidden)
 {
     double energy = 0.;
-    for (int i = 0; i < visible->num_nodes; i++)
+    for (int i = 0; i < visible.num_nodes; i++)
     {
-        for (int j = 0; j < hidden->num_nodes; j++)
+        for (int j = 0; j < hidden.num_nodes; j++)
         {
             energy -= node_get_activation(visible, i) * \
                       matrix_get(weights, i, j) * \
@@ -260,7 +216,7 @@ state_energy (struct matrix * weights, struct node * visible, struct node * hidd
 double
 network_energy (struct network * net)
 {
-    return state_energy (net->weights, net->nvisible, net->nhidden);
+    return state_energy (net->weights, net->visible, net->hidden);
 }
 
 
@@ -334,7 +290,7 @@ main(int argc, char *argv[])
 //            printf("%f\n", matrix_get(net->weights, i, j));
             sum += node_get_activation(hidden, j) * matrix_get(net->weights, i, j);
         }
-        sum += node_get_bias(net->nvisible, i);
+        sum += node_get_bias(net->visible, i);
         expo = sigmoid(sum, 1);
         if (expo < 0.5)
         {
