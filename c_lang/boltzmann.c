@@ -131,6 +131,7 @@ void
 network_print (struct network * net)
 {
     printf("---- NETWORK STATUS ----\n");
+    printf("NUMBER OF LAYERS ---> %zu\n", net->num_layers);
     for (int i = 0; i < net->num_layers; i++)
     {
         printf("Layer %2d \n", i);
@@ -183,7 +184,8 @@ network_create (struct parameters * param)
         exit(2);
     }
 
-    net->num_layers = 0;
+    net->num_layers = param->num_layers;
+
     net->visible.num_nodes = param->nodes_per_layer[0];
     net->visible.nodes = malloc(sizeof (net->visible.nodes) * net->visible.num_nodes);
     for (int i = 0; i < net->visible.num_nodes; i++)
@@ -191,7 +193,7 @@ network_create (struct parameters * param)
         node_create(&net->visible.nodes[i]);
     }
 
-    net->hidden.num_nodes = param->nodes_per_layer[0];
+    net->hidden.num_nodes = param->nodes_per_layer[1];
     net->hidden.nodes = malloc(sizeof (net->hidden.nodes) * net->hidden.num_nodes);
     for (int i = 0; i < net->hidden.num_nodes; i++)
     {
@@ -265,8 +267,8 @@ main(int argc, char *argv[])
     network_print(net);
 
     struct layer * visible = layer_create(param->nodes_per_layer[0]);
-    struct layer * visible_aux = layer_create(param->nodes_per_layer[0]);
-    struct layer * hidden = layer_create(param->nodes_per_layer[1]);
+//    struct layer * visible_aux = layer_create(param->nodes_per_layer[0]);
+//    struct layer * hidden = layer_create(param->nodes_per_layer[1]);
     for (int i = 0; i < visible->num_nodes; i++)
     {
         node_set_activation(&visible->nodes[i], matrix_get(dataset, 0, i));
