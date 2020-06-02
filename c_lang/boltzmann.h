@@ -71,8 +71,8 @@ void          node_create           (struct node *);
     =================================================
  */
 struct network * network_create (struct parameters *);
-void network_delete (struct network *);
-void network_print (struct network *);
+void             network_delete (struct network *);
+void             network_print  (struct network *);
 
 
 
