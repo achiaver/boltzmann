@@ -10,23 +10,23 @@
 
 
 void
-node_set_activation (struct node * n, double value)
+node_set_activation (struct node * n, int node, double value)
 {
-    n->activation = value;
+    n[node].activation = value;
 } /* end node_set_activation */
 
 
 void
-node_set_bias (struct node * n, double value)
+node_set_bias (struct node * n, int node, double value)
 {
-    n->bias = value;
+    n[node].bias = value;
 } /* end node_set_bias */
 
 
 void
-node_set_z_in (struct node * n, double value)
+node_set_z_in (struct node * n, int node, double value)
 {
-    n->z_in = value;
+    n[node].z_in = value;
 } /* end node_set_z_in */
 
 
@@ -38,40 +38,40 @@ node_randomize_bias (struct node * n)
 
 
 double
-node_get_activation (struct node * n)
+node_get_activation (struct node * n, int node)
 {
-    return n->activation;
+    return n[node].activation;
 } /* end node_get_activation */
 
 
 double
-node_get_bias (struct node * n)
+node_get_bias (struct node * n, int node)
 {
-    return n->bias;
+    return n[node].bias;
 } /* end node_get_bias */
 
 
 double
-node_get_z_in (struct node * n)
+node_get_z_in (struct node * n, int node)
 {
-    return n->z_in;
+    return n[node].z_in;
 } /* end node_get_z_in */
 
 
 void
-node_print(struct node * n, int option)
+node_print(struct node * n, int node, int option)
 {
     if (option == 0) // print all node status
     {
-        printf("\t- activation \t %f \n", node_get_activation(n));
-        printf("\t- bias \t %f \n", node_get_bias(n));
-        printf("\t- z_in \t %f \n", node_get_z_in(n));
+        printf("\t- activation \t %f \n", node_get_activation(n, node));
+        printf("\t- bias \t %f \n", node_get_bias(n, node));
+        printf("\t- z_in \t %f \n", node_get_z_in(n, node));
         printf("\n");
     } else if (option == 1) // print only node activation
     {
-        printf("\t- activation \t %f \n", node_get_activation(n));
+        printf("\t- activation \t %f \n", node_get_activation(n, node));
         printf("\n");
-    } else 
+    } else
     {
         printf("Not a node_print option\n");
         exit(1);
@@ -87,15 +87,15 @@ node_copy (struct node * n1, struct node * n2)
 
 
 void
-node_create (struct node * n) 
+node_create (struct node * n, int node)
 {
-    node_set_activation(n, 0.);
-    node_set_bias(n, 0.);
-    node_set_z_in(n, 0.);
+    node_set_activation(n, node, 0.);
+    node_set_bias(n, node, 0.);
+    node_set_z_in(n, node, 0.);
 } /* end of node_create */
 
 
-struct layer * 
+struct layer *
 layer_create (size_t num_nodes)
 {
     struct layer * l = malloc(sizeof (*l));
@@ -108,7 +108,7 @@ layer_create (size_t num_nodes)
     l->nodes = malloc(sizeof(l->nodes) * l->num_nodes);
     for (int i = 0; i < l->num_nodes; i++)
     {
-        node_create(&l->nodes[i]);
+        node_create(l->nodes, i);
     }
 
     return l;
@@ -121,14 +121,14 @@ layer_print(struct layer * l, int option)
     for (int i = 0; i < l->num_nodes; i++)
     {
         printf("Node %d\n", i);
-        node_print(&l->nodes[i], option);
+        node_print(l->nodes, i, option);
     }
 }
 
 
 
 void
-network_print (struct network * net)
+network_print (struct network * net, int option)
 {
     printf("---- NETWORK STATUS ----\n");
     printf("NUMBER OF LAYERS ---> %zu\n", net->num_layers);
@@ -137,26 +137,10 @@ network_print (struct network * net)
         printf("Layer %2d \n", i);
         if (i == 0)
         {
-            for (int j = 0; j < net->visible.num_nodes; j++)
-            {
-                printf("\t node %2d \n", j);
-                printf("\t\t- activation %2f \n", node_get_activation(&net->visible.nodes[j]));
-                printf("\t\t- bias %f \n", node_get_bias(&net->visible.nodes[j]));
-                printf("\t\t- z_in %f \n", node_get_z_in(&net->visible.nodes[j]));
-            }
-        } else if (i == 1)
+            layer_print(&net->visible, option);
+        } else
         {
-            for (int j = 0; j < net->hidden.num_nodes; j++)
-            {
-                printf("\t node %2d \n", j);
-                printf("\t\t- activation %2f \n", node_get_activation(&net->hidden.nodes[j]));
-                printf("\t\t- bias %f \n", node_get_bias(&net->hidden.nodes[j]));
-                printf("\t\t- z_in %f \n", node_get_z_in(&net->hidden.nodes[j]));
-            }
-        }
-        else
-        {
-            printf(" - - - - - There is no such layer - - - - -\n");
+            layer_print(&net->hidden, option);
         }
     }
 
@@ -169,7 +153,7 @@ network_print (struct network * net)
 struct matrix *
 weight_create(size_t visible, size_t hidden)
 {
-    struct matrix * weight = matrix_create(visible, hidden); 
+    struct matrix * weight = matrix_create(visible, hidden);
     matrix_randomize(weight);
     return weight;
 } /* end of weight_create*/
@@ -185,22 +169,26 @@ network_create (struct parameters * param)
     }
 
     net->num_layers = param->num_layers;
-
+    printf("NUMBER OF LAYERS (1) ---> %zu \n", net->num_layers);
     net->visible.num_nodes = param->nodes_per_layer[0];
     net->visible.nodes = malloc(sizeof (net->visible.nodes) * net->visible.num_nodes);
     for (int i = 0; i < net->visible.num_nodes; i++)
     {
-        node_create(&net->visible.nodes[i]);
+        node_create(net->visible.nodes, i);
     }
+    printf("NUMBER OF LAYERS (2) ---> %zu \n", net->num_layers);
 
     net->hidden.num_nodes = param->nodes_per_layer[1];
     net->hidden.nodes = malloc(sizeof (net->hidden.nodes) * net->hidden.num_nodes);
     for (int i = 0; i < net->hidden.num_nodes; i++)
     {
-        node_create(&net->hidden.nodes[i]);
+        node_create(net->hidden.nodes, i);
     }
+    printf("NUMBER OF LAYERS (3) ---> %zu \n", net->num_layers);
 
+    net->num_layers = param->num_layers;
     net->weights = weight_create(net->visible.num_nodes, net->hidden.num_nodes);
+    printf("NUMBER OF LAYERS (4) ---> %zu \n", net->num_layers);
 
     return net;
 } /* end of network_create */
@@ -215,7 +203,7 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 
 
 double
-sigmoid (double expoent, double temp) 
+sigmoid (double expoent, double temp)
 {
     return (1 / (1 + exp(-expoent/temp)));
 } /* end of sigmoid*/
@@ -235,7 +223,7 @@ sigmoid (double expoent, double temp)
 //        }
 //        energy -= node_get_bias(visible, i);
 //    }
-//    energy /= 2; 
+//    energy /= 2;
 //    return energy;
 //}
 //
@@ -263,15 +251,16 @@ main(int argc, char *argv[])
     matrix_print(dataset);
 
     struct network * net = network_create(param);
+    printf("%zu\n", net->num_layers);
     printf("\n\n");
-    network_print(net);
+    network_print(net, 0);
 
     struct layer * visible = layer_create(param->nodes_per_layer[0]);
 //    struct layer * visible_aux = layer_create(param->nodes_per_layer[0]);
 //    struct layer * hidden = layer_create(param->nodes_per_layer[1]);
     for (int i = 0; i < visible->num_nodes; i++)
     {
-        node_set_activation(&visible->nodes[i], matrix_get(dataset, 0, i));
+        node_set_activation(visible->nodes, i, matrix_get(dataset, 0, i));
     }
     layer_print(visible, 1);
     printf("\n");
@@ -290,7 +279,7 @@ main(int argc, char *argv[])
 //        {
 ////            printf("%zu \t %zu\n", i, j);
 ////            printf("%f\n", matrix_get(net->weights, j, i));
-//            sum += node_get_activation(visible, j) * matrix_get(net->weights, j, i); 
+//            sum += node_get_activation(visible, j) * matrix_get(net->weights, j, i);
 //        }
 //        sum += node_get_bias(visible, i);
 //        expo = sigmoid(sum, 1);

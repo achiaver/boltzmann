@@ -54,16 +54,16 @@ struct network {
     Function Related to Node structure.
     =================================================
  */
-void          node_set_activation   (struct node *, double);
-void          node_set_bias         (struct node *, double);
-void          node_set_z_in         (struct node *, double);
+void          node_set_activation   (struct node *, int, double);
+void          node_set_bias         (struct node *, int, double);
+void          node_set_z_in         (struct node *, int, double);
 void          node_randomize_bias   (struct node *);
-double        node_get_activation   (struct node *);
-double        node_get_bias         (struct node *);
-double        node_get_z_in         (struct node *);
-void          node_print            (struct node *, int);
+double        node_get_activation   (struct node *, int);
+double        node_get_bias         (struct node *, int);
+double        node_get_z_in         (struct node *, int);
+void          node_print            (struct node *, int, int);
 void          node_copy             (struct node *, struct node *);
-void          node_create           (struct node *);
+void          node_create           (struct node *, int);
 
 
 /*  =================================================
@@ -72,7 +72,7 @@ void          node_create           (struct node *);
  */
 struct network * network_create (struct parameters *);
 void             network_delete (struct network *);
-void             network_print  (struct network *);
+void             network_print  (struct network *, int);
 
 
 
