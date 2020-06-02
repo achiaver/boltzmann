@@ -63,13 +63,13 @@ node_print(struct node * n, int option)
 {
     if (option == 0) // print all node status
     {
-        printf("- activation \t %f \n", node_get_activation(n));
-        printf("- bias \t %f \n", node_get_bias(n));
-        printf("- z_in \t %f \n", node_get_z_in(n));
+        printf("\t- activation \t %f \n", node_get_activation(n));
+        printf("\t- bias \t %f \n", node_get_bias(n));
+        printf("\t- z_in \t %f \n", node_get_z_in(n));
         printf("\n");
     } else if (option == 1) // print only node activation
     {
-        printf("- activation \t %f \n", node_get_activation(n));
+        printf("\t- activation \t %f \n", node_get_activation(n));
         printf("\n");
     } else 
     {
@@ -120,6 +120,7 @@ layer_print(struct layer * l, int option)
 {
     for (int i = 0; i < l->num_nodes; i++)
     {
+        printf("Node %d\n", i);
         node_print(&l->nodes[i], option);
     }
 }
