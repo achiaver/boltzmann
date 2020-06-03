@@ -31,9 +31,9 @@ node_set_z_in (struct node * n, int node, double value)
 
 
 void
-node_randomize_bias (struct node * n)
+node_randomize_bias (struct node * n, int node)
 {
-    n->bias = drand48();
+    n[node].bias = drand48();
 } /* end of node_randomize_bias */
 
 
@@ -184,7 +184,7 @@ network_create (struct parameters * param)
     net->num_layers = param->num_layers;
     printf("NUMBER OF LAYERS (1) ---> %zu \n", net->num_layers);
     net->visible.num_nodes = param->nodes_per_layer[0];
-    net->visible.nodes = malloc(sizeof (net->visible.nodes) * net->visible.num_nodes);
+    net->visible.nodes = malloc(sizeof (net->visible.nodes) * (net->visible.num_nodes));
     for (int i = 0; i < net->visible.num_nodes; i++)
     {
         node_create(net->visible.nodes, i);
@@ -192,7 +192,7 @@ network_create (struct parameters * param)
     printf("NUMBER OF LAYERS (2) ---> %zu \n", net->num_layers);
 
     net->hidden.num_nodes = param->nodes_per_layer[1];
-    net->hidden.nodes = malloc(sizeof (net->hidden.nodes) * net->hidden.num_nodes);
+    net->hidden.nodes = malloc(sizeof (net->hidden.nodes) * (net->hidden.num_nodes));
     for (int i = 0; i < net->hidden.num_nodes; i++)
     {
         node_create(net->hidden.nodes, i);

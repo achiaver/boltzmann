@@ -57,7 +57,7 @@ struct network {
 void          node_set_activation   (struct node *, int, double);
 void          node_set_bias         (struct node *, int, double);
 void          node_set_z_in         (struct node *, int, double);
-void          node_randomize_bias   (struct node *);
+void          node_randomize_bias   (struct node *, int);
 double        node_get_activation   (struct node *, int);
 double        node_get_bias         (struct node *, int);
 double        node_get_z_in         (struct node *, int);
