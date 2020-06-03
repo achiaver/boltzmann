@@ -9,3 +9,4 @@ default:
 
 clean:
 	rm -rf boltzmann *.o
+	rm -rf boltzmann.dSYM
