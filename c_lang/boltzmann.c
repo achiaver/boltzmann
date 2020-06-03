@@ -288,7 +288,6 @@ main(int argc, char *argv[])
     matrix_print(dataset);
 
     struct network * net = network_create(param);
-//    printf("%zu\n", net->num_layers);
     printf("\n\n");
     network_print(net, 0);
 
