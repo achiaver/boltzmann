@@ -116,7 +116,7 @@ layer_create (size_t num_nodes)
 
 
 void
-layer_print(struct layer * l, int option)
+layer_print (struct layer * l, int option)
 {
     for (int i = 0; i < l->num_nodes; i++)
     {
@@ -126,6 +126,11 @@ layer_print(struct layer * l, int option)
 }
 
 
+void
+layer_delete (struct layer * l)
+{
+    free(l->nodes);
+}
 
 void
 network_print (struct network * net, int option)
@@ -149,6 +154,14 @@ network_print (struct network * net, int option)
     printf("\n");
 } /* end network_print*/
 
+
+void
+network_delete (struct network * net)
+{
+    layer_delete(&net->visible);
+    layer_delete(&net->hidden);
+    free(net);
+}
 
 struct matrix *
 weight_create(size_t visible, size_t hidden)
@@ -320,5 +333,7 @@ main(int argc, char *argv[])
 //    }
 //    node_print(visible_aux, 1);
 
+    layer_delete(visible);
+    network_delete(net);
     return 0;
 }
