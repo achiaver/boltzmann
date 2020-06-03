@@ -3,8 +3,8 @@
 #include <errno.h>
 #include <stdlib.h>
 #include "parameters.h"
-#include "boltzmann.h"
 #include "matrix.h"
+#include "boltzmann.h"
 #include <time.h>
 #include <math.h>
 
@@ -34,7 +34,7 @@ void
 node_randomize_bias (struct node * n, int node)
 {
     n[node].bias = drand48();
-} /* end of node_randomize_bias */
+} /* end node_randomize_bias */
 
 
 double
@@ -83,7 +83,7 @@ void
 node_copy (struct node * n1, struct node * n2)
 {
     *n2 = *n1;
-} /* end of node_copy */
+} /* end node_copy */
 
 
 void
@@ -92,7 +92,7 @@ node_create (struct node * n, int node)
     node_set_activation(n, node, 0.);
     node_set_bias(n, node, 0.);
     node_set_z_in(n, node, 0.);
-} /* end of node_create */
+} /* end node_create */
 
 
 struct layer *
@@ -112,18 +112,7 @@ layer_create (size_t num_nodes)
     }
 
     return l;
-}
-
-
-void
-layer_print (struct layer * l, int option)
-{
-    for (int i = 0; i < l->num_nodes; i++)
-    {
-        printf("Node %d\n", i);
-        node_print(l->nodes, i, option);
-    }
-}
+} /* end layer_creat */
 
 
 void
@@ -141,8 +130,20 @@ layer_delete (struct layer * l, int option)
             free(l->nodes);
         }
     }
-    printf("---- \t DELETED\n");
-}
+    printf("----> \t DELETED\n");
+} /* end layer_delete */
+
+
+void
+layer_print (struct layer * l, int option)
+{
+    for (int i = 0; i < l->num_nodes; i++)
+    {
+        printf("Node %d\n", i);
+        node_print(l->nodes, i, option);
+    }
+} /* end layer_print */
+
 
 void
 network_print (struct network * net, int option)
@@ -160,10 +161,10 @@ network_print (struct network * net, int option)
         }
     }
 
-    printf("\n---- \t WEIGHTS VALUES \t ----\n");
+    printf("\n---- WEIGHTS VALUES ----\n");
     matrix_print(net->weights);
     printf("\n");
-} /* end network_print*/
+} /* end network_print */
 
 
 void
@@ -177,8 +178,9 @@ network_delete (struct network * net)
         matrix_destroy(net->weights);
         free(net);
     }
-    printf("---- \t DELETED\n\n");
-}
+    printf("----> \t DELETED\n\n");
+} /* end network_delete */
+
 
 struct matrix *
 weight_create(size_t visible, size_t hidden)
@@ -186,7 +188,7 @@ weight_create(size_t visible, size_t hidden)
     struct matrix * weight = matrix_create(visible, hidden);
     matrix_randomize(weight);
     return weight;
-} /* end of weight_create*/
+} /* end weight_create*/
 
 
 struct network *
@@ -228,7 +230,7 @@ network_create (struct parameters * param)
     net->weights = weight_create(net->visible.num_nodes, net->hidden.num_nodes);
 
     return net;
-} /* end of network_create */
+} /* end network_create */
 
 
 struct matrix *
@@ -236,14 +238,14 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 {
     struct matrix * data = matrix_read_data(filename, rows, cols);
     return data;
-} /* end of dataset_allocate*/
+} /* end dataset_allocate*/
 
 
 double
 sigmoid (double expoent, double temp)
 {
     return (1 / (1 + exp(-expoent/temp)));
-} /* end of sigmoid*/
+} /* end sigmoid */
 
 
 //double

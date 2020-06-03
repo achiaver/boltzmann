@@ -67,6 +67,14 @@ void          node_create           (struct node *, int);
 
 
 /*  =================================================
+    Function Related to Layer structure.
+    =================================================
+ */
+struct layer * layer_create (size_t);
+void           layer_delete (struct layer *, int);
+void           layer_print  (struct layer *, int);
+
+/*  =================================================
     Function Related to Network structure.
     =================================================
  */
