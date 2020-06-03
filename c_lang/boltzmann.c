@@ -127,16 +127,29 @@ layer_print (struct layer * l, int option)
 
 
 void
-layer_delete (struct layer * l)
+layer_delete (struct layer * l, int option)
 {
-    free(l->nodes);
+    if (l)
+    {
+        printf("----\tDELETING LAYER\t----\n");
+        if (option == 0)
+        {
+            free(l->nodes);
+            free(l);
+        } else
+        {
+            free(l->nodes);
+        }
+    }
+    printf("----\tLAYER DELETED\t---- \n\n");
 }
 
 void
 network_print (struct network * net, int option)
 {
-    printf("---- NETWORK STATUS ----\n");
+    printf("----\tNETWORK STATUS\t----\n");
     printf("NUMBER OF LAYERS ---> %zu\n", net->num_layers);
+//    printf("ACTIVATION %f\n", net->visible.nodes[0].activation);
     for (int i = 0; i < net->num_layers; i++)
     {
         printf("Layer %2d \n", i);
@@ -149,7 +162,7 @@ network_print (struct network * net, int option)
         }
     }
 
-    printf("\n---- WEIGHTS VALUES ----\n");
+    printf("\n----\tWEIGHTS VALUES\t----\n");
     matrix_print(net->weights);
     printf("\n");
 } /* end network_print*/
@@ -158,9 +171,15 @@ network_print (struct network * net, int option)
 void
 network_delete (struct network * net)
 {
-    layer_delete(&net->visible);
-    layer_delete(&net->hidden);
-    free(net);
+    if (net)
+    {
+        printf("----\tDELETING NETWORK\t----\n");
+        layer_delete(&net->visible, 1);
+        layer_delete(&net->hidden, 1);
+        matrix_destroy(net->weights);
+        free(net);
+    }
+    printf("----\tNETWORK DELETED\t----\n\n");
 }
 
 struct matrix *
@@ -181,15 +200,16 @@ network_create (struct parameters * param)
         exit(2);
     }
 
-    net->num_layers = param->num_layers;
-    printf("NUMBER OF LAYERS (1) ---> %zu \n", net->num_layers);
+//    net->num_layers = param->num_layers;
+//    printf("NUMBER OF LAYERS (1) ---> %zu \n", net->num_layers);
+
     net->visible.num_nodes = param->nodes_per_layer[0];
     net->visible.nodes = malloc(sizeof (net->visible.nodes) * (net->visible.num_nodes));
     for (int i = 0; i < net->visible.num_nodes; i++)
     {
         node_create(net->visible.nodes, i);
     }
-    printf("NUMBER OF LAYERS (2) ---> %zu \n", net->num_layers);
+//    printf("NUMBER OF LAYERS (2) ---> %zu \n", net->num_layers);
 
     net->hidden.num_nodes = param->nodes_per_layer[1];
     net->hidden.nodes = malloc(sizeof (net->hidden.nodes) * (net->hidden.num_nodes));
@@ -197,11 +217,11 @@ network_create (struct parameters * param)
     {
         node_create(net->hidden.nodes, i);
     }
-    printf("NUMBER OF LAYERS (3) ---> %zu \n", net->num_layers);
+//    printf("NUMBER OF LAYERS (3) ---> %zu \n", net->num_layers);
 
     net->num_layers = param->num_layers;
     net->weights = weight_create(net->visible.num_nodes, net->hidden.num_nodes);
-    printf("NUMBER OF LAYERS (4) ---> %zu \n", net->num_layers);
+//    printf("NUMBER OF LAYERS (4) ---> %zu \n", net->num_layers);
 
     return net;
 } /* end of network_create */
@@ -264,7 +284,7 @@ main(int argc, char *argv[])
     matrix_print(dataset);
 
     struct network * net = network_create(param);
-    printf("%zu\n", net->num_layers);
+//    printf("%zu\n", net->num_layers);
     printf("\n\n");
     network_print(net, 0);
 
@@ -333,7 +353,8 @@ main(int argc, char *argv[])
 //    }
 //    node_print(visible_aux, 1);
 
-    layer_delete(visible);
+    matrix_destroy(dataset);
+    layer_delete(visible, 0);
     network_delete(net);
     return 0;
 }
