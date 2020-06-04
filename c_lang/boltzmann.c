@@ -86,6 +86,8 @@ node_copy (struct node * n1, struct node * n2)
 } /* end node_copy */
 
 
+
+
 void
 node_create (struct node * n, int node)
 {
