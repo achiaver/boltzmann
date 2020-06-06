@@ -18,7 +18,7 @@ seed_random ()
 double
 random_number (int lower, int upper, int option)
 {
-    double random = rand() / (double)RAND_MAX;
+    double random = (double) rand() / ((double)RAND_MAX + 1);
     if (option == 0)
     {
         return random;
@@ -53,10 +53,17 @@ point_generate (size_t npoints, int *range, int option)
 int
 main (int argc, char *argv[])
 {
+    if (argc <= 2)
+    {
+        fprintf(stderr, "usage: %s <random option {0, 1, 2} (int)> <number of points (int)>\n", argv[0]);
+        exit(2);
+    }
+
     int range[2] = {0, 100};
-    int option = 2;
+    int option = atoi(argv[1]);
+    int npoints = atoi(argv[2]);
     seed_random();
-    struct point * points = point_generate(10, range, option);
+    struct point * points = point_generate(npoints, range, option);
     free(points);
     return 0;
 }
