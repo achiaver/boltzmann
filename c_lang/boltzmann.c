@@ -10,6 +10,13 @@
 
 
 void
+initialize_seed(void)
+{
+    srand48(time(NULL));
+}
+
+
+void
 node_set_activation (struct node * n, int node, double value)
 {
     n[node].activation = value;
@@ -295,7 +302,8 @@ network_energy (struct network * net)
 int
 main(int argc, char *argv[])
 {
-    srand48(time(NULL));
+
+    initialize_seed();
 
     char * parameters_file = "in_parameters.dat";
     char * dataset_file = "dataset/three_node_test.csv";
