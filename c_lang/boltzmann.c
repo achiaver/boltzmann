@@ -177,10 +177,12 @@ network_delete (struct network * net)
         printf("---- \t DELETING NETWORK\n");
         layer_delete(&net->visible, 1);
         layer_delete(&net->hidden, 1);
+        printf("---- \t DELETING WEIGHTS\n");
         matrix_destroy(net->weights);
+        printf("----> \t DELETED\n");
         free(net);
     }
-    printf("----> \t DELETED\n\n");
+    printf("----> \t NETWORK DELETED!\n\n");
 } /* end network_delete */
 
 
@@ -243,6 +245,14 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 } /* end dataset_allocate*/
 
 
+void
+dataset_destroy (struct matrix * m)
+{
+    printf("---- \t DELETING DATASET\n");
+    matrix_destroy(m);
+    printf("----> \t DATASET DELETED\n\n");
+}
+
 double
 sigmoid (double expoent, double temp)
 {
@@ -272,7 +282,26 @@ state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_
 double
 network_energy (struct network * net)
 {
-    return state_energy (net->weights, &net->visible, &net->hidden);
+//    return state_energy (net->weights, &net->visible, &net->hidden);
+    double energy = 0.;
+    for (int i = 0; i < net->visible.num_nodes; i++)
+    {
+        for (int j = 0; j < net->hidden.num_nodes; j++)
+        {
+            energy -= node_get_activation(net->visible.nodes, i) * \
+                      matrix_get(net->weights, i, j) * \
+                      node_get_activation(net->hidden.nodes, j);
+        }
+        energy -= node_get_activation(net->visible.nodes, i) * \
+                  node_get_bias(net->visible.nodes, i); 
+    }
+    for (int j = 0; j < net->hidden.num_nodes; j++)
+    {
+        energy -= node_get_activation(net->hidden.nodes, j) * \
+                  node_get_bias(net->hidden.nodes, j);
+    }
+
+    return energy;
 }
 
 
@@ -359,8 +388,9 @@ main(int argc, char *argv[])
     }
     layer_print(visible_aux, 1);
 
-    matrix_destroy(dataset);
+    dataset_destroy(dataset);
     layer_delete(visible, 0);
+    printf("\n");
     network_delete(net);
     return 0;
 }
