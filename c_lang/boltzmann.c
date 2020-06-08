@@ -272,9 +272,15 @@ state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_
                       matrix_get(weights, i, j) * \
                       node_get_activation(lay_2->nodes, j);
         }
-        energy -= node_get_bias(lay_1->nodes, i);
+        energy -= node_get_activation(lay_1->nodes, i) * \
+                  node_get_bias(lay_1->nodes, i); 
     }
-    energy /= 2;
+    for (int j = 0; j < lay_2->num_nodes; j++)
+    {
+        energy -= node_get_activation(lay_2->nodes, j) * \
+                  node_get_bias(lay_2->nodes, j);
+    }
+
     return energy;
 }
 
@@ -282,26 +288,7 @@ state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_
 double
 network_energy (struct network * net)
 {
-//    return state_energy (net->weights, &net->visible, &net->hidden);
-    double energy = 0.;
-    for (int i = 0; i < net->visible.num_nodes; i++)
-    {
-        for (int j = 0; j < net->hidden.num_nodes; j++)
-        {
-            energy -= node_get_activation(net->visible.nodes, i) * \
-                      matrix_get(net->weights, i, j) * \
-                      node_get_activation(net->hidden.nodes, j);
-        }
-        energy -= node_get_activation(net->visible.nodes, i) * \
-                  node_get_bias(net->visible.nodes, i); 
-    }
-    for (int j = 0; j < net->hidden.num_nodes; j++)
-    {
-        energy -= node_get_activation(net->hidden.nodes, j) * \
-                  node_get_bias(net->hidden.nodes, j);
-    }
-
-    return energy;
+    return state_energy(net->weights, &net->visible, &net->hidden);
 }
 
 
@@ -387,6 +374,8 @@ main(int argc, char *argv[])
     printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
     }
     layer_print(visible_aux, 1);
+
+    printf("network energy - %f\n\n", network_energy(net));
 
     dataset_destroy(dataset);
     layer_delete(visible, 0);
