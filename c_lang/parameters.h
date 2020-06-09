@@ -39,6 +39,7 @@ struct parameters {
 
 
 struct parameters * parameters_create ();
+void                parameters_delete (struct parameters *);
 struct parameters * parameters_input  (char *, char *);
 void                parameters_print  (struct parameters *);
 

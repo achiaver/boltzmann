@@ -260,6 +260,7 @@ dataset_destroy (struct matrix * m)
     printf("----> \t DATASET DELETED\n\n");
 }
 
+
 double
 sigmoid (double expoent, double temp)
 {
@@ -299,6 +300,54 @@ network_energy (struct network * net)
 }
 
 
+struct state *
+state_create (size_t num_units)
+{
+    struct state * st = malloc (sizeof (*st));
+    if (!st)
+    {
+        printf("state_create: malloc: state: %s \n", strerror(errno));
+        exit(2);
+    }
+
+    st->num_units = num_units;
+
+    st->unit = malloc (sizeof (*st->unit) * (st->num_units));
+    if (!st->unit)
+    {
+        printf("state_create: malloc: state units %s \n", strerror(errno));
+        exit(2);
+    }
+    for (int i = 0; i < st->num_units; i++)
+    {
+        st->unit[i] = 999.;
+    }
+
+    return st;
+}
+
+
+void
+state_destroy (struct state * st)
+{
+    free(st->unit);
+    free(st);
+    printf("----> State deleted! \n");
+}
+
+
+void
+state_print (struct state * st)
+{
+    printf("---- STATE STATUS ----\n");
+    for (int i = 0; i < st->num_units; i++)
+    {
+        printf("%f, \t", st->unit[i]);
+    }
+    printf("\n\n");
+}
+
+
 int
 main(int argc, char *argv[])
 {
@@ -308,15 +357,15 @@ main(int argc, char *argv[])
     char * parameters_file = "in_parameters.dat";
     char * dataset_file = "dataset/three_node_test.csv";
     struct parameters * param = parameters_input(parameters_file, dataset_file);
-    parameters_print(param);
+//    parameters_print(param);
 
     struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
-    printf("\n\nInput dataset display\n\n");
-    matrix_print(dataset);
+//    printf("\n\nInput dataset display\n\n");
+//    matrix_print(dataset);
 
     struct network * net = network_create(param);
-    printf("\n\n");
-    network_print(net, 0);
+//    printf("\n\n");
+//    network_print(net, 0);
 
     struct layer * visible = layer_create(param->nodes_per_layer[0]);
     struct layer * visible_aux = layer_create(param->nodes_per_layer[0]);
@@ -385,9 +434,18 @@ main(int argc, char *argv[])
 
     printf("network energy - %f\n\n", network_energy(net));
 
+    struct state * st = state_create(param->nodes_per_layer[0] + param->nodes_per_layer[1]);
+    state_print(st);
+    state_destroy(st);
+
+
     dataset_destroy(dataset);
     layer_delete(visible, 0);
     printf("\n");
     network_delete(net);
+
+
+    parameters_delete(param);
+
     return 0;
 }

@@ -27,6 +27,14 @@ parameters_create ()
 } /* end parameters_create */
 
 
+void
+parameters_delete (struct parameters * param)
+{
+    free(param);
+    printf("----> Parameters deleted! \n");
+}
+
+
 struct parameters *
 parameters_input (char * parameters_file, char * data_file)
 {
