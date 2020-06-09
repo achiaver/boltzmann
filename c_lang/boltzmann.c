@@ -13,6 +13,7 @@ void
 initialize_seed(void)
 {
     srand48(time(NULL));
+    srand(time(NULL));
 }
 
 
@@ -320,7 +321,7 @@ state_create (size_t num_units)
     }
     for (int i = 0; i < st->num_units; i++)
     {
-        st->unit[i] = 999.;
+        st->unit[i] = rand() % 2;
     }
 
     return st;
