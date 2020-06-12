@@ -32,10 +32,10 @@ node_set_bias (struct node * n, int node, double value)
 
 
 void
-node_set_z_in (struct node * n, int node, double value)
+node_set_nprob (struct node * n, int node, double value)
 {
-    n[node].z_in = value;
-} /* end node_set_z_in */
+    n[node].nprob = value;
+} /* end node_set_nprob */
 
 
 void
@@ -60,10 +60,10 @@ node_get_bias (struct node * n, int node)
 
 
 double
-node_get_z_in (struct node * n, int node)
+node_get_nprob (struct node * n, int node)
 {
-    return n[node].z_in;
-} /* end node_get_z_in */
+    return n[node].nprob;
+} /* end node_get_nprob */
 
 
 void
@@ -73,7 +73,7 @@ node_print(struct node * n, int node, int option)
     {
         printf("\t- activation \t %f \n", node_get_activation(n, node));
         printf("\t- bias \t %f \n", node_get_bias(n, node));
-        printf("\t- z_in \t %f \n", node_get_z_in(n, node));
+        printf("\t- nprob \t %f \n", node_get_nprob(n, node));
         printf("\n");
     } else if (option == 1) // print only node activation
     {
@@ -94,14 +94,12 @@ node_copy (struct node * n1, struct node * n2)
 } /* end node_copy */
 
 
-
-
 void
 node_create (struct node * n, int node)
 {
     node_set_activation(n, node, 0.);
     node_set_bias(n, node, 0.);
-    node_set_z_in(n, node, 0.);
+    node_set_nprob(n, node, 0.);
 } /* end node_create */
 
 

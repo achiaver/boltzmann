@@ -7,13 +7,13 @@
     =================================================
     activation - vector of activation of the nodes; valeu 0 (off) or 1 (on);
     bias - vector of bias value of each node;
-    z_in - weighted sum of the information each node is receiving from other nodes connected to it;
+    nprob - weighted sum of the information each node is receiving from other nodes connected to it;
     =================================================
  */
 struct node {
     double activation;
     double bias;
-    double z_in;
+    double nprob;
 };
 
 
@@ -64,11 +64,11 @@ struct state {
  */
 void          node_set_activation   (struct node *, int, double);
 void          node_set_bias         (struct node *, int, double);
-void          node_set_z_in         (struct node *, int, double);
+void          node_set_nprob         (struct node *, int, double);
 void          node_randomize_bias   (struct node *, int);
 double        node_get_activation   (struct node *, int);
 double        node_get_bias         (struct node *, int);
-double        node_get_z_in         (struct node *, int);
+double        node_get_nprob        (struct node *, int);
 void          node_print            (struct node *, int, int);
 void          node_copy             (struct node *, struct node *);
 void          node_create           (struct node *, int);
