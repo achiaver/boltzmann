@@ -463,10 +463,12 @@ network_training(struct network * net, struct parameters * param, double data[12
             } // end for compute hidden (1)
 
             struct matrix * positive_grad = outerproduct(&net->visible, &net->hidden);
-
+            printf("positive gradiente %d \n", idx);
             matrix_print(positive_grad);
+            printf("\n");
 
         } // end for idx
+        printf("Done epoch %d \n\n", epoch);
         epoch++;
     }
 }
@@ -512,13 +514,14 @@ main(int argc, char *argv[])
     param->epsilonw = 0.01;
     param->epsilonvb = 0.01;
     param->epsilonhb = 0.01;
-    param->maxepochs = 12;
+    param->maxepochs = 2;
 
     printf("Training RBM using CD1 algorithm \n");
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
     printf("Setting maximum amount of epochs = %d \n", param->maxepochs);
 
     network_training(net, param, dataset);
+    matrix_print(net->weights);
 
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
