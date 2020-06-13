@@ -395,6 +395,22 @@ shuffle(int arr[], int n)
     }
 }
 
+struct matrix *
+outerproduct (struct layer * lay_1, struct layer * lay_2)
+{
+    struct matrix * outerprod = matrix_create(lay_1->num_nodes, lay_2->num_nodes);
+    for (int i = 0; i < lay_1->num_nodes; i++)
+    {
+        for (int j = 0; j < lay_2->num_nodes; j++)
+        {
+            matrix_set(outerprod, i, j, node_get_activation(lay_1->nodes, i) * node_get_activation(lay_2->nodes, j));
+        }
+    }
+
+    return outerprod;
+}
+
+
 
 void
 network_training(struct network * net, struct parameters * param, double data[12][6])
@@ -446,9 +462,12 @@ network_training(struct network * net, struct parameters * param, double data[12
                 }
             } // end for compute hidden (1)
 
+            struct matrix * positive_grad = outerproduct(&net->visible, &net->hidden);
 
+            matrix_print(positive_grad);
 
         } // end for idx
+        epoch++;
     }
 }
 
@@ -493,11 +512,13 @@ main(int argc, char *argv[])
     param->epsilonw = 0.01;
     param->epsilonvb = 0.01;
     param->epsilonhb = 0.01;
-    param->maxepochs = 1000;
+    param->maxepochs = 12;
 
     printf("Training RBM using CD1 algorithm \n");
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
     printf("Setting maximum amount of epochs = %d \n", param->maxepochs);
+
+    network_training(net, param, dataset);
 
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
