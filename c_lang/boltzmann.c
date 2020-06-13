@@ -444,7 +444,8 @@ network_training(struct network * net, struct parameters * param, double data[12
                 {
                     node_set_activation(net->hidden.nodes, h, 0.);
                 }
-            }
+            } // end for compute hidden (1)
+
 
 
         } // end for idx
