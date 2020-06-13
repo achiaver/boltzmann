@@ -282,7 +282,7 @@ state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_
                       node_get_activation(lay_2->nodes, j);
         }
         energy -= node_get_activation(lay_1->nodes, i) * \
-                  node_get_bias(lay_1->nodes, i); 
+                  node_get_bias(lay_1->nodes, i);
     }
     for (int j = 0; j < lay_2->num_nodes; j++)
     {
@@ -374,7 +374,55 @@ dataset_print(double data[12][6], int num_rows)
     printf("\n");
 }
 
+// Fisher-Yates shuffle algorithm
+// swap and shuffle functions
+void
+swap (int *a, int *b)
+{
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
+
+void
+shuffle(int arr[], int n)
+{
+    for (int i = n-1; i > 0; i--)
+    {
+        int j = rand() % (i+1);
+        swap(&arr[i], &arr[j]);
+    }
+}
+
+
+void
+network_training(struct network * net, struct parameters * param, double data[12][6])
+{
+    int *indices = malloc(sizeof (int) * param->dataset_rows);
+    int indices_len = param->dataset_rows;
+    if (!indices)
+    {
+        printf("network_training: malloc: indices: %s \n", strerror(errno));
+        exit(2);
+    }
+    for (int i = 0; i < indices_len; i++)
+    {
+        indices[i] = i;
+    }
+
+    int epoch = 0;
+    while (epoch < param->maxepochs)
+    {
+        shuffle(indices, indices_len);
+
+        for (int idx = 0; idx < indices_len; idx++)
+        {
+            int i = indices[idx];
+
+        }
+    }
+}
 
 int
 main(int argc, char *argv[])
@@ -403,14 +451,17 @@ main(int argc, char *argv[])
     struct parameters * param = parameters_create();
     param->num_layers = 2;
     param->num_visible = 6;
-    param->num_hidden = 3; 
+    param->num_hidden = 3;
 
     printf("Creating a RBM ... \n");
     printf("Setting number of visible nodes = %zu \n", param->num_visible);
     printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
 
     struct network * net = network_create(param);
-    
+//    network_delete(net);
+
+    param->dataset_rows = 12;
+    param->dataset_cols = 6;
     param->epsilonw = 0.01;
     param->epsilonvb = 0.01;
     param->epsilonhb = 0.01;
@@ -418,7 +469,7 @@ main(int argc, char *argv[])
 
     printf("Training RBM using CD1 algorithm \n");
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-    printf("Setting maximum amount of epochs = %f \n", param->maxepochs);
+    printf("Setting maximum amount of epochs = %d \n", param->maxepochs);
 
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
