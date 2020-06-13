@@ -416,11 +416,38 @@ network_training(struct network * net, struct parameters * param, double data[12
     {
         shuffle(indices, indices_len);
 
-        for (int idx = 0; idx < indices_len; idx++)
+        for (int idx = 0; idx < indices_len; idx++) // for each point in the dataset
         {
             int i = indices[idx];
 
-        }
+            // Copy train data i into network visible layer (nodes)
+            for (int v = 0; v < net->visible.num_nodes; v++)
+            {
+                node_set_activation(net->visible.nodes, v, data[i][v]);
+            }
+
+            // Compute hidden nodes values
+            for (int h = 0; h < net->hidden.num_nodes; h++)
+            {
+                double sum = 0.;
+                for (int v = 0; v < net->visible.num_nodes; v++)
+                {
+                    sum += node_get_activation(net->visible.nodes, v) * matrix_get(net->weights, v, h);
+                }
+                sum += node_get_bias(net->hidden.nodes, h);
+
+                node_set_nprob(net->hidden.nodes, h, sigmoid(sum, 1));
+                if (node_get_nprob(net->hidden.nodes, h) > drand48())
+                {
+                    node_set_activation(net->hidden.nodes, h, 1.);
+                } else
+                {
+                    node_set_activation(net->hidden.nodes, h, 0.);
+                }
+            }
+
+
+        } // end for idx
     }
 }
 
