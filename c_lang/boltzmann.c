@@ -9,6 +9,8 @@
 #include <math.h>
 
 
+#define LEN(arr) ((int) (sizeof (arr)) / sizeof (arr[0]))
+
 void
 initialize_seed(void)
 {
@@ -212,7 +214,7 @@ network_create (struct parameters * param)
 
     net->num_layers = param->num_layers;
 
-    net->visible.num_nodes = param->nodes_per_layer[0];
+    net->visible.num_nodes = param->num_visible;
     net->visible.nodes = malloc(sizeof (*net->visible.nodes) * (net->visible.num_nodes));
     if (!net->visible.nodes)
     {
@@ -225,7 +227,7 @@ network_create (struct parameters * param)
     }
 
 
-    net->hidden.num_nodes = param->nodes_per_layer[1];
+    net->hidden.num_nodes = param->num_hidden;
     net->hidden.nodes = malloc(sizeof (*net->hidden.nodes) * (net->hidden.num_nodes));
     if (!net->hidden.nodes)
     {
@@ -347,104 +349,169 @@ state_print (struct state * st)
 }
 
 
+
+/* ==========================================
+ * ==========================================
+ *
+ * Functions from RestrictedBoltzmannProgram.cs
+ *
+ * ==========================================
+ * ========================================== */
+
+void
+dataset_print(double data[12][6], int num_rows)
+{
+    int cols = (int) sizeof(data[0]) / sizeof(data[0][0]);
+    for (int i = 0; i < num_rows; i++)
+    {
+        printf("[%2d] - ", i);
+        for (int j = 0; j < cols; j++)
+        {
+            printf("%2.0f ", data[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
+
+
 int
 main(int argc, char *argv[])
 {
-
     initialize_seed();
 
-    char * parameters_file = "in_parameters.dat";
-    char * dataset_file = "dataset/three_node_test.csv";
-    struct parameters * param = parameters_input(parameters_file, dataset_file);
+    printf("\nBegin Restricted Boltzmann Machine demo\n");
+    printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");
+
+    double dataset[12][6] = {{ 1, 1, 0, 0, 0, 0 },   // A
+                             { 0, 0, 1, 1, 0, 0 },   // B
+                             { 0, 0, 0, 0, 1, 1 },   // C
+                             { 1, 1, 0, 0, 0, 1 },   // noisy A
+                             { 0, 0, 1, 1, 0, 0 },   // B
+                             { 0, 0, 0, 0, 1, 1 },   // C
+                             { 1, 0, 0, 0, 0, 0 },   // weak A
+                             { 0, 0, 1, 0, 0, 0 },   // weak B
+                             { 0, 0, 0, 0, 1, 0 },   // weak C
+                             { 1, 1, 0, 1, 0, 0 },   // noisy A
+                             { 1, 0, 1, 1, 0, 0 },   // noisy B
+                             { 0, 0, 1, 0, 1, 1 }};  // noisy C
+
+    printf("Film like-dislike data is: \n");
+    dataset_print(dataset, 12);
+
+    struct parameters * param = parameters_create();
+    param->num_layers = 2;
+    param->num_visible = 6;
+    param->num_hidden = 3; 
+
+    printf("Creating a RBM ... \n");
+    printf("Setting number of visible nodes = %zu \n", param->num_visible);
+    printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
+
+    struct network * net = network_create(param);
+    
+    param->epsilonw = 0.01;
+    param->epsilonvb = 0.01;
+    param->epsilonhb = 0.01;
+    param->maxepochs = 1000;
+
+    printf("Training RBM using CD1 algorithm \n");
+    printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
+    printf("Setting maximum amount of epochs = %f \n", param->maxepochs);
+
+//    char * parameters_file = "in_parameters.dat";
+//    char * dataset_file = "dataset/three_node_test.csv";
+//    struct parameters * param = parameters_input(parameters_file, dataset_file);
 //    parameters_print(param);
 
-    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
+//    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
 //    printf("\n\nInput dataset display\n\n");
 //    matrix_print(dataset);
 
-    struct network * net = network_create(param);
+//    struct network * net = network_create(param);
 //    printf("\n\n");
 //    network_print(net, 0);
 
-    struct layer * visible = layer_create(param->nodes_per_layer[0]);
-    struct layer * visible_aux = layer_create(param->nodes_per_layer[0]);
-    struct layer * hidden = layer_create(param->nodes_per_layer[1]);
-    for (int i = 0; i < visible->num_nodes; i++)
-    {
-        node_set_activation(visible->nodes, i, matrix_get(dataset, 0, i));
-    }
-    layer_print(visible, 1);
-    printf("\n");
-
-    double energy = state_energy(net->weights, visible, hidden); // holds the initial energy of the state of the system
-    double energy_compare = 0.; // after any update, energy_compare will have the immediate energy of the state
-    // energy and energy_compare will be compared, if there is a decrease in energy, update is kept,
-    // otherwise the previous value of the unit remains.
-    double sum = 0.;
-    double expo = 0.;
-
-    printf("\n---- UPDATE HIDDEN UNITS ----\n");
-    for (size_t i = 0; i < hidden->num_nodes; i++)
-    {
-        for (size_t j = 0; j < visible->num_nodes; j++)
-        {
-//            printf("%zu \t %zu\n", i, j);
-//            printf("%f\n", matrix_get(net->weights, j, i));
-            sum += node_get_activation(visible->nodes, j) * matrix_get(net->weights, j, i);
-        }
-        sum += node_get_bias(visible->nodes, i);
-        expo = sigmoid(sum, 1);
-        if (expo < 0.5)
-        {
-            node_set_activation(hidden->nodes, i, 0.);
-        } else
-        {
-            node_set_activation(hidden->nodes, i, 1.);
-        }
-    energy_compare = state_energy(net->weights, visible, hidden);
-    printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
-    }
-    layer_print(hidden, 1);
-
-    printf("\n---- UPDATE VISIBLE UNITS ----\n");
-    for (size_t i = 0; i < visible_aux->num_nodes; i++)
-    {
-        sum = 0.;
-        expo = 0.;
-        for (size_t j = 0; j < hidden->num_nodes; j++)
-        {
-//            printf("%zu \t %zu\n", i, j);
-//            printf("%f\n", matrix_get(net->weights, i, j));
-            sum += node_get_activation(hidden->nodes, j) * matrix_get(net->weights, i, j);
-        }
-        sum += node_get_bias(net->visible.nodes, i);
-        expo = sigmoid(sum, 1);
-        if (expo < 0.5)
-        {
-            node_set_activation(visible_aux->nodes, i, 0.);
-        } else
-        {
-            node_set_activation(visible_aux->nodes, i, 1.);
-        }
-    energy_compare = state_energy(net->weights, visible, hidden);
-    printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
-    }
-    layer_print(visible_aux, 1);
-
-    printf("network energy - %f\n\n", network_energy(net));
-
-    struct state * st = state_create(param->nodes_per_layer[0] + param->nodes_per_layer[1]);
-    state_print(st);
-    state_destroy(st);
-
-
-    dataset_destroy(dataset);
-    layer_delete(visible, 0);
-    printf("\n");
-    network_delete(net);
-
-
-    parameters_delete(param);
+//    struct layer * visible = layer_create(param->num_visible);
+//    struct layer * visible_aux = layer_create(param->num_visible);
+//    struct layer * hidden = layer_create(param->num_hidden);
+//    for (int i = 0; i < visible->num_nodes; i++)
+//    {
+//        node_set_activation(visible->nodes, i, matrix_get(dataset, 0, i));
+//    }
+//    layer_print(visible, 1);
+//    printf("\n");
+//
+//    double energy = state_energy(net->weights, visible, hidden); // holds the initial energy of the state of the system
+//    double energy_compare = 0.; // after any update, energy_compare will have the immediate energy of the state
+//    // energy and energy_compare will be compared, if there is a decrease in energy, update is kept,
+//    // otherwise the previous value of the unit remains.
+//    double sum = 0.;
+//    double expo = 0.;
+//
+//    printf("\n---- UPDATE HIDDEN UNITS ----\n");
+//    for (size_t i = 0; i < hidden->num_nodes; i++)
+//    {
+//        for (size_t j = 0; j < visible->num_nodes; j++)
+//        {
+////            printf("%zu \t %zu\n", i, j);
+////            printf("%f\n", matrix_get(net->weights, j, i));
+//            sum += node_get_activation(visible->nodes, j) * matrix_get(net->weights, j, i);
+//        }
+//        sum += node_get_bias(visible->nodes, i);
+//        expo = sigmoid(sum, 1);
+//        if (expo < 0.5)
+//        {
+//            node_set_activation(hidden->nodes, i, 0.);
+//        } else
+//        {
+//            node_set_activation(hidden->nodes, i, 1.);
+//        }
+//    energy_compare = state_energy(net->weights, visible, hidden);
+//    printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
+//    }
+//    layer_print(hidden, 1);
+//
+//    printf("\n---- UPDATE VISIBLE UNITS ----\n");
+//    for (size_t i = 0; i < visible_aux->num_nodes; i++)
+//    {
+//        sum = 0.;
+//        expo = 0.;
+//        for (size_t j = 0; j < hidden->num_nodes; j++)
+//        {
+////            printf("%zu \t %zu\n", i, j);
+////            printf("%f\n", matrix_get(net->weights, i, j));
+//            sum += node_get_activation(hidden->nodes, j) * matrix_get(net->weights, i, j);
+//        }
+//        sum += node_get_bias(net->visible.nodes, i);
+//        expo = sigmoid(sum, 1);
+//        if (expo < 0.5)
+//        {
+//            node_set_activation(visible_aux->nodes, i, 0.);
+//        } else
+//        {
+//            node_set_activation(visible_aux->nodes, i, 1.);
+//        }
+//    energy_compare = state_energy(net->weights, visible, hidden);
+//    printf("state energy 1 -> %f \t state energy 2 -> %f \n", energy, energy_compare);
+//    }
+//    layer_print(visible_aux, 1);
+//
+//    printf("network energy - %f\n\n", network_energy(net));
+//
+//    struct state * st = state_create(param->num_visible + param->num_hidden);
+//    state_print(st);
+//    state_destroy(st);
+//
+//
+//    dataset_destroy(dataset);
+//    layer_delete(visible, 0);
+//    printf("\n");
+//    network_delete(net);
+//
+//
+//    parameters_delete(param);
 
     return 0;
 }
