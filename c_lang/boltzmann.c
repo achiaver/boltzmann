@@ -462,13 +462,17 @@ network_training(struct network * net, struct parameters * param, double data[12
                 }
             } // end for compute hidden (1)
 
+            // Compute positive gradiente -> outer product of v and h.
             struct matrix * positive_grad = outerproduct(&net->visible, &net->hidden);
-            printf("positive gradiente %d \n", idx);
-            matrix_print(positive_grad);
-            printf("\n");
+//            printf("positive gradiente %d \n", idx);
+//            matrix_print(positive_grad);
+//            printf("\n");
+
+            // Reconstruct visible v'
+
 
         } // end for idx
-        printf("Done epoch %d \n\n", epoch);
+//        printf("Done epoch %d \n\n", epoch);
         epoch++;
     }
 }
