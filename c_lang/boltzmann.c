@@ -415,6 +415,7 @@ outerproduct (struct layer * lay_1, struct layer * lay_2)
 void
 network_training(struct network * net, struct parameters * param, double data[12][6])
 {
+    double learning_rate = param->epsilonw;
     int *indices = malloc(sizeof (int) * param->dataset_rows);
     int indices_len = param->dataset_rows;
     if (!indices)
@@ -442,7 +443,7 @@ network_training(struct network * net, struct parameters * param, double data[12
                 node_set_activation(net->visible.nodes, v, data[i][v]);
             }
 
-            // Compute hidden nodes values
+            // Compute hidden nodes values on the network
             for (int h = 0; h < net->hidden.num_nodes; h++)
             {
                 double sum = 0.;
@@ -468,7 +469,70 @@ network_training(struct network * net, struct parameters * param, double data[12
 //            matrix_print(positive_grad);
 //            printf("\n");
 
-            // Reconstruct visible v'
+            // Reconstruct visible v' from h
+            struct layer * visible_prime = layer_create(net->visible.num_nodes);
+            for (int v = 0; v < visible_prime->num_nodes; v++)
+            {
+                double sum = 0.;
+                for (int h = 0; h < net->hidden.num_nodes; h++)
+                {
+                    sum += node_get_activation(net->hidden.nodes, h) * matrix_get(net->weights, v, h);
+                }
+                sum += node_get_bias(net->visible.nodes, v);
+
+                node_set_nprob(visible_prime->nodes, v, sigmoid(sum, 1));
+                if (node_get_nprob(visible_prime->nodes, v) > drand48())
+                {
+                    node_set_activation(visible_prime->nodes, v, 1.);
+                } else
+                {
+                    node_set_activation(visible_prime->nodes, v, 0.);
+                }
+            }
+
+            // Reconstruct hidden h' from v'
+            struct layer * hidden_prime = layer_create(net->hidden.num_nodes);
+            for (int h = 0; h < hidden_prime->num_nodes; h++)
+            {
+                double sum = 0.;
+                for (int v = 0; v < visible_prime->num_nodes; v++)
+                {
+                    sum += node_get_activation(visible_prime->nodes, v) * matrix_get(net->weights, v, h);
+                }
+                sum += node_get_bias(net->hidden.nodes, h);
+
+                node_set_nprob(hidden_prime->nodes, h, sigmoid(sum, 1));
+                if (node_get_nprob(hidden_prime->nodes, h) > drand48())
+                {
+                    node_set_activation(hidden_prime->nodes, h, 1.);
+                } else
+                {
+                    node_set_activation(hidden_prime->nodes, h, 0.);
+                }
+            }
+
+            // Compute negative gradiente -> outer product of v' and h'
+            struct matrix * negative_grad = outerproduct(visible_prime, hidden_prime);
+//            printf("negative gradiente %d \n", idx);
+//            matrix_print(negative_grad);
+//            printf("\n");
+
+
+//            printf("BEFORE updated weights \n");
+//            matrix_print(net->weights);
+
+            // update weights
+            for (int row = 0; row < net->visible.num_nodes; row++)
+            {
+                for (int col = 0; col < net->hidden.num_nodes; col++)
+                {
+                    matrix_set(net->weights, row, col, \
+                            (matrix_get(net->weights, row, col) + \
+                             learning_rate * (matrix_get(positive_grad, row, col) - matrix_get(negative_grad, row, col))));
+                }
+            }
+//            printf("AFTER updated weights \n");
+//            matrix_print(net->weights);
 
 
         } // end for idx
@@ -518,14 +582,21 @@ main(int argc, char *argv[])
     param->epsilonw = 0.01;
     param->epsilonvb = 0.01;
     param->epsilonhb = 0.01;
-    param->maxepochs = 2;
+    param->maxepochs = 1000;
 
     printf("Training RBM using CD1 algorithm \n");
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
     printf("Setting maximum amount of epochs = %d \n", param->maxepochs);
 
-    network_training(net, param, dataset);
+    printf("Weights before training...\n");
     matrix_print(net->weights);
+    printf("\n");
+
+    network_training(net, param, dataset);
+
+    printf("Weights after training...\n");
+    matrix_print(net->weights);
+    printf("\n");
 
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
