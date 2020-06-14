@@ -395,6 +395,7 @@ shuffle(int arr[], int n)
     }
 }
 
+
 struct matrix *
 outerproduct (struct layer * lay_1, struct layer * lay_2)
 {
@@ -518,9 +519,6 @@ network_training(struct network * net, struct parameters * param, double data[12
 //            printf("\n");
 
 
-//            printf("BEFORE updated weights \n");
-//            matrix_print(net->weights);
-
             // update weights
             for (int row = 0; row < net->visible.num_nodes; row++)
             {
@@ -531,9 +529,24 @@ network_training(struct network * net, struct parameters * param, double data[12
                              learning_rate * (matrix_get(positive_grad, row, col) - matrix_get(negative_grad, row, col))));
                 }
             }
-//            printf("AFTER updated weights \n");
-//            matrix_print(net->weights);
 
+            // update visible biases
+            for (int v = 0; v < net->visible.num_nodes; v++)
+            {
+                node_set_bias(net->visible.nodes, v, \
+                        (node_get_bias(net->visible.nodes, v) + \
+                         learning_rate * (node_get_activation(net->visible.nodes, v) - \
+                             node_get_activation(visible_prime->nodes, v))));
+            }
+
+            //update hidden biases
+            for (int h = 0; h < net->hidden.num_nodes; h++)
+            {
+                node_set_bias(net->hidden.nodes, h, \
+                        (node_get_bias(net->hidden.nodes, h) + \
+                         learning_rate * (node_get_activation(net->hidden.nodes, h) - \
+                             node_get_activation(hidden_prime->nodes, h))));
+            }
 
         } // end for idx
 //        printf("Done epoch %d \n\n", epoch);
@@ -588,12 +601,15 @@ main(int argc, char *argv[])
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
     printf("Setting maximum amount of epochs = %d \n", param->maxepochs);
 
+
+    network_print(net, 0);
     printf("Weights before training...\n");
     matrix_print(net->weights);
     printf("\n");
 
     network_training(net, param, dataset);
 
+    network_print(net, 0);
     printf("Weights after training...\n");
     matrix_print(net->weights);
     printf("\n");
