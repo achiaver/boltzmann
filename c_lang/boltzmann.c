@@ -598,6 +598,69 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
 }
 
 
+struct layer *
+visible_from_hidden (struct network * net, struct layer * hidden)
+{
+    struct layer * visible = layer_create(net->visible.num_nodes);
+    for (int v = 0; v < visible->num_nodes; v++)
+    {
+        double sum = 0.;
+        for (int h = 0; h < hidden->num_nodes; h++)
+        {
+            sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
+        }
+        sum += node_get_bias(net->visible.nodes, v);
+
+        node_set_nprob(visible->nodes, v, sigmoid(sum, 1));
+        if (node_get_nprob(visible->nodes, v) > drand48())
+        {
+            node_set_activation(visible->nodes, v, 1.);
+        } else
+        {
+            node_set_activation(visible->nodes, v, 0.);
+        }
+    }
+    return visible;
+}
+
+
+struct layer *
+hidden_from_visible (struct network * net, struct layer * visible)
+{
+    struct layer * hidden = layer_create(net->hidden.num_nodes);
+    for (int h = 0; h < hidden->num_nodes; h++)
+    {
+        double sum = 0.;
+        for (int v = 0; v < visible->num_nodes; v++)
+        {
+            sum += node_get_activation(visible->nodes, v) * matrix_get(net->weights, v, h);
+        }
+        sum += node_get_bias(net->hidden.nodes, h);
+
+        node_set_nprob(hidden->nodes, h, sigmoid(sum, 1));
+        if (node_get_nprob(hidden->nodes, h) > drand48())
+        {
+            node_set_activation(hidden->nodes, h, 1.);
+        } else
+        {
+            node_set_activation(hidden->nodes, h, 0.);
+        }
+    }
+    return hidden;
+}
+
+
+void 
+layer_copy_from_array (struct layer * l, double array[])
+{
+    for (int i = 0; i < l->num_nodes; i++)
+    {
+        node_set_activation(l->nodes, i, array[i]);
+    }
+}
+
+
+
 int
 main(int argc, char *argv[])
 {
@@ -662,8 +725,18 @@ main(int argc, char *argv[])
 //    printf("\n");
 
     printf("\nUsing trained machine... \n");
-    
 
+    struct layer * visible = layer_create(net->visible.num_nodes);
+    layer_copy_from_array(visible, dataset[0]);
+    layer_print(visible, 1);
+    struct layer * hidden = hidden_from_visible(net, visible);
+    layer_print(hidden, 1);
+
+
+
+    layer_delete(visible, 0);
+    layer_delete(hidden, 0);
+    network_delete(net);
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
 //    struct parameters * param = parameters_input(parameters_file, dataset_file);
