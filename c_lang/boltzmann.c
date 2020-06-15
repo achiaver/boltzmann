@@ -552,7 +552,51 @@ network_training(struct network * net, struct parameters * param, double data[12
 //        printf("Done epoch %d \n\n", epoch);
         epoch++;
     }
+} /* end network_training */
+
+
+void
+network_dump (struct network * net, int show_values, int show_weights, int show_biases)
+{
+    if (show_values == 1)
+    {
+        for (int i = 0; i < net->visible.num_nodes; i++)
+        {
+            printf("visible node [%4d] value = %f ", i,node_get_activation(net->visible.nodes, i));
+            printf(" - prob = %f \n", node_get_nprob(net->visible.nodes, i));
+        }
+        printf("\n");
+        
+        for (int j = 0; j < net->hidden.num_nodes; j++)
+        {
+            printf("hidden node [%4d] value = %f ", j, node_get_activation(net->hidden.nodes, j));
+            printf(" - prob = %f \n", node_get_nprob(net->hidden.nodes, j));
+        }
+        printf("\n");
+    }
+
+    if (show_weights == 1)
+    {
+        matrix_print(net->weights);
+    }
+    printf("\n");
+
+    if (show_biases == 1)
+    {
+        for (int i = 0; i < net->visible.num_nodes; i++)
+        {
+            printf("visible bias [%4d] value = %f \n", i, node_get_bias(net->visible.nodes, i));
+        }
+        printf("\n");
+        
+        for (int j = 0; j < net->hidden.num_nodes; j++)
+        {
+            printf("hidden bias [%4d] value = %f \n", j, node_get_bias(net->hidden.nodes, j));
+        }
+        printf("\n");
+    }
 }
+
 
 int
 main(int argc, char *argv[])
@@ -599,20 +643,26 @@ main(int argc, char *argv[])
 
     printf("Training RBM using CD1 algorithm \n");
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-    printf("Setting maximum amount of epochs = %d \n", param->maxepochs);
+    printf("Setting maximum amount of epochs = %d \n\n", param->maxepochs);
 
 
-    network_print(net, 0);
-    printf("Weights before training...\n");
-    matrix_print(net->weights);
-    printf("\n");
+//    network_print(net, 0);
+//    printf("Weights before training...\n");
+//    matrix_print(net->weights);
+//    printf("\n");
 
     network_training(net, param, dataset);
+    printf("Training complete. \n");
 
-    network_print(net, 0);
-    printf("Weights after training...\n");
-    matrix_print(net->weights);
-    printf("\n");
+    printf("Trained machine's weights and biases are: \n");
+    network_dump(net, 0, 1, 1);
+//    network_print(net, 0);
+//    printf("Weights after training...\n");
+//    matrix_print(net->weights);
+//    printf("\n");
+
+    printf("\nUsing trained machine... \n");
+    
 
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
