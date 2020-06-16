@@ -9,7 +9,8 @@
 #include <math.h>
 
 
-#define LEN(arr) ((int) (sizeof (arr)) / sizeof (arr[0]))
+//#define LEN(arr) ((int) (sizeof (arr)) / sizeof (arr[0]))
+
 
 void
 initialize_seed(void)
