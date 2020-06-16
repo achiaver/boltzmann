@@ -149,8 +149,11 @@ layer_print (struct layer * l, int option)
 {
     for (int i = 0; i < l->num_nodes; i++)
     {
-        printf("Node %d\n", i);
-        node_print(l->nodes, i, option);
+        printf("%2.0f ", node_get_activation(l->nodes, i));
+    }
+    if (option == 1)
+    {
+        printf("\n");
     }
 } /* end layer_print */
 
@@ -566,7 +569,7 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
             printf(" - prob = %f \n", node_get_nprob(net->visible.nodes, i));
         }
         printf("\n");
-        
+
         for (int j = 0; j < net->hidden.num_nodes; j++)
         {
             printf("hidden node [%4d] value = %f ", j, node_get_activation(net->hidden.nodes, j));
@@ -588,7 +591,7 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
             printf("visible bias [%4d] value = %f \n", i, node_get_bias(net->visible.nodes, i));
         }
         printf("\n");
-        
+
         for (int j = 0; j < net->hidden.num_nodes; j++)
         {
             printf("hidden bias [%4d] value = %f \n", j, node_get_bias(net->hidden.nodes, j));
@@ -650,7 +653,7 @@ hidden_from_visible (struct network * net, struct layer * visible)
 }
 
 
-void 
+void
 layer_copy_from_array (struct layer * l, double array[])
 {
     for (int i = 0; i < l->num_nodes; i++)
@@ -728,15 +731,35 @@ main(int argc, char *argv[])
 
     struct layer * visible = layer_create(net->visible.num_nodes);
     layer_copy_from_array(visible, dataset[0]);
-    layer_print(visible, 1);
+    printf("visible = ");
+    layer_print(visible, 0);
+
     struct layer * hidden = hidden_from_visible(net, visible);
+    printf(" -> ");
     layer_print(hidden, 1);
 
+
+    struct layer * visible_computed = visible_from_hidden(net, hidden);
+    printf("hidden = ");
+    layer_print(hidden, 0);
+    printf(" -> ");
+    layer_print(visible_computed, 1);
+    printf("\n");
 
 
     layer_delete(visible, 0);
     layer_delete(hidden, 0);
+    layer_delete(visible_computed, 0);
     network_delete(net);
+    parameters_delete(param);
+
+    return 0;
+}
+
+
+
+
+
 //    char * parameters_file = "in_parameters.dat";
 //    char * dataset_file = "dataset/three_node_test.csv";
 //    struct parameters * param = parameters_input(parameters_file, dataset_file);
@@ -830,5 +853,4 @@ main(int argc, char *argv[])
 //
 //    parameters_delete(param);
 
-    return 0;
-}
+
