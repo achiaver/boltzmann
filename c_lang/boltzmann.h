@@ -50,14 +50,6 @@ struct network {
 };
 
 
-struct state {
-    size_t num_units;
-    double *unit;
-};
-
-
-
-
 /*  =================================================
     Function Related to Node structure.
     =================================================

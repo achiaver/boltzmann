@@ -304,52 +304,52 @@ network_energy (struct network * net)
 }
 
 
-struct state *
-state_create (size_t num_units)
-{
-    struct state * st = malloc (sizeof (*st));
-    if (!st)
-    {
-        printf("state_create: malloc: state: %s \n", strerror(errno));
-        exit(2);
-    }
-
-    st->num_units = num_units;
-
-    st->unit = malloc (sizeof (*st->unit) * (st->num_units));
-    if (!st->unit)
-    {
-        printf("state_create: malloc: state units %s \n", strerror(errno));
-        exit(2);
-    }
-    for (int i = 0; i < st->num_units; i++)
-    {
-        st->unit[i] = rand() % 2;
-    }
-
-    return st;
-}
-
-
-void
-state_destroy (struct state * st)
-{
-    free(st->unit);
-    free(st);
-    printf("----> State deleted! \n");
-}
-
-
-void
-state_print (struct state * st)
-{
-    printf("---- STATE STATUS ----\n");
-    for (int i = 0; i < st->num_units; i++)
-    {
-        printf("%f, \t", st->unit[i]);
-    }
-    printf("\n\n");
-}
+//struct state *
+//state_create (size_t num_units)
+//{
+//    struct state * st = malloc (sizeof (*st));
+//    if (!st)
+//    {
+//        printf("state_create: malloc: state: %s \n", strerror(errno));
+//        exit(2);
+//    }
+//
+//    st->num_units = num_units;
+//
+//    st->unit = malloc (sizeof (*st->unit) * (st->num_units));
+//    if (!st->unit)
+//    {
+//        printf("state_create: malloc: state units %s \n", strerror(errno));
+//        exit(2);
+//    }
+//    for (int i = 0; i < st->num_units; i++)
+//    {
+//        st->unit[i] = rand() % 2;
+//    }
+//
+//    return st;
+//}
+//
+//
+//void
+//state_destroy (struct state * st)
+//{
+//    free(st->unit);
+//    free(st);
+//    printf("----> State deleted! \n");
+//}
+//
+//
+//void
+//state_print (struct state * st)
+//{
+//    printf("---- STATE STATUS ----\n");
+//    for (int i = 0; i < st->num_units; i++)
+//    {
+//        printf("%f, \t", st->unit[i]);
+//    }
+//    printf("\n\n");
+//}
 
 
 
@@ -507,6 +507,7 @@ network_training(struct network * net, struct parameters * param, double data[12
 
                 node_set_nprob(hidden_prime->nodes, h, sigmoid(sum, 1));
                 if (node_get_nprob(hidden_prime->nodes, h) > drand48())
+
                 {
                     node_set_activation(hidden_prime->nodes, h, 1.);
                 } else
