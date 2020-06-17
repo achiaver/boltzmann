@@ -260,13 +260,30 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 } /* end dataset_allocate */
 
 
+struct matrix *
+dataset_example (double example[12][6], size_t rows, size_t cols)
+{
+    struct matrix * data = matrix_create(rows, cols);
+
+    for (int row = 0; row < rows; row++)
+    {
+        for (int col = 0; col < cols; col++)
+        {
+            matrix_set(data, row, col, example[row][col]);
+        }
+    }
+
+    return data;
+} /* end dataset_example */
+
+
 void
 dataset_destroy (struct matrix * m)
 {
     printf("---- \t DELETING DATASET\n");
     matrix_destroy(m);
     printf("----> \t DATASET DELETED\n\n");
-}
+} /* end dataset_destroy */
 
 
 double
@@ -310,7 +327,7 @@ network_energy (struct network * net)
 
 //struct state *
 //state_create (size_t num_units)
-//{
+//{)
 //    struct state * st = malloc (sizeof (*st));
 //    if (!st)
 //    {
@@ -366,15 +383,15 @@ network_energy (struct network * net)
  * ========================================== */
 
 void
-dataset_print(double data[12][6], int num_rows)
+dataset_dump(struct matrix * m)
 {
-    int cols = (int) sizeof(data[0]) / sizeof(data[0][0]);
-    for (int i = 0; i < num_rows; i++)
+//    int cols = (int) sizeof(data[0]) / sizeof(data[0][0]);
+    for (int row = 0; row < m->rows; row++)
     {
-        printf("[%2d] - ", i);
-        for (int j = 0; j < cols; j++)
+        printf("[%2d] - ", row);
+        for (int col = 0; col < m->cols; col++)
         {
-            printf("%2.0f ", data[i][j]);
+            printf("%2.0f ", matrix_get(m, row, col));
         }
         printf("\n");
     }
@@ -420,7 +437,7 @@ outerproduct (struct layer * lay_1, struct layer * lay_2)
 
 
 void
-network_training(struct network * net, struct parameters * param, double data[12][6])
+network_training(struct network * net, struct parameters * param, struct matrix * data)
 {
     double learning_rate = param->epsilonw;
     int *indices = malloc(sizeof (int) * param->dataset_rows);
@@ -447,7 +464,7 @@ network_training(struct network * net, struct parameters * param, double data[12
             // Copy train data i into network visible layer (nodes)
             for (int v = 0; v < net->visible.num_nodes; v++)
             {
-                node_set_activation(net->visible.nodes, v, data[i][v]);
+                node_set_activation(net->visible.nodes, v, matrix_get(data, i, v));
             }
 
             // Compute hidden nodes values on the network
@@ -658,11 +675,11 @@ hidden_from_visible (struct network * net, struct layer * visible)
 
 
 void
-layer_copy_from_array (struct layer * l, double array[])
+layer_copy_from_array (struct layer * l, struct matrix * m, int row)
 {
     for (int i = 0; i < l->num_nodes; i++)
     {
-        node_set_activation(l->nodes, i, array[i]);
+        node_set_activation(l->nodes, i, matrix_get(m, row, row+i));
     }
 } /* end layer_copy_from_array */
 
@@ -675,7 +692,7 @@ test_run_from_james (void)
     printf("\nBegin Restricted Boltzmann Machine demo\n");
     printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");
 
-    double dataset[12][6] = {{ 1, 1, 0, 0, 0, 0 },   // A
+    double example[12][6] = {{ 1, 1, 0, 0, 0, 0 },   // A
                              { 0, 0, 1, 1, 0, 0 },   // B
                              { 0, 0, 0, 0, 1, 1 },   // C
                              { 1, 1, 0, 0, 0, 1 },   // noisy A
@@ -688,8 +705,11 @@ test_run_from_james (void)
                              { 1, 0, 1, 1, 0, 0 },   // noisy B
                              { 0, 0, 1, 0, 1, 1 }};  // noisy C
 
+
+    struct matrix * dataset = dataset_example(example, 12, 6);
+
     printf("Film like-dislike data is: \n");
-    dataset_print(dataset, 12);
+    dataset_dump(dataset);
 
     struct parameters * param = parameters_create();
     param->num_layers = 2;
@@ -722,7 +742,7 @@ test_run_from_james (void)
     printf("\nUsing trained machine... \n");
 
     struct layer * visible = layer_create(net->visible.num_nodes);
-    layer_copy_from_array(visible, dataset[0]);
+    layer_copy_from_array(visible, dataset, 0);
     printf("visible = ");
     layer_print(visible, 0);
 
