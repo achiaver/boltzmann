@@ -176,7 +176,7 @@ network_print (struct network * net, int option)
     }
 
     printf("\n---- WEIGHTS VALUES ----\n");
-    matrix_print(net->weights);
+    matrix_print(net->weights, 1);
     printf("\n");
 } /* end network_print */
 
@@ -228,6 +228,7 @@ network_create (struct parameters * param)
     for (int i = 0; i < net->visible.num_nodes; i++)
     {
         node_create(net->visible.nodes, i);
+        node_set_bias(net->visible.nodes, i, drand48());
     }
 
 
@@ -241,7 +242,9 @@ network_create (struct parameters * param)
     for (int i = 0; i < net->hidden.num_nodes; i++)
     {
         node_create(net->hidden.nodes, i);
+//        node_set_bias(net->hidden.nodes, i, drand48());
     }
+
 
     net->weights = weight_create(net->visible.num_nodes, net->hidden.num_nodes);
 
@@ -470,7 +473,7 @@ network_training(struct network * net, struct parameters * param, double data[12
             // Compute positive gradiente -> outer product of v and h.
             struct matrix * positive_grad = outerproduct(&net->visible, &net->hidden);
 //            printf("positive gradiente %d \n", idx);
-//            matrix_print(positive_grad);
+//            matrix_print(positive_grad, 1);
 //            printf("\n");
 
             // Reconstruct visible v' from h
@@ -519,7 +522,7 @@ network_training(struct network * net, struct parameters * param, double data[12
             // Compute negative gradiente -> outer product of v' and h'
             struct matrix * negative_grad = outerproduct(visible_prime, hidden_prime);
 //            printf("negative gradiente %d \n", idx);
-//            matrix_print(negative_grad);
+//            matrix_print(negative_grad, 1);
 //            printf("\n");
 
 
@@ -581,7 +584,7 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
 
     if (show_weights == 1)
     {
-        matrix_print(net->weights);
+        matrix_print(net->weights, 1);
     }
     printf("\n");
 
@@ -753,108 +756,31 @@ main(int argc, char *argv[])
 {
     // Uncomment test_run_from_james()
     // for a simple test run of the RBM based on James McCaffrey article
-    test_run_from_james();
+//    test_run_from_james();
 
-//    initialize_seed();
-//
-//    printf("\nBegin Restricted Boltzmann Machine demo\n");
-//    printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");
-//
-//    double dataset[12][6] = {{ 1, 1, 0, 0, 0, 0 },   // A
-//                             { 0, 0, 1, 1, 0, 0 },   // B
-//                             { 0, 0, 0, 0, 1, 1 },   // C
-//                             { 1, 1, 0, 0, 0, 1 },   // noisy A
-//                             { 0, 0, 1, 1, 0, 0 },   // B
-//                             { 0, 0, 0, 0, 1, 1 },   // C
-//                             { 1, 0, 0, 0, 0, 0 },   // weak A
-//                             { 0, 0, 1, 0, 0, 0 },   // weak B
-//                             { 0, 0, 0, 0, 1, 0 },   // weak C
-//                             { 1, 1, 0, 1, 0, 0 },   // noisy A
-//                             { 1, 0, 1, 1, 0, 0 },   // noisy B
-//                             { 0, 0, 1, 0, 1, 1 }};  // noisy C
-//
-//    printf("Film like-dislike data is: \n");
-//    dataset_print(dataset, 12);
-//
-//    struct parameters * param = parameters_create();
-//    param->num_layers = 2;
-//    param->num_visible = 6;
-//    param->num_hidden = 3;
-//
-//    printf("Creating a RBM ... \n");
-//    printf("Setting number of visible nodes = %zu \n", param->num_visible);
-//    printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
-//
-//    struct network * net = network_create(param);
-//
-//    param->dataset_rows = 12;
-//    param->dataset_cols = 6;
-//    param->epsilonw = 0.01;
-//    param->epsilonvb = 0.01;
-//    param->epsilonhb = 0.01;
-//    param->maxepochs = 1000;
-//
-//    printf("Training RBM using CD1 algorithm \n");
-//    printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-//    printf("Setting maximum amount of epochs = %d \n\n", param->maxepochs);
-//
-//
-////    network_print(net, 0);
-////    printf("Weights before training...\n");
-////    matrix_print(net->weights);
-////    printf("\n");
-//
-//    network_training(net, param, dataset);
-//    printf("Training complete. \n");
-//
-//    printf("Trained machine's weights and biases are: \n");
-//    network_dump(net, 0, 1, 1);
-////    network_print(net, 0);
-////    printf("Weights after training...\n");
-////    matrix_print(net->weights);
-////    printf("\n");
-//
-//    printf("\nUsing trained machine... \n");
-//
-//    struct layer * visible = layer_create(net->visible.num_nodes);
-//    layer_copy_from_array(visible, dataset[0]);
-//    printf("visible = ");
-//    layer_print(visible, 0);
-//
-//    struct layer * hidden = hidden_from_visible(net, visible);
-//    printf(" -> ");
-//    layer_print(hidden, 1);
-//
-//
-//    struct layer * visible_computed = visible_from_hidden(net, hidden);
-//    printf("hidden = ");
-//    layer_print(hidden, 0);
-//    printf(" -> ");
-//    layer_print(visible_computed, 1);
-//    printf("\n");
-//
-//
-//    layer_delete(visible, 0);
-//    layer_delete(hidden, 0);
-//    layer_delete(visible_computed, 0);
-//    network_delete(net);
-//    parameters_delete(param);
+    initialize_seed();
 
+    char * parameters_file = "in_parameters.dat";
+    char * dataset_file = "dataset/training_dataset.csv";
+    struct parameters * param = parameters_input(parameters_file, dataset_file);
+    parameters_print(param);
+
+    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
+    printf("\n\nInput dataset display\n\n");
+    matrix_print(dataset, 0);
+
+    struct network * net = network_create(param);
+    network_dump(net, 0, 1, 1);
+
+    network_delete(net);
+    dataset_destroy(dataset);
+    parameters_delete(param);
     return 0;
 } /* end main */
 
 
 
 
-
-//    char * parameters_file = "in_parameters.dat";
-//    char * dataset_file = "dataset/three_node_test.csv";
-//    struct parameters * param = parameters_input(parameters_file, dataset_file);
-//    parameters_print(param);
-
-//    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
-//    printf("\n\nInput dataset display\n\n");
-//    matrix_print(dataset);
 
 //    struct network * net = network_create(param);
 //    printf("\n\n");
