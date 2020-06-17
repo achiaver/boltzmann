@@ -2,10 +2,16 @@
 
 OBJS = parameters.o matrix.o boltzmann.o dataset.o
 
-CC = gcc
-# CFLAGS = -g -Wall -Wpedantic --std=c2x 		# drand is deprecated
-CFLAGS = -g -Wall -Wpedantic 
+# drand is deprecated
+# CFLAGS = -g -Wall -Wpedantic --std=c2x
+
+# DEBUG
+CFLAGS = -g -Wall -Wpedantic
+
+# OPTIMIZED
+CFLAGS = -O3 -Wall -Wpedantic 				
 LIBS = -lm
+CC = gcc
 
 all: main james
 
