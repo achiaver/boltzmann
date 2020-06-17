@@ -699,7 +699,6 @@ main(int argc, char *argv[])
     printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
 
     struct network * net = network_create(param);
-//    network_delete(net);
 
     param->dataset_rows = 12;
     param->dataset_cols = 6;
