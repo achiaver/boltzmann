@@ -1,3 +1,4 @@
+*.o
 *.tab
 tags
 .Makefile.swp

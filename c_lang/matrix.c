@@ -51,7 +51,7 @@ matrix_randomize(struct matrix *m)
 {
     for (size_t e = 0; e < (m->rows * m->cols); e++)
         m->elem[e] = drand48();
-//        m->elem[e] = ran3(&iseed);
+        // m->elem[e] = ran3(&iseed);
 } /* end of matrix_randomize */
 
 

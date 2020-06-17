@@ -1,12 +1,22 @@
-.PHONY: all default clean
+.PHONY: all clean
 
-all: default
+TARGETS = boltzmann
+
+OBJS = parameters.o matrix.o boltzmann.o
+
+CC = gcc
+# CFLAGS = -g -Wall -Wpedantic --std=c2x 		# drand is deprecated
+CFLAGS = -g -Wall -Wpedantic 
+LIBS = -lm
 
 
-default:
-	gcc -g -lm -Wall parameters.c matrix.c boltzmann.c -o boltzmann
+all: $(TARGETS)
 
+%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS) 
 
+$(TARGETS): $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+ 
 clean:
-	rm -rf boltzmann *.o
-	rm -rf boltzmann.dSYM
+	rm -rf $(TARGETS) $(OBJS) $(TARGETS).dsY
