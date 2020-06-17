@@ -1,22 +1,23 @@
 .PHONY: all clean
 
-TARGETS = boltzmann
-
-OBJS = parameters.o matrix.o boltzmann.o
+OBJS = parameters.o matrix.o boltzmann.o dataset.o
 
 CC = gcc
 # CFLAGS = -g -Wall -Wpedantic --std=c2x 		# drand is deprecated
 CFLAGS = -g -Wall -Wpedantic 
 LIBS = -lm
 
-
-all: $(TARGETS)
+all: main james
 
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS) 
 
-$(TARGETS): $(OBJS)
+main: main.o $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+james: james.o $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
  
+
 clean:
-	rm -rf $(TARGETS) $(OBJS) $(TARGETS).dsY
+	rm -rf main main.o james james.o $(OBJS) *.dsY

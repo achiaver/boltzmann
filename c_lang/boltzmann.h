@@ -1,6 +1,14 @@
 #ifndef __BOLTZMANN_H__
 #define __BOLTZMANN_H__
 
+#include <stdio.h>
+#include <string.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+#include "parameters.h"
+#include "matrix.h"
 
 /*  =================================================
     Node structure.
@@ -74,15 +82,32 @@ struct layer * layer_create (size_t);
 void           layer_delete (struct layer *, int);
 void           layer_print  (struct layer *, int);
 
+void            layer_copy_from_array   (struct layer *     layer,
+                                         struct matrix *    matrix, 
+                                         int                row);
+
 /*  =================================================
     Function Related to Network structure.
     =================================================
  */
-struct network * network_create (struct parameters *);
-void             network_delete (struct network *);
-void             network_print  (struct network *, int);
+struct network * network_create     (struct parameters *    param);
+void             network_delete     (struct network *       net);
+void             network_print      (struct network *       net,
+                                     int                    to_prototype_is_to_document_check_the_difference);
+void             network_dump       (struct network *       net,
+                                     int                    show_values,
+                                     int                    show_weights, 
+                                     int                    show_biases);
+void             network_training   (struct network *       net,
+                                     struct parameters *    param,
+                                     struct matrix *        data);
 
 
+/* MORE STUFF QUE NAO EXISTE */
+struct layer *  hidden_from_visible (struct network * net, struct layer * visible);
+struct layer *  visible_from_hidden (struct network * net, struct layer * hidden);
 
+/* FALTA DE LUGAR MELHOR : IGOR */
+void initialize_seed(void);
 
 #endif /* __BOLTZMANN_H__ */

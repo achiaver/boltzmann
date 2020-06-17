@@ -1,23 +1,15 @@
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
-#include "parameters.h"
-#include "matrix.h"
 #include "boltzmann.h"
-#include <time.h>
-#include <math.h>
 
 
-//#define LEN(arr) ((int) (sizeof (arr)) / sizeof (arr[0]))
-
-
+/* FALTA DE LUGAR MELHOR 
+ * IGOR
+ */
 void
 initialize_seed(void)
 {
     srand48(time(NULL));
     srand(time(NULL));
-} /* end initialize_seed */
+} 
 
 
 void
@@ -252,39 +244,6 @@ network_create (struct parameters * param)
 } /* end network_create */
 
 
-struct matrix *
-dataset_allocate (char * filename, size_t rows, size_t cols)
-{
-    struct matrix * data = matrix_read_data(filename, rows, cols);
-    return data;
-} /* end dataset_allocate */
-
-
-struct matrix *
-dataset_example (double example[12][6], size_t rows, size_t cols)
-{
-    struct matrix * data = matrix_create(rows, cols);
-
-    for (int row = 0; row < rows; row++)
-    {
-        for (int col = 0; col < cols; col++)
-        {
-            matrix_set(data, row, col, example[row][col]);
-        }
-    }
-
-    return data;
-} /* end dataset_example */
-
-
-void
-dataset_destroy (struct matrix * m)
-{
-    printf("---- \t DELETING DATASET\n");
-    matrix_destroy(m);
-    printf("----> \t DATASET DELETED\n\n");
-} /* end dataset_destroy */
-
 
 double
 sigmoid (double expoent, double temp)
@@ -381,22 +340,6 @@ network_energy (struct network * net)
  *
  * ==========================================
  * ========================================== */
-
-void
-dataset_dump(struct matrix * m)
-{
-//    int cols = (int) sizeof(data[0]) / sizeof(data[0][0]);
-    for (int row = 0; row < m->rows; row++)
-    {
-        printf("[%2d] - ", row);
-        for (int col = 0; col < m->cols; col++)
-        {
-            printf("%2.0f ", matrix_get(m, row, col));
-        }
-        printf("\n");
-    }
-    printf("\n");
-} /* end dataset_print */
 
 // Fisher-Yates shuffle algorithm
 // swap and shuffle functions
@@ -682,157 +625,4 @@ layer_copy_from_array (struct layer * l, struct matrix * m, int row)
         node_set_activation(l->nodes, i, matrix_get(m, row, i));
     }
 } /* end layer_copy_from_array */
-
-
-int
-test_run_from_james (void)
-{
-    initialize_seed();
-
-    printf("\nBegin Restricted Boltzmann Machine demo\n");
-    printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");
-
-    double example[12][6] = {{ 1, 1, 0, 0, 0, 0 },   // A
-                             { 0, 0, 1, 1, 0, 0 },   // B
-                             { 0, 0, 0, 0, 1, 1 },   // C
-                             { 1, 1, 0, 0, 0, 1 },   // noisy A
-                             { 0, 0, 1, 1, 0, 0 },   // B
-                             { 0, 0, 0, 0, 1, 1 },   // C
-                             { 1, 0, 0, 0, 0, 0 },   // weak A
-                             { 0, 0, 1, 0, 0, 0 },   // weak B
-                             { 0, 0, 0, 0, 1, 0 },   // weak C
-                             { 1, 1, 0, 1, 0, 0 },   // noisy A
-                             { 1, 0, 1, 1, 0, 0 },   // noisy B
-                             { 0, 0, 1, 0, 1, 1 }};  // noisy C
-
-
-    struct matrix * dataset = dataset_example(example, 12, 6);
-
-    printf("Film like-dislike data is: \n");
-    dataset_dump(dataset);
-
-    struct parameters * param = parameters_create();
-    param->num_layers = 2;
-    param->num_visible = 6;
-    param->num_hidden = 3;
-
-    printf("Creating a RBM ... \n");
-    printf("Setting number of visible nodes = %zu \n", param->num_visible);
-    printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
-
-    struct network * net = network_create(param);
-
-    param->dataset_rows = 12;
-    param->dataset_cols = 6;
-    param->epsilonw = 0.01;
-    param->epsilonvb = 0.01;
-    param->epsilonhb = 0.01;
-    param->maxepochs = 1000;
-
-    printf("Training RBM using CD1 algorithm \n");
-    printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-    printf("Setting maximum amount of epochs = %d \n\n", param->maxepochs);
-
-    network_training(net, param, dataset);
-    printf("Training complete. \n");
-
-    printf("Trained machine's weights and biases are: \n");
-    network_dump(net, 0, 1, 1);
-
-    printf("\nUsing trained machine... \n");
-
-    struct layer * visible = layer_create(net->visible.num_nodes);
-    layer_copy_from_array(visible, dataset, 0);
-    printf("visible = ");
-    layer_print(visible, 0);
-
-    struct layer * hidden = hidden_from_visible(net, visible);
-    printf(" -> ");
-    layer_print(hidden, 1);
-
-
-    struct layer * visible_computed = visible_from_hidden(net, hidden);
-    printf("hidden = ");
-    layer_print(hidden, 0);
-    printf(" -> ");
-    layer_print(visible_computed, 1);
-    printf("\n");
-
-
-    layer_delete(visible, 0);
-    layer_delete(hidden, 0);
-    layer_delete(visible_computed, 0);
-    network_delete(net);
-    parameters_delete(param);
-
-    printf("\n\n- - - END OF RBM TEST BASED ON JAMES - - -\n\n");
-
-    return 0;
-}
-
-
-int
-main(int argc, char *argv[])
-{
-    // Uncomment test_run_from_james()
-    // for a simple test run of the RBM based on James McCaffrey article
-//    test_run_from_james();
-
-    initialize_seed();
-
-    char * parameters_file = "in_parameters.dat";
-    char * dataset_file = "dataset/training_dataset.csv";
-    struct parameters * param = parameters_input(parameters_file, dataset_file);
-    parameters_print(param);
-
-    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
-    printf("\n\nInput dataset display\n\n");
-//    matrix_print(dataset, 0);
-
-    struct network * net = network_create(param);
-//    network_dump(net, 0, 1, 1);
-
-    printf("Training RBM using CD1 algorithm \n");
-    printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-    printf("Setting maximum amount of epochs = %d \n\n", param->maxepochs);
-
-    network_training(net, param, dataset);
-    printf("Training complete. \n");
-
-    printf("Trained machine's weights and biases are: \n");
-    network_dump(net, 0, 1, 1);
-
-    printf("\nUsing trained machine... \n");
-
-    struct layer * visible = layer_create(net->visible.num_nodes);
-    layer_copy_from_array(visible, dataset, 2);
-    printf("visible = ");
-    layer_print(visible, 0);
-
-    struct layer * hidden = hidden_from_visible(net, visible);
-    printf(" -> ");
-    layer_print(hidden, 1);
-
-
-    struct layer * visible_computed = visible_from_hidden(net, hidden);
-    printf("hidden = ");
-    layer_print(hidden, 0);
-    printf(" -> ");
-    layer_print(visible_computed, 1);
-    printf("\n");
-
-
-    layer_delete(visible, 0);
-    layer_delete(hidden, 0);
-    layer_delete(visible_computed, 0);
-    network_delete(net);
-    dataset_destroy(dataset);
-    parameters_delete(param);
-    return 0;
-} /* end main */
-
-
-
-
-
 
