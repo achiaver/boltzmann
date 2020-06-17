@@ -56,13 +56,19 @@ matrix_randomize(struct matrix *m)
 
 
 void
-matrix_print(struct matrix *m)
+matrix_print(struct matrix *m, int option)
 {
     for (size_t row = 0; row < m->rows; row++)
     {
         for( size_t col = 0; col < m->cols; col++)
         {
-            printf("%f \t", matrix_get(m, row, col));
+            if (option == 0) // print no decimals
+            {
+                printf("%.0f ", matrix_get(m, row, col));
+            } else           // print with decimals
+            {
+                printf("%f \t", matrix_get(m, row, col));
+            }
         }
         printf("\n");
     }
@@ -70,12 +76,20 @@ matrix_print(struct matrix *m)
 
 
 void
-matrix_print_line(struct matrix *m)
+matrix_print_line(struct matrix *m, int option)
 {
     for (size_t row = 0; row < m->rows; row++)
+    {
         for( size_t col = 0; col < m->cols; col++)
-            printf("%f, \t", matrix_get(m, row, col));
+        {
+            if (option == 0) // print no decimals
+            {
+                printf("%.0f, \t", matrix_get(m, row, col));
+            } else           // print with decimals
+                printf("%f, \t", matrix_get(m, row, col));
+        }
     printf("\n");
+    }
 } /* end of matrix_print_line */
 
 
