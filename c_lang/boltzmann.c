@@ -17,7 +17,7 @@ initialize_seed(void)
 {
     srand48(time(NULL));
     srand(time(NULL));
-}
+} /* end initialize_seed */
 
 
 void
@@ -204,7 +204,7 @@ weight_create(size_t visible, size_t hidden)
     struct matrix * weight = matrix_create(visible, hidden);
     matrix_randomize(weight);
     return weight;
-} /* end weight_create*/
+} /* end weight_create */
 
 
 struct network *
@@ -254,7 +254,7 @@ dataset_allocate (char * filename, size_t rows, size_t cols)
 {
     struct matrix * data = matrix_read_data(filename, rows, cols);
     return data;
-} /* end dataset_allocate*/
+} /* end dataset_allocate */
 
 
 void
@@ -295,14 +295,14 @@ state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_
     }
 
     return energy;
-}
+} /* end state_energy */
 
 
 double
 network_energy (struct network * net)
 {
     return state_energy(net->weights, &net->visible, &net->hidden);
-}
+} /* end network_energy */
 
 
 //struct state *
@@ -376,7 +376,7 @@ dataset_print(double data[12][6], int num_rows)
         printf("\n");
     }
     printf("\n");
-}
+} /* end dataset_print */
 
 // Fisher-Yates shuffle algorithm
 // swap and shuffle functions
@@ -386,7 +386,7 @@ swap (int *a, int *b)
     int temp = *a;
     *a = *b;
     *b = temp;
-}
+} /*end swap */
 
 
 void
@@ -397,7 +397,7 @@ shuffle(int arr[], int n)
         int j = rand() % (i+1);
         swap(&arr[i], &arr[j]);
     }
-}
+} /* end shuffle */
 
 
 struct matrix *
@@ -413,8 +413,7 @@ outerproduct (struct layer * lay_1, struct layer * lay_2)
     }
 
     return outerprod;
-}
-
+} /* end outerproduct */
 
 
 void
@@ -600,7 +599,7 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
         }
         printf("\n");
     }
-}
+} /* end network_dump */
 
 
 struct layer *
@@ -626,7 +625,7 @@ visible_from_hidden (struct network * net, struct layer * hidden)
         }
     }
     return visible;
-}
+} /* end visible_from_hidden */
 
 
 struct layer *
@@ -652,7 +651,7 @@ hidden_from_visible (struct network * net, struct layer * visible)
         }
     }
     return hidden;
-}
+} /* end hidden_from_visible */
 
 
 void
@@ -662,7 +661,7 @@ layer_copy_from_array (struct layer * l, double array[])
     {
         node_set_activation(l->nodes, i, array[i]);
     }
-}
+} /* end layer_copy_from_array */
 
 
 
@@ -756,7 +755,7 @@ main(int argc, char *argv[])
     parameters_delete(param);
 
     return 0;
-}
+} /* end main */
 
 
 
