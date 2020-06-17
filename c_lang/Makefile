@@ -9,7 +9,7 @@ OBJS = parameters.o matrix.o boltzmann.o dataset.o
 CFLAGS = -g -Wall -Wpedantic
 
 # OPTIMIZED
-CFLAGS = -O3 -Wall -Wpedantic 				
+CFLAGS = -O3 -Wall -Wpedantic
 LIBS = -lm
 CC = gcc
 
