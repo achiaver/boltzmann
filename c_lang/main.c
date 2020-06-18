@@ -13,7 +13,7 @@ main(int argc, char *argv[])
     initialize_seed();
 
     char * parameters_file = "in_parameters.dat";
-    char * dataset_file = "dataset/training_dataset.csv";
+    char * dataset_file = "dataset/training_dataset_2.csv";
     struct parameters * param = parameters_input(parameters_file, dataset_file);
     parameters_print(param);
 
@@ -44,7 +44,7 @@ main(int argc, char *argv[])
     printf("\nUsing trained machine... \n");
 
     struct layer * visible = layer_create(net->visible.num_nodes);
-    layer_copy_from_array(visible, dataset, 2);
+    layer_copy_from_array(visible, dataset, 0);
     printf("visible = ");
     layer_print(visible, 0);
 
