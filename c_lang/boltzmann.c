@@ -244,7 +244,6 @@ network_create (struct parameters * param)
 } /* end network_create */
 
 
-
 double
 sigmoid (double expoent, double temp)
 {
