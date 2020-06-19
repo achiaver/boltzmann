@@ -1,15 +1,12 @@
 #include "boltzmann.h"
 
 
-/* FALTA DE LUGAR MELHOR 
- * IGOR
- */
 void
 initialize_seed(void)
 {
     srand48(time(NULL));
     srand(time(NULL));
-} 
+} /* end initialize_seed */
 
 
 void
