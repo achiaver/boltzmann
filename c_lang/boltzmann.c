@@ -11,7 +11,7 @@ initialize_seed(void)
 
 
 /* =============================================================================
- * Below is a set of functions related to struct node
+ * struct node functions
  */
 
 // node_set_activation assign the given value to the activation of the given node
@@ -114,6 +114,12 @@ node_create (struct node * n, int node)
 } /* end node_create */
 
 
+/* =============================================================================
+ * struct layer functions
+ * */
+
+// layer_create creates a struct layer variable 
+
 struct layer *
 layer_create (size_t num_nodes)
 {
@@ -129,10 +135,13 @@ layer_create (size_t num_nodes)
     {
         node_create(l->nodes, i);
     }
-
     return l;
 } /* end layer_creat */
 
+
+// layer_delete deletes the layer
+// option = 0 -> deletes all nodes
+// option = 1 -> deletes the layer
 
 void
 layer_delete (struct layer * l, int option)
@@ -166,6 +175,10 @@ layer_print (struct layer * l, int option)
     }
 } /* end layer_print */
 
+
+/* =============================================================================
+ * struct network functions
+ * */
 
 void
 network_print (struct network * net, int option)
