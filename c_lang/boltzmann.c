@@ -1,5 +1,6 @@
 #include "boltzmann.h"
 
+// initialize_seed initialize seed for random generator
 
 void
 initialize_seed(void)
@@ -9,12 +10,20 @@ initialize_seed(void)
 } /* end initialize_seed */
 
 
+/* =============================================================================
+ * Below is a set of functions related to struct node
+ */
+
+// node_set_activation assign the given value to the activation of the given node
+
 void
 node_set_activation (struct node * n, int node, double value)
 {
     n[node].activation = value;
 } /* end node_set_activation */
 
+
+// node_set_bias assign the given value to the bias of the given node
 
 void
 node_set_bias (struct node * n, int node, double value)
@@ -23,6 +32,9 @@ node_set_bias (struct node * n, int node, double value)
 } /* end node_set_bias */
 
 
+// node_set_nprob assign the given value to the nprob of the given node
+// nprob refers to the probability value of the node.
+
 void
 node_set_nprob (struct node * n, int node, double value)
 {
@@ -30,12 +42,15 @@ node_set_nprob (struct node * n, int node, double value)
 } /* end node_set_nprob */
 
 
+// node_randomize_bias assigns a random value to bias of give node
+
 void
 node_randomize_bias (struct node * n, int node)
 {
     n[node].bias = drand48();
 } /* end node_randomize_bias */
 
+// node_get_activation retrieves the activation value of the given node
 
 double
 node_get_activation (struct node * n, int node)
@@ -44,12 +59,16 @@ node_get_activation (struct node * n, int node)
 } /* end node_get_activation */
 
 
+// node_get_bias retrieves the bias value of the given node
+
 double
 node_get_bias (struct node * n, int node)
 {
     return n[node].bias;
 } /* end node_get_bias */
 
+
+// node_get_nprob retrieves the nprob value of the given node
 
 double
 node_get_nprob (struct node * n, int node)
@@ -280,63 +299,6 @@ network_energy (struct network * net)
 } /* end network_energy */
 
 
-//struct state *
-//state_create (size_t num_units)
-//{)
-//    struct state * st = malloc (sizeof (*st));
-//    if (!st)
-//    {
-//        printf("state_create: malloc: state: %s \n", strerror(errno));
-//        exit(2);
-//    }
-//
-//    st->num_units = num_units;
-//
-//    st->unit = malloc (sizeof (*st->unit) * (st->num_units));
-//    if (!st->unit)
-//    {
-//        printf("state_create: malloc: state units %s \n", strerror(errno));
-//        exit(2);
-//    }
-//    for (int i = 0; i < st->num_units; i++)
-//    {
-//        st->unit[i] = rand() % 2;
-//    }
-//
-//    return st;
-//}
-//
-//
-//void
-//state_destroy (struct state * st)
-//{
-//    free(st->unit);
-//    free(st);
-//    printf("----> State deleted! \n");
-//}
-//
-//
-//void
-//state_print (struct state * st)
-//{
-//    printf("---- STATE STATUS ----\n");
-//    for (int i = 0; i < st->num_units; i++)
-//    {
-//        printf("%f, \t", st->unit[i]);
-//    }
-//    printf("\n\n");
-//}
-
-
-
-/* ==========================================
- * ==========================================
- *
- * Functions from RestrictedBoltzmannProgram.cs
- *
- * ==========================================
- * ========================================== */
-
 // Fisher-Yates shuffle algorithm
 // swap and shuffle functions
 void
@@ -428,9 +390,6 @@ network_training(struct network * net, struct parameters * param, struct matrix 
 
             // Compute positive gradiente -> outer product of v and h.
             struct matrix * positive_grad = outerproduct(&net->visible, &net->hidden);
-//            printf("positive gradiente %d \n", idx);
-//            matrix_print(positive_grad, 1);
-//            printf("\n");
 
             // Reconstruct visible v' from h
             struct layer * visible_prime = layer_create(net->visible.num_nodes);
@@ -477,10 +436,6 @@ network_training(struct network * net, struct parameters * param, struct matrix 
 
             // Compute negative gradiente -> outer product of v' and h'
             struct matrix * negative_grad = outerproduct(visible_prime, hidden_prime);
-//            printf("negative gradiente %d \n", idx);
-//            matrix_print(negative_grad, 1);
-//            printf("\n");
-
 
             // update weights
             for (int row = 0; row < net->visible.num_nodes; row++)
@@ -512,7 +467,6 @@ network_training(struct network * net, struct parameters * param, struct matrix 
             }
 
         } // end for idx
-//        printf("Done epoch %d \n\n", epoch);
         epoch++;
     }
 } /* end network_training */
