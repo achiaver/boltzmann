@@ -6,10 +6,6 @@
 int
 main(int argc, char *argv[])
 {
-    // Uncomment test_run_from_james()
-    // for a simple test run of the RBM based on James McCaffrey article
-    // test_run_from_james();
-
     initialize_seed();
 
     char * parameters_file = "in_parameters.dat";
@@ -69,7 +65,4 @@ main(int argc, char *argv[])
     parameters_delete(param);
     return 0;
 } /* end main */
-
-
-
 

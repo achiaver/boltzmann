@@ -7,6 +7,4 @@
 #include "boltzmann.h"
 #include "dataset.h"
 
-/* #define LEN(arr) ((int) (sizeof (arr)) / sizeof (arr[0])) */
-
 #endif /* __MAIN_H__ */
