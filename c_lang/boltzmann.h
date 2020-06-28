@@ -51,7 +51,6 @@ struct layer {
  */
 struct network {
     size_t num_layers;
-//    size_t * nodes_per_layer;
     struct layer visible;
     struct layer hidden;
     struct matrix * weights;
@@ -86,6 +85,10 @@ void            layer_copy_from_array   (struct layer *     layer,
                                          struct matrix *    matrix, 
                                          int                row);
 
+struct layer *  hidden_from_visible (struct network * net, struct layer * visible);
+struct layer *  visible_from_hidden (struct network * net, struct layer * hidden);
+
+
 /*  =================================================
     Function Related to Network structure.
     =================================================
@@ -103,8 +106,6 @@ void             network_training   (struct network *       net,
                                      struct matrix *        data);
 
 
-struct layer *  hidden_from_visible (struct network * net, struct layer * visible);
-struct layer *  visible_from_hidden (struct network * net, struct layer * hidden);
 
 void initialize_seed(void);
 
