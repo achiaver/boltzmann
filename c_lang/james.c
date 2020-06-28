@@ -3,11 +3,17 @@
 // 0 to disable it
 #define DEBUG 1
 void
-layer_copy_layer (struct layer * l1, struct layer * l2)
+layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
 {
-    for (int i = 0; i < l1->num_nodes; i++)
+    for (int i = 0; i < lay_1->num_nodes; i++)
     {
-        node_set_activation(l2->nodes, i, node_get_activation(l1->nodes, i));
+        if (node_get_activation(lay_1->nodes, i) == -1.)
+        {
+            node_set_activation(lay_2->nodes, i, (double)rand() / (double)RAND_MAX);
+        } else 
+        {
+            node_set_activation(lay_2->nodes, i, node_get_activation(lay_1->nodes, i));
+        }
     }
 }
 
@@ -16,13 +22,19 @@ simulated_annealing (struct network * net, struct layer * input)
 {
     struct layer * lay = layer_create(input->num_nodes);
     layer_copy_layer(input, lay);
+    layer_print(lay, 0);
+    printf("\n");
 
     double T = 100.0;
     while (T >= 1)
     {
-        printf("%f\n", T);
-
-        T = T * 0.05;
+        struct layer * hidden = hidden_from_visible(net, lay);
+        layer_print(hidden, 0);
+        printf("\n");
+//        printf("%f\n", T);
+        
+        
+        T = T * 0.95;
     }
 
     return lay;
@@ -84,7 +96,7 @@ main(int argc, char *argv[])
     printf("Trained machine's weights and biases are: \n");
     network_dump(net, 0, 1, 1);
 
-    printf("\nUsing trained machine... \n");
+    printf("\nUsing trained machine - NOT Simulated Annealing -\n");
 
     struct layer * visible = layer_create(net->visible.num_nodes);
     layer_copy_from_array(visible, dataset, 0);
@@ -103,13 +115,23 @@ main(int argc, char *argv[])
     layer_print(visible_computed, 1);
     printf("\n");
 
-    struct layer * copy = layer_create(visible_computed->num_nodes);
-    layer_copy_layer(visible_computed, copy);
-    layer_print(copy, 0);
+    printf("- SIMULATED ANNEALING TEST -\n");
+    // Select a test example, where activation as -1 means that these unit will be randomly initialized.
+    double test_example[1][6] = {{1,-1,0,-1,0,0}};
+    struct matrix * test_m = dataset_example(test_example, 1, 6);
+    struct layer * test_l = layer_create(net->visible.num_nodes);
+    layer_copy_from_array(test_l, test_m, 0);
+    layer_print(test_l, 0);
     printf("\n");
-    layer_delete(copy, 0);
+    matrix_destroy(test_m);
 
+    struct layer * simu = simulated_annealing(net, test_l);
 
+    printf("\n\n\n");
+    layer_delete(simu, 0);
+    layer_delete(test_l, 0);
+
+    matrix_destroy(dataset);
     layer_delete(visible, 0);
     layer_delete(hidden, 0);
     layer_delete(visible_computed, 0);
