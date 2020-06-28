@@ -103,11 +103,9 @@ void             network_training   (struct network *       net,
                                      struct matrix *        data);
 
 
-/* MORE STUFF QUE NAO EXISTE */
 struct layer *  hidden_from_visible (struct network * net, struct layer * visible);
 struct layer *  visible_from_hidden (struct network * net, struct layer * hidden);
 
-/* FALTA DE LUGAR MELHOR : IGOR */
 void initialize_seed(void);
 
 #endif /* __BOLTZMANN_H__ */
