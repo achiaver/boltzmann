@@ -2,6 +2,31 @@
 
 // 0 to disable it
 #define DEBUG 1
+void
+layer_copy_layer (struct layer * l1, struct layer * l2)
+{
+    for (int i = 0; i < l1->num_nodes; i++)
+    {
+        node_set_activation(l2->nodes, i, node_get_activation(l1->nodes, i));
+    }
+}
+
+struct layer *
+simulated_annealing (struct network * net, struct layer * input) 
+{
+    struct layer * lay = layer_create(input->num_nodes);
+    layer_copy_layer(input, lay);
+
+    double T = 100.0;
+    while (T >= 1)
+    {
+        printf("%f\n", T);
+
+        T = T * 0.05;
+    }
+
+    return lay;
+} /* end simulated_annealing*/
 
 
 int
@@ -77,6 +102,12 @@ main(int argc, char *argv[])
     printf(" -> ");
     layer_print(visible_computed, 1);
     printf("\n");
+
+    struct layer * copy = layer_create(visible_computed->num_nodes);
+    layer_copy_layer(visible_computed, copy);
+    layer_print(copy, 0);
+    printf("\n");
+    layer_delete(copy, 0);
 
 
     layer_delete(visible, 0);
