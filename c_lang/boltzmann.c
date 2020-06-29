@@ -118,7 +118,7 @@ node_create (struct node * n, int node)
  * struct layer functions
  * */
 
-// layer_create creates a struct layer variable 
+// layer_create creates a struct layer variable
 
 struct layer *
 layer_create (size_t num_nodes)
@@ -529,7 +529,7 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
 
 
 struct layer *
-visible_from_hidden (struct network * net, struct layer * hidden)
+visible_from_hidden (struct network * net, struct layer * hidden, double T)
 {
     struct layer * visible = layer_create(net->visible.num_nodes);
     for (int v = 0; v < visible->num_nodes; v++)
@@ -541,7 +541,7 @@ visible_from_hidden (struct network * net, struct layer * hidden)
         }
         sum += node_get_bias(net->visible.nodes, v);
 
-        node_set_nprob(visible->nodes, v, sigmoid(sum, 1));
+        node_set_nprob(visible->nodes, v, sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > drand48())
         {
             node_set_activation(visible->nodes, v, 1.);
@@ -555,7 +555,7 @@ visible_from_hidden (struct network * net, struct layer * hidden)
 
 
 struct layer *
-hidden_from_visible (struct network * net, struct layer * visible)
+hidden_from_visible (struct network * net, struct layer * visible, double T)
 {
     struct layer * hidden = layer_create(net->hidden.num_nodes);
     for (int h = 0; h < hidden->num_nodes; h++)
@@ -567,7 +567,7 @@ hidden_from_visible (struct network * net, struct layer * visible)
         }
         sum += node_get_bias(net->hidden.nodes, h);
 
-        node_set_nprob(hidden->nodes, h, sigmoid(sum, 1));
+        node_set_nprob(hidden->nodes, h, sigmoid(sum, T));
         if (node_get_nprob(hidden->nodes, h) > drand48())
         {
             node_set_activation(hidden->nodes, h, 1.);

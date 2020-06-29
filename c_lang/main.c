@@ -44,12 +44,12 @@ main(int argc, char *argv[])
     printf("visible = ");
     layer_print(visible, 0);
 
-    struct layer * hidden = hidden_from_visible(net, visible);
+    struct layer * hidden = hidden_from_visible(net, visible, 1);
     printf(" -> ");
     layer_print(hidden, 1);
 
 
-    struct layer * visible_computed = visible_from_hidden(net, hidden);
+    struct layer * visible_computed = visible_from_hidden(net, hidden, 1);
     printf("hidden = ");
     layer_print(hidden, 0);
     printf(" -> ");

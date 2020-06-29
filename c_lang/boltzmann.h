@@ -85,8 +85,12 @@ void            layer_copy_from_array   (struct layer *     layer,
                                          struct matrix *    matrix, 
                                          int                row);
 
-struct layer *  hidden_from_visible (struct network * net, struct layer * visible);
-struct layer *  visible_from_hidden (struct network * net, struct layer * hidden);
+struct layer *  hidden_from_visible (struct network * net,
+                                     struct layer   * visible,
+                                     double           T);
+struct layer *  visible_from_hidden (struct network * net,
+                                     struct layer   * hidden,
+                                     double           T);
 
 
 /*  =================================================

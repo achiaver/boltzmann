@@ -1,7 +1,13 @@
 #include "main.h"
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_rng.h>
+#include <sys/time.h>
+
 
 // 0 to disable it
 #define DEBUG 1
+
+
 void
 layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
 {
@@ -10,15 +16,38 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
         if (node_get_activation(lay_1->nodes, i) == -1.)
         {
             node_set_activation(lay_2->nodes, i, (double)rand() / (double)RAND_MAX);
-        } else 
+        } else
         {
             node_set_activation(lay_2->nodes, i, node_get_activation(lay_1->nodes, i));
         }
     }
 }
 
+double
+random_num (void)
+{
+    const gsl_rng_type * T;
+    gsl_rng * r;
+    gsl_rng_env_setup();
+
+    struct timeval tv;
+    gettimeofday(&tv, 0);
+
+    unsigned long my_seed = tv.tv_sec + tv.tv_usec;
+
+    T = gsl_rng_default;
+    r = gsl_rng_alloc(T);
+
+    gsl_rng_set(r, my_seed);
+    double u = gsl_rng_uniform(r);
+    gsl_rng_free(r);
+
+    return u;
+}
+
+
 struct layer *
-simulated_annealing (struct network * net, struct layer * input) 
+simulated_annealing (struct network * net, struct layer * input)
 {
     struct layer * lay = layer_create(input->num_nodes);
     layer_copy_layer(input, lay);
@@ -28,12 +57,15 @@ simulated_annealing (struct network * net, struct layer * input)
     double T = 100.0;
     while (T >= 1)
     {
-        struct layer * hidden = hidden_from_visible(net, lay);
+        struct layer * hidden = hidden_from_visible(net, lay, T);
         layer_print(hidden, 0);
         printf("\n");
+
+
+        printf("%f\n", random_num());
 //        printf("%f\n", T);
-        
-        
+
+
         T = T * 0.95;
     }
 
@@ -103,12 +135,12 @@ main(int argc, char *argv[])
     printf("visible = ");
     layer_print(visible, 0);
 
-    struct layer * hidden = hidden_from_visible(net, visible);
+    struct layer * hidden = hidden_from_visible(net, visible, 1);
     printf(" -> ");
     layer_print(hidden, 1);
 
 
-    struct layer * visible_computed = visible_from_hidden(net, hidden);
+    struct layer * visible_computed = visible_from_hidden(net, hidden, 1);
     printf("hidden = ");
     layer_print(hidden, 0);
     printf(" -> ");
