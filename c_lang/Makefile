@@ -10,7 +10,7 @@ CFLAGS = -g -Wall -Wpedantic
 
 # OPTIMIZED
 CFLAGS = -O3 -Wall -Wpedantic
-LIBS = -lm
+LIBS = -lm -lgsl -lgslcblas
 CC = gcc
 
 all: main james
