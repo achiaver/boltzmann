@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "random_gen.h"
 #include "parameters.h"
 #include "matrix.h"
 
@@ -63,7 +64,7 @@ struct network {
  */
 void          node_set_activation   (struct node *, int, double);
 void          node_set_bias         (struct node *, int, double);
-void          node_set_nprob         (struct node *, int, double);
+void          node_set_nprob        (struct node *, int, double);
 void          node_randomize_bias   (struct node *, int);
 double        node_get_activation   (struct node *, int);
 double        node_get_bias         (struct node *, int);
@@ -80,7 +81,6 @@ void          node_create           (struct node *, int);
 struct layer * layer_create (size_t);
 void           layer_delete (struct layer *, int);
 void           layer_print  (struct layer *, int);
-
 void            layer_copy_from_array   (struct layer *     layer,
                                          struct matrix *    matrix, 
                                          int                row);

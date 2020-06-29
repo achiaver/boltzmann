@@ -2,6 +2,11 @@
 #ifndef __MATRIX_H__
 #define __MATRIX_H__
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "random_gen.h"
+
 struct matrix {
     size_t rows;
     size_t cols;

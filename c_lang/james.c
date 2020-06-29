@@ -1,7 +1,4 @@
 #include "main.h"
-#include <gsl/gsl_math.h>
-#include <gsl/gsl_rng.h>
-#include <sys/time.h>
 
 
 // 0 to disable it
@@ -21,28 +18,6 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
             node_set_activation(lay_2->nodes, i, node_get_activation(lay_1->nodes, i));
         }
     }
-}
-
-double
-random_num (void)
-{
-    const gsl_rng_type * T;
-    gsl_rng * r;
-    gsl_rng_env_setup();
-
-    struct timeval tv;
-    gettimeofday(&tv, 0);
-
-    unsigned long my_seed = tv.tv_sec + tv.tv_usec;
-
-    T = gsl_rng_default;
-    r = gsl_rng_alloc(T);
-
-    gsl_rng_set(r, my_seed);
-    double u = gsl_rng_uniform(r);
-    gsl_rng_free(r);
-
-    return u;
 }
 
 
