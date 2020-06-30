@@ -146,9 +146,8 @@ layer_create (size_t num_nodes)
 void
 layer_delete (struct layer * l, int option)
 {
-    if (l)
+    if (l->nodes)
     {
-        printf("---- \t DELETING LAYER\n");
         if (option == 0)
         {
             free(l->nodes);
@@ -158,7 +157,7 @@ layer_delete (struct layer * l, int option)
             free(l->nodes);
         }
     }
-    printf("----> \t DELETED\n");
+    printf("----> \t layer deleted...\n");
 } /* end layer_delete */
 
 
@@ -207,15 +206,19 @@ network_delete (struct network * net)
 {
     if (net)
     {
-        printf("---- \t DELETING NETWORK\n");
-        layer_delete(&net->visible, 1);
-        layer_delete(&net->hidden, 1);
-        printf("---- \t DELETING WEIGHTS\n");
+        if (net->visible.nodes) 
+        {
+            layer_delete(&net->visible, 1);
+        }
+        if (net->hidden.nodes)
+        {
+            layer_delete(&net->hidden, 1);
+        }
         matrix_destroy(net->weights);
-        printf("----> \t DELETED\n");
+        printf("----> \t weights deleted...\n");
         free(net);
     }
-    printf("----> \t NETWORK DELETED!\n\n");
+    printf("----> \t network deleted!\n\n");
 } /* end network_delete */
 
 
@@ -344,7 +347,6 @@ outerproduct (struct layer * lay_1, struct layer * lay_2)
             matrix_set(outerprod, i, j, node_get_activation(lay_1->nodes, i) * node_get_activation(lay_2->nodes, j));
         }
     }
-
     return outerprod;
 } /* end outerproduct */
 

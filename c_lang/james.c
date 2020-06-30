@@ -25,6 +25,7 @@ struct layer *
 simulated_annealing (struct network * net, struct layer * input)
 {
     struct layer * lay = layer_create(input->num_nodes);
+    struct layer * hidden = layer_create(net->hidden.num_nodes);
     layer_copy_layer(input, lay);
     layer_print(lay, 0);
     printf("\n");
@@ -32,18 +33,16 @@ simulated_annealing (struct network * net, struct layer * input)
     double T = 100.0;
     while (T >= 1)
     {
-        struct layer * hidden = hidden_from_visible(net, lay, T);
+        hidden = hidden_from_visible(net, lay, T);
         layer_print(hidden, 0);
         printf("\n");
-
-
-        printf("%f\n", random_num());
-//        printf("%f\n", T);
-
+        lay = visible_from_hidden(net, hidden, T); 
+        layer_print(lay, 0);
+        printf("\n");
 
         T = T * 0.95;
     }
-
+    layer_delete(hidden, 0);
     return lay;
 } /* end simulated_annealing*/
 
@@ -130,19 +129,37 @@ main(int argc, char *argv[])
     layer_copy_from_array(test_l, test_m, 0);
     layer_print(test_l, 0);
     printf("\n");
+    printf("delete test_m\n");
     matrix_destroy(test_m);
 
     struct layer * simu = simulated_annealing(net, test_l);
+    printf("\n");
+    layer_print(simu, 0);
+    printf("\n");
 
     printf("\n\n\n");
-    layer_delete(simu, 0);
+    printf("delete simu\n");
+    layer_delete(simu, 1);
+
+    printf("delete test_l\n");
     layer_delete(test_l, 0);
 
+    printf("delete dataset\n");
     matrix_destroy(dataset);
+
+    printf("delete visible\n");
     layer_delete(visible, 0);
+
+    printf("delete hidden\n");
     layer_delete(hidden, 0);
+
+    printf("delete visible_computed\n");
     layer_delete(visible_computed, 0);
+
+    printf("detele network\n");
     network_delete(net);
+
+    printf("delete paramenters\n");
     parameters_delete(param);
 
     printf("\n\n- - - END OF RBM TEST BASED ON JAMES - - -\n\n");
