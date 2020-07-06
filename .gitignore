@@ -1,5 +1,6 @@
 *.o
 *.tab
+c_lang/dataset/mnist/
 tags
 .Makefile.swp
 .*.swp
