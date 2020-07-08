@@ -1,9 +1,7 @@
 #include "main.h"
 
-
 // 0 to disable it
 #define DEBUG 1
-
 
 void
 layer_copy_layer (struct layer * lay_1, struct layer * lay_2)

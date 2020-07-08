@@ -13,7 +13,7 @@ CFLAGS = -O3 -Wall -Wpedantic
 LIBS = -lm -lgsl -lgslcblas
 CC = gcc
 
-all: main james
+all: main james mnist_02
 
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS) 
@@ -24,6 +24,8 @@ main: main.o $(OBJS)
 james: james.o $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
  
+mnist_02: mnist_02.o $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 clean:
-	rm -rf main main.o james james.o $(OBJS) *.dsY
+	rm -rf main main.o james james.o mnist_02 mnist_02.o $(OBJS) *.dsY
