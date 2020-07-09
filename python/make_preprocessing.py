@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os
+import os.path
 import numpy as np
 
 num_examples = 2
@@ -33,7 +33,12 @@ print(dataset)
 datapath = '../c_lang/dataset/'
 filename = 'make_smolensky_training.bin'
 
-
-file = open(datapath + filename, 'wb')
-file.write(dataset)
-file.close()
+print("Writing binary file...")
+if not os.path.exists(datapath + filename):
+    print("Binary {} does not exist...".format(datapath+filename))
+    file = open(datapath + filename, 'wb')
+    file.write(dataset)
+    file.close()
+    print("Writing done.")
+else:
+    print("Binary already exists with name {}".format(datapath + filename))
