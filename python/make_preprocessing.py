@@ -42,3 +42,45 @@ if not os.path.exists(datapath + filename):
     print("Writing done.")
 else:
     print("Binary already exists with name {}".format(datapath + filename))
+
+print("\n\n")
+print("Computing Weight Matrix for make example of Smolensky (Fig. 6)")
+# Knowledge Matrix
+K = np.array([[ 1, 0, 0, 0],
+              [-1, 0, 0, 0],
+              [-1, 0, 0, 0],
+              [ 1, 1, 0, 0],
+              [-1, -1, 0, 0],
+              [ 0, 1, 1, -1],
+              [ 0, -1, -1, 1],
+              [ 0, 0, 1, -1],
+              [ 0, 0, -1, -1]])
+
+print("Matrix K => each column is a knowledge vector")
+print(K)
+
+# Strength Matrix
+Sigma = np.ones(K.shape)
+print("Sigma Matrix")
+print(Sigma)
+
+# Weight Matrix
+L1 = np.sum(np.abs(K), axis=0)
+W = (K * Sigma/L1).astype(np.float64)
+print("Weight Matrix")
+print(W)
+
+datapath = '../c_lang/dataset/'
+filename_weight = 'make_smolensky_weights.bin'
+
+print("Writing binary file...")
+if not os.path.exists(datapath + filename_weight):
+    print("Binary {} does not exist...".format(datapath+filename_weight))
+    file = open(datapath + filename_weight, 'wb')
+    file.write(W)
+    file.close()
+    print("Writing done.")
+else:
+    print("Binary already exists with name {}".format(datapath + filename_weight))
+
+
