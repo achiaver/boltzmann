@@ -45,6 +45,13 @@ simulated_annealing (struct network * net, struct layer * input)
 } /* end simulated_annealing*/
 
 
+void
+read_binary_weight (struct network * net)
+{
+     
+}
+
+
 int
 main(int argc, char *argv[])
 {
@@ -55,6 +62,7 @@ main(int argc, char *argv[])
 
     double example[2][9] = {{ 1, 0, 0, 1, 0, 1, 0, 1, 0 },   // MAKE
                             { 0, 0, 1, 0, 1, 1, 0, 1, 0}};  // Nonsense
+    
 
 
     struct matrix * dataset = dataset_example(example, 2, 9);
@@ -67,11 +75,9 @@ main(int argc, char *argv[])
     param->num_visible = 9;
     param->num_hidden = 4;
 
-    printf("Creating a RBM ... \n");
-    printf("Setting number of visible nodes = %zu \n", param->num_visible);
-    printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
-
     struct network * net = network_create(param);
+    read_binary_weight(net);
+
 
     param->dataset_rows = 2;
     param->dataset_cols = 9;
