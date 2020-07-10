@@ -46,9 +46,21 @@ simulated_annealing (struct network * net, struct layer * input)
 
 
 void
-read_binary_weight (struct network * net)
+read_binary_weight (struct network * net, char *filename)
 {
-     
+    FILE *file = fopen(filename, "rb");
+    if (!file)
+    {
+        fprintf(stderr, "Could not open file %s. Quitting...\n", filename);
+        exit(1);
+    }
+
+    double *data = calloc(net->visible.num_nodes, sizeof(double));
+    size_t bytes_read;
+    while((bytes_read = fread(data, sizeof(double), 9, file)))
+    {
+        
+    }
 }
 
 
@@ -56,6 +68,8 @@ int
 main(int argc, char *argv[])
 {
     initialize_seed();
+    char filename_weights[256];
+    strncpy(filename_weights, argv[1], 255);
 
     printf("\nBegin Restricted Boltzmann Machine demo\n");
     printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");
@@ -63,11 +77,7 @@ main(int argc, char *argv[])
     double example[2][9] = {{ 1, 0, 0, 1, 0, 1, 0, 1, 0 },   // MAKE
                             { 0, 0, 1, 0, 1, 1, 0, 1, 0}};  // Nonsense
     
-
-
     struct matrix * dataset = dataset_example(example, 2, 9);
-
-    printf("Film like-dislike data is: \n");
     dataset_dump(dataset);
 
     struct parameters * param = parameters_create();
@@ -76,7 +86,7 @@ main(int argc, char *argv[])
     param->num_hidden = 4;
 
     struct network * net = network_create(param);
-    read_binary_weight(net);
+    read_binary_weight(net, filename_weights);
 
 
     param->dataset_rows = 2;
