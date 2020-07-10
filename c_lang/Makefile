@@ -13,7 +13,7 @@ CFLAGS = -O3 -Wall -Wpedantic
 LIBS = -lm -lgsl -lgslcblas
 CC = gcc
 
-all: main james mnist_02
+all: main james smolensky_make
 
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS) 
@@ -24,8 +24,8 @@ main: main.o $(OBJS)
 james: james.o $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
  
-mnist_02: mnist_02.o $(OBJS)
+smolensky_make: smolensky_make.o $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 clean:
-	rm -rf main main.o james james.o mnist_02 mnist_02.o $(OBJS) *.dsY
+	rm -rf main main.o james james.o smolensky_make smolensky_make.o $(OBJS) *.dsY

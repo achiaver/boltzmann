@@ -66,12 +66,12 @@ print(Sigma)
 
 # Weight Matrix
 L1 = np.sum(np.abs(K), axis=0)
-W = (K * Sigma/L1).astype(np.float64)
+W = (K * Sigma/L1).astype(np.double)
 print("Weight Matrix")
 print(W)
 
 datapath = '../c_lang/dataset/'
-filename_weight = 'make_smolensky_weights.bin'
+filename_weight = 'make_smolensky_weights_double.bin'
 
 print("Writing binary file...")
 if not os.path.exists(datapath + filename_weight):

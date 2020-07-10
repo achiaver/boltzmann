@@ -128,7 +128,6 @@ layer_create (size_t num_nodes)
         printf("layer_create: malloc: layer: %s \n", strerror(errno));
         exit(2);
     }
-https://github.com/somini/vim-autoclose.git
     l->num_nodes = num_nodes;
     l->nodes = malloc(sizeof (*l->nodes) * (l->num_nodes));
     for (int i = 0; i < l->num_nodes; i++)

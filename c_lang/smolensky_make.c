@@ -3,14 +3,66 @@
 // 0 to disable it
 #define DEBUG 1
 
+typedef double welem_t;
+
+struct layer *
+visible_to_hidden_s (struct layer * visible, struct network * net, double T)
+{
+    struct layer * hidden = layer_create(net->hidden.num_nodes);
+    for (int h = 0 ; h < hidden->num_nodes; h++)
+    {
+        double sum = 0.;
+        for (int v = 0; v < visible->num_nodes; v++)
+        {
+            sum += node_get_activation(visible->nodes, v) * matrix_get(net->weights, v, h);
+        }
+        node_set_nprob(hidden->nodes, h, sigmoid(sum, T));
+        if (node_get_nprob(hidden->nodes, h) > random_num())
+        {
+            node_set_activation(hidden->nodes, h, 1.);
+        } else
+        {
+            node_set_activation(hidden->nodes, h, 0.);
+        }
+    }
+    return hidden;
+}
+    
+struct layer *
+hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
+{
+    struct layer * visible = layer_create(net->visible.num_nodes);
+    for (int v = 0; v < visible->num_nodes; v++)
+    {
+        double sum = 0.;
+        for (int h = 0; h < hidden->num_nodes; h++)
+        {
+            sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
+        }
+        sum *= 2.;  
+        node_set_nprob(visible->nodes, v, sigmoid(sum, T));
+        if (node_get_nprob(visible->nodes, v) > random_num())
+        {
+            node_set_activation(visible->nodes, v, 1.);
+        } else
+        {
+            node_set_activation(visible->nodes, v, -1.);
+        }
+    }
+    return visible;
+} /* end visible_from_hidden */
+
+
+
+
 void
 layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
 {
     for (int i = 0; i < lay_1->num_nodes; i++)
     {
-        if (node_get_activation(lay_1->nodes, i) == -1.)
+        if (node_get_activation(lay_1->nodes, i) == 0.)
         {
-            node_set_activation(lay_2->nodes, i, (double)rand() / (double)RAND_MAX);
+            node_set_activation(lay_2->nodes, i, random_activation(2)-2);
         } else
         {
             node_set_activation(lay_2->nodes, i, node_get_activation(lay_1->nodes, i));
@@ -18,66 +70,65 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
     }
 }
 
-
 struct layer *
 simulated_annealing (struct network * net, struct layer * input)
 {
-    struct layer * lay = layer_create(input->num_nodes);
+    struct layer * input_aux = layer_create(input->num_nodes);
     struct layer * hidden = layer_create(net->hidden.num_nodes);
-    layer_copy_layer(input, lay);
-    layer_print(lay, 0);
+    layer_copy_layer(input, input_aux);
+    layer_print(input_aux, 0);
     printf("\n");
 
     double T = 100.0;
     while (T >= 1)
     {
-        hidden = hidden_from_visible(net, lay, T);
+        hidden = visible_to_hidden_s(input_aux, net, T);
         layer_print(hidden, 0);
         printf("\n");
-        lay = visible_from_hidden(net, hidden, T); 
-        layer_print(lay, 0);
+        input_aux = hidden_to_visible_s(hidden, net, T); 
+        layer_print(input_aux, 0);
         printf("\n");
 
         T = T * 0.95;
     }
     layer_delete(hidden, 0);
-    return lay;
+    return input_aux;
 } /* end simulated_annealing*/
-
-
-void
-read_binary_weight (struct network * net, char *filename)
-{
-    FILE *file = fopen(filename, "rb");
-    if (!file)
-    {
-        fprintf(stderr, "Could not open file %s. Quitting...\n", filename);
-        exit(1);
-    }
-
-    double *data = calloc(net->visible.num_nodes, sizeof(double));
-    size_t bytes_read;
-    while((bytes_read = fread(data, sizeof(double), 9, file)))
-    {
-        
-    }
-}
 
 
 int
 main(int argc, char *argv[])
 {
     initialize_seed();
+
+    if (argc < 4)
+    {
+        fprintf(stdout, "Usage:   %s FILENAME COLS ROWS\n", argv[0]);
+        fprintf(stdout, "Example: %s dados.bin 4 9\n", argv[0]);
+        return 1;
+    }
+
     char filename_weights[256];
     strncpy(filename_weights, argv[1], 255);
+    size_t weight_cols = atoi(argv[2]);
+    size_t weight_rows = atoi(argv[3]);
 
-    printf("\nBegin Restricted Boltzmann Machine demo\n");
-    printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");
+    printf("weight columns size - %zu\n", weight_cols);
+    printf("weight rows size - %zu\n", weight_rows);
 
-    double example[2][9] = {{ 1, 0, 0, 1, 0, 1, 0, 1, 0 },   // MAKE
-                            { 0, 0, 1, 0, 1, 1, 0, 1, 0}};  // Nonsense
-    
-    struct matrix * dataset = dataset_example(example, 2, 9);
+    double example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};    // MAKE
+
+    double weights[9][4] = {{ 0.2,   0.,   0.,  0.},
+                            {-0.2,   0.,   0.,  0.},
+                            {-0.2,   0.,   0.,  0.},
+                            { 0.2, 0.25,   0.,  0.},
+                            { 0.2,-0.25,   0.,  0.},
+                            {  0., 0.25, 0.25,-0.25},
+                            {  0.,-0.25,-0.25, 0.25},
+                            {  0.,   0., 0.25,-0.25},
+                            {  0.,   0.,-0.25,-0.25}};
+
+    struct matrix * dataset = dataset_example(1, 9, example);
     dataset_dump(dataset);
 
     struct parameters * param = parameters_create();
@@ -86,49 +137,17 @@ main(int argc, char *argv[])
     param->num_hidden = 4;
 
     struct network * net = network_create(param);
-    read_binary_weight(net, filename_weights);
-
-
-    param->dataset_rows = 2;
-    param->dataset_cols = 9;
-    param->epsilonw = 0.01;
-    param->epsilonvb = 0.01;
-    param->epsilonhb = 0.01;
-    param->maxepochs = 1000;
-
-    printf("Training RBM using CD1 algorithm \n");
-    printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-    printf("Setting maximum amount of epochs = %d \n\n", param->maxepochs);
-
-    network_training(net, param, dataset);
-    printf("Training complete. \n");
-
-    printf("Trained machine's weights and biases are: \n");
-    network_dump(net, 0, 1, 1);
-
-    printf("\nUsing trained machine - NOT Simulated Annealing -\n");
-
-    struct layer * visible = layer_create(net->visible.num_nodes);
-    layer_copy_from_array(visible, dataset, 0);
-    printf("visible = ");
-    layer_print(visible, 0);
-
-    struct layer * hidden = hidden_from_visible(net, visible, 1);
-    printf(" -> ");
-    layer_print(hidden, 1);
-
-
-    struct layer * visible_computed = visible_from_hidden(net, hidden, 1);
-    printf("hidden = ");
-    layer_print(hidden, 0);
-    printf(" -> ");
-    layer_print(visible_computed, 1);
+    struct matrix * weights_m = dataset_example(9, 4, weights);
     printf("\n");
+    matrix_copy(weights_m, net->weights);
+    matrix_destroy(weights_m);
+    printf("\n");
+    network_dump(net, 0, 1, 0);
 
-    printf("- SIMULATED ANNEALING TEST -\n");
-    // Select a test example, where activation as -1 means that these unit will be randomly initialized.
-    double test_example[1][6] = {{1,-1,0,-1,0,0}};
-    struct matrix * test_m = dataset_example(test_example, 1, 6);
+    printf("- SIMULATED ANNEALING -\n");
+ // Select a test example, where activation as -1 means that these unit will be randomly initialized.
+    double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1,-1, 1,-1}};
+    struct matrix * test_m = dataset_example(1, 9, test_example);
     struct layer * test_l = layer_create(net->visible.num_nodes);
     layer_copy_from_array(test_l, test_m, 0);
     layer_print(test_l, 0);
@@ -147,26 +166,15 @@ main(int argc, char *argv[])
 
     printf("delete test_l\n");
     layer_delete(test_l, 0);
-
+ 
     printf("delete dataset\n");
     matrix_destroy(dataset);
-
-    printf("delete visible\n");
-    layer_delete(visible, 0);
-
-    printf("delete hidden\n");
-    layer_delete(hidden, 0);
-
-    printf("delete visible_computed\n");
-    layer_delete(visible_computed, 0);
 
     printf("detele network\n");
     network_delete(net);
 
     printf("delete paramenters\n");
     parameters_delete(param);
-
-    printf("\n\n- - - END OF RBM TEST BASED ON JAMES - - -\n\n");
 
     return 0;
 }

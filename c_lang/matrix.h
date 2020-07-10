@@ -26,6 +26,7 @@ struct matrix * matrix_read_data      (char *, size_t, size_t);
 struct matrix * matrix_sum            (struct matrix*, struct matrix*);
 struct matrix * matrix_product        (struct matrix*, struct matrix*);
 struct matrix * matrix_product_scalar (struct matrix*, double);
+void            matrix_copy           (struct matrix*, struct matrix*);
 
 #endif /* __MATRIX_H__ */
 

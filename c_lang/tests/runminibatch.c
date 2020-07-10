@@ -4,6 +4,8 @@
 #include <string.h>
 
 typedef uint8_t feio_t;
+//typedef double feio_t;
+
 
 void do_something(feio_t *data, size_t rows, size_t columns);
 
@@ -35,7 +37,8 @@ int main(int argc, char *argv[]) {
     while((bytes_read = fread(data, sizeof(feio_t), nmemb, fd)))
     {
         patterns_read = bytes_read / (sizeof(feio_t)*neurons);
-
+        printf("bytes_read - %u\n", bytes_read);
+        printf("patterns_read - %u\n", patterns_read);
         // Aqui voce chama o que quer fazer com o seu "minibatch"
         fprintf(stdout, "\n\nStarting batch %zu\n", batchnum++);
         do_something(data, patterns_read, neurons);

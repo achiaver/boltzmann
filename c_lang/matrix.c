@@ -212,3 +212,19 @@ matrix_product_scalar(struct matrix * A, double scalar)
 
     return m_prod_scalar;
 } /* end matrix_product_scalar */
+
+void
+matrix_copy (struct matrix * m1, struct matrix * m2)
+{
+    if (m1->rows != m2->rows || m1->cols != m2->cols)
+    {
+        exit(1);
+    }
+    for (size_t i = 0; i < m1->rows; i++)
+    {
+        for (size_t j = 0; j < m1->cols; j++)
+        {
+            matrix_set(m2, i, j, matrix_get(m1, i, j));
+        }
+    }
+} /* end matrix_copy */

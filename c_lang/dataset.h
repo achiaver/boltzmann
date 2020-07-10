@@ -7,9 +7,9 @@
 struct matrix * dataset_allocate    (char *             filename,
                                      size_t             rows,
                                      size_t             cols);
-struct matrix * dataset_example     (double             example[12][6], 
-                                     size_t             rows, 
-                                     size_t             cols);
+struct matrix * dataset_example     (size_t             rows, 
+                                     size_t             cols,
+                                     double             example[rows][cols]);
 void            dataset_destroy     (struct matrix *    m);
 
 void            dataset_dump        (struct matrix *    m);

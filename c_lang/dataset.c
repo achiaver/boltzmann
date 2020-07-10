@@ -23,7 +23,7 @@
 // struct matrix.
 
 struct matrix *
-dataset_example (double example[12][6], size_t rows, size_t cols)
+dataset_example (size_t rows, size_t cols, double example[rows][cols])
 {
     struct matrix * data = matrix_create(rows, cols);
 
