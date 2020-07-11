@@ -275,10 +275,10 @@ network_create (struct parameters * param)
 
 
 double
-sigmoid (double expoent, double temp)
+func_sigmoid (double expoent, double temp)
 {
-    return (1 / (1 + exp(-expoent/temp)));
-} /* end sigmoid */
+    return (1. / (1. + exp(-expoent/temp)));
+} /* end func_sigmoid */
 
 
 double
@@ -391,7 +391,7 @@ network_training(struct network * net, struct parameters * param, struct matrix 
                 }
                 sum += node_get_bias(net->hidden.nodes, h);
 
-                node_set_nprob(net->hidden.nodes, h, sigmoid(sum, 1));
+                node_set_nprob(net->hidden.nodes, h, func_sigmoid(sum, 1));
                 if (node_get_nprob(net->hidden.nodes, h) > random_num())
                 {
                     node_set_activation(net->hidden.nodes, h, 1.);
@@ -415,7 +415,7 @@ network_training(struct network * net, struct parameters * param, struct matrix 
                 }
                 sum += node_get_bias(net->visible.nodes, v);
 
-                node_set_nprob(visible_prime->nodes, v, sigmoid(sum, 1));
+                node_set_nprob(visible_prime->nodes, v, func_sigmoid(sum, 1));
                 if (node_get_nprob(visible_prime->nodes, v) > random_num())
                 {
                     node_set_activation(visible_prime->nodes, v, 1.);
@@ -436,7 +436,7 @@ network_training(struct network * net, struct parameters * param, struct matrix 
                 }
                 sum += node_get_bias(net->hidden.nodes, h);
 
-                node_set_nprob(hidden_prime->nodes, h, sigmoid(sum, 1));
+                node_set_nprob(hidden_prime->nodes, h, func_sigmoid(sum, 1));
                 if (node_get_nprob(hidden_prime->nodes, h) > random_num())
                 {
                     node_set_activation(hidden_prime->nodes, h, 1.);
@@ -540,7 +540,7 @@ visible_from_hidden (struct network * net, struct layer * hidden, double T)
         }
         sum += node_get_bias(net->visible.nodes, v);
 
-        node_set_nprob(visible->nodes, v, sigmoid(sum, T));
+        node_set_nprob(visible->nodes, v, func_sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > random_num())
         {
             node_set_activation(visible->nodes, v, 1.);
@@ -566,7 +566,7 @@ hidden_from_visible (struct network * net, struct layer * visible, double T)
         }
         sum += node_get_bias(net->hidden.nodes, h);
 
-        node_set_nprob(hidden->nodes, h, sigmoid(sum, T));
+        node_set_nprob(hidden->nodes, h, func_sigmoid(sum, T));
         if (node_get_nprob(hidden->nodes, h) > random_num())
         {
             node_set_activation(hidden->nodes, h, 1.);

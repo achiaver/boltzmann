@@ -17,8 +17,10 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
             sum += node_get_activation(visible->nodes, v) * matrix_get(net->weights, v, h);
         }
         sum -= 0.7;
-        printf("%f\n", sum);
-        node_set_nprob(hidden->nodes, h, sigmoid(sum, T));
+        printf("I_hidden - %f\n", sum);
+        printf("P_hidden - %f\n", func_sigmoid(sum, T));
+        printf("\n");
+        node_set_nprob(hidden->nodes, h, func_sigmoid(sum, T));
         if (node_get_nprob(hidden->nodes, h) > random_num())
         {
             node_set_activation(hidden->nodes, h, 1.);
@@ -39,11 +41,13 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
         double sum = 0.;
         for (int h = 0; h < hidden->num_nodes; h++)
         {
-            sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
+           sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
         }
         sum *= 2.;  
-        printf("%f\n", sum);
-        node_set_nprob(visible->nodes, v, sigmoid(sum, T));
+        printf("I_visible - %f\n", sum);
+        printf("P_visible - %f\n", func_sigmoid(sum, T));
+        printf("\n");
+        node_set_nprob(visible->nodes, v, func_sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > random_num())
         {
             node_set_activation(visible->nodes, v, 1.);
@@ -86,9 +90,10 @@ simulated_annealing (struct network * net, struct layer * input)
     layer_print(input_aux, 0);
     printf("\n");
 
-    double T = 1.0;
+    double T = 100.0;
     while (T >= 1)
     {
+        printf("T - %0.2f\n", T);
         hidden = visible_to_hidden_s(input_aux, net, T);
 //        layer_print(hidden, 0);
 //        printf("\n");
@@ -129,7 +134,7 @@ main(int argc, char *argv[])
                             {-0.2,   0.,   0.,  0.},
                             {-0.2,   0.,   0.,  0.},
                             { 0.2, 0.25,   0.,  0.},
-                            { 0.2,-0.25,   0.,  0.},
+                            {-0.2,-0.25,   0.,  0.},
                             {  0., 0.25, 0.25,-0.25},
                             {  0.,-0.25,-0.25, 0.25},
                             {  0.,   0., 0.25,-0.25},

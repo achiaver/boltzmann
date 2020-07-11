@@ -81,7 +81,7 @@ void          node_create           (struct node *, int);
 struct layer * layer_create (size_t);
 void           layer_delete (struct layer *, int);
 void           layer_print  (struct layer *, int);
-void            layer_copy_from_array   (struct layer *     layer,
+void           layer_copy_from_array   (struct layer *     layer,
                                          struct matrix *    matrix, 
                                          int                row);
 
@@ -112,5 +112,6 @@ void             network_training   (struct network *       net,
 
 
 void initialize_seed(void);
+double func_sigmoid (double, double);
 
 #endif /* __BOLTZMANN_H__ */
