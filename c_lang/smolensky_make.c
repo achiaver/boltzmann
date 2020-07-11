@@ -16,6 +16,8 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
         {
             sum += node_get_activation(visible->nodes, v) * matrix_get(net->weights, v, h);
         }
+        sum -= 0.7;
+        printf("%f\n", sum);
         node_set_nprob(hidden->nodes, h, sigmoid(sum, T));
         if (node_get_nprob(hidden->nodes, h) > random_num())
         {
@@ -40,6 +42,7 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
             sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
         }
         sum *= 2.;  
+        printf("%f\n", sum);
         node_set_nprob(visible->nodes, v, sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > random_num())
         {
@@ -62,7 +65,11 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
     {
         if (node_get_activation(lay_1->nodes, i) == 0.)
         {
-            node_set_activation(lay_2->nodes, i, random_activation(2)-2);
+            double act = random_activation(2);
+            if (act == 1.)
+                node_set_activation(lay_2->nodes, i, 1.);
+            else
+                node_set_activation(lay_2->nodes, i, -1.);
         } else
         {
             node_set_activation(lay_2->nodes, i, node_get_activation(lay_1->nodes, i));
@@ -79,15 +86,15 @@ simulated_annealing (struct network * net, struct layer * input)
     layer_print(input_aux, 0);
     printf("\n");
 
-    double T = 100.0;
+    double T = 1.0;
     while (T >= 1)
     {
         hidden = visible_to_hidden_s(input_aux, net, T);
-        layer_print(hidden, 0);
-        printf("\n");
+//        layer_print(hidden, 0);
+//        printf("\n");
         input_aux = hidden_to_visible_s(hidden, net, T); 
-        layer_print(input_aux, 0);
-        printf("\n");
+//        layer_print(input_aux, 0);
+//        printf("\n");
 
         T = T * 0.95;
     }
@@ -101,20 +108,20 @@ main(int argc, char *argv[])
 {
     initialize_seed();
 
-    if (argc < 4)
-    {
-        fprintf(stdout, "Usage:   %s FILENAME COLS ROWS\n", argv[0]);
-        fprintf(stdout, "Example: %s dados.bin 4 9\n", argv[0]);
-        return 1;
-    }
-
-    char filename_weights[256];
-    strncpy(filename_weights, argv[1], 255);
-    size_t weight_cols = atoi(argv[2]);
-    size_t weight_rows = atoi(argv[3]);
-
-    printf("weight columns size - %zu\n", weight_cols);
-    printf("weight rows size - %zu\n", weight_rows);
+//    if (argc < 4)
+//    {
+//        fprintf(stdout, "Usage:   %s FILENAME COLS ROWS\n", argv[0]);
+//        fprintf(stdout, "Example: %s dados.bin 4 9\n", argv[0]);
+//        return 1;
+//    }
+//
+//    char filename_weights[256];
+//    strncpy(filename_weights, argv[1], 255);
+//    size_t weight_cols = atoi(argv[2]);
+//    size_t weight_rows = atoi(argv[3]);
+//
+//    printf("weight columns size - %zu\n", weight_cols);
+//    printf("weight rows size - %zu\n", weight_rows);
 
     double example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};    // MAKE
 
@@ -146,7 +153,7 @@ main(int argc, char *argv[])
 
     printf("- SIMULATED ANNEALING -\n");
  // Select a test example, where activation as -1 means that these unit will be randomly initialized.
-    double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1,-1, 1,-1}};
+    double test_example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};
     struct matrix * test_m = dataset_example(1, 9, test_example);
     struct layer * test_l = layer_create(net->visible.num_nodes);
     layer_copy_from_array(test_l, test_m, 0);
