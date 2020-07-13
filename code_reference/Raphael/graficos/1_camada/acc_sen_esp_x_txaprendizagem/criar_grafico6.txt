@@ -1,0 +1,19 @@
+reset
+set term pdf
+set output 'especificidade_txaprendizagem_par.pdf'
+
+
+set xlabel 'taxa de aprendizagem'
+set ylabel 'especificidade'
+set xrange [0.01:1.0]
+set yrange [0:103]
+set key right bottom font ",08"
+# set size 1.0, 1.0
+
+
+plot 'Teste (10,2,1) - taxa de aprendizagem (0.01-1.0) - 100 épocas.txt' using ($8):($5) with lines lc 1 title '(10,2,1)' ,\
+'Teste (10,4,1) - taxa de aprendizagem (0.01-1.0) - 100 épocas.txt' using ($8):($5) with lines lc 2 title '(10,4,1)' ,\
+'Teste (10,6,1) - taxa de aprendizagem (0.01-1.0) - 100 épocas.txt' using ($8):($5) with lines lc 3 title '(10,6,1)' ,\
+'Teste (10,8,1) - taxa de aprendizagem (0.01-1.0) - 100 épocas.txt' using ($8):($5) with lines lc 4 title '(10,8,1)' ,\
+'Teste (10,10,1) - taxa de aprendizagem (0.01-1.0) - 100 épocas.txt' using ($8):($5) with lines lc 7 title '(10,10,1)'
+

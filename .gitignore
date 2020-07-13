@@ -1,6 +1,5 @@
 *.o
 *.tab
-c_lang/dataset/mnist/
 tags
 .Makefile.swp
 .*.swp
@@ -8,8 +7,8 @@ james
 main
 matrix
 boltzmann
+smolensky_make
 .DS_Store
-code_reference/
 .ipynb_checkpoints/
 venv
 pycache/

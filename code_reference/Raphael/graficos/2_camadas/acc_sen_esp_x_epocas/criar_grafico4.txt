@@ -1,0 +1,25 @@
+reset
+set term pdf
+set output 'sensibilidade_epocas.pdf'
+
+#set title 'sensibilidade x Épocas - (10,4,1)'
+set xlabel 'número de épocas'
+set ylabel 'sensibilidade (%)'
+set xrange [1:1000]
+set yrange [0:103]
+set key left bottom font ",08"
+# set size 1.0, 1.0
+
+set label 4 "Número de camadas intermediárias = 2\nNúmero de neurônios na 1ª camada intermediária = 10\nNúmero de neurônios na 2ª camada intermediária = 6" at 500, 16, 20 font ",09" left norotate back nopoint offset character 0, 0.5, 0
+
+plot 'Teste (10,10,6,1) - taxa de aprendizagem 0.05 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 1 title ' {/Symbol h} = 0.05' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.1 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 3 title '{/Symbol h} = 0.1' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.2 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 4 title '{/Symbol h} = 0.2' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.3 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 5 title '{/Symbol h} = 0.3' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.4 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 6 title '{/Symbol h} = 0.4' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.5 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 7 title '{/Symbol h} = 0.5' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.6 - x épocas.txt' using ($9):($4) with lines smooth bezier lc 8 title '{/Symbol h} = 0.6' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.7 - x épocas.txt' using ($9):($4) with lines smooth bezier dt 2 lc 9 title '{/Symbol h} = 0.7' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.8 - x épocas.txt' using ($9):($4) with lines smooth bezier dt 2 lc 10 title '{/Symbol h} = 0.8' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 0.9 - x épocas.txt' using ($9):($4) with lines smooth bezier dt 2 lc 7 title '{/Symbol h} = 0.9' ,\
+'Teste (10,10,6,1) - taxa de aprendizagem 1.0 - x épocas.txt' using ($9):($4) with lines smooth bezier dt 2 lc 8 title '{/Symbol h} = 1.0'

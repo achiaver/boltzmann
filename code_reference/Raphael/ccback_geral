@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cc -g back_geral.c -o back_geral -lm

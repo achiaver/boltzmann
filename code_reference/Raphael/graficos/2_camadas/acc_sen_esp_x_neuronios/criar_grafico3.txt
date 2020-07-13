@@ -1,0 +1,27 @@
+reset
+set term pdf
+set output 'acuracia_neurônios.pdf'
+
+#set pt 5 title 'Acurácia x Neurônios'
+set xlabel 'número de neurônios'
+set ylabel 'acurácia (%)'
+set xrange [1:10]
+set yrange [0:103]
+set key right bottom font ",08"
+# set size 1.0, 1.0
+
+
+plot 'Teste (10,10,x,1) - taxa de aprendizagem 0.1 - 100 épocas.txt' using ($2):($3) with linespoints lc 8 dt 2 pt 20 title '{/Symbol h} = 0.1' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.2 - 100 épocas.txt' using ($2):($3) with linespoints lc 4 dt 2 pt 2 title '{/Symbol h} = 0.2' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.3 - 100 épocas.txt' using ($2):($3) with linespoints lc 2 dt 2 pt 3 title '{/Symbol h} = 0.3' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.4 - 100 épocas.txt' using ($2):($3) with linespoints lc 6 dt 2 pt 4 title '{/Symbol h} = 0.4' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.5 - 100 épocas.txt' using ($2):($3) with linespoints lc 7 dt 2 pt 5 title '{/Symbol h} = 0.5' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.6 - 100 épocas.txt' using ($2):($3) with linespoints lc 8 dt 2 pt 6 title '{/Symbol h} = 0.6' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.7 - 100 épocas.txt' using ($2):($3) with linespoints lc 9 dt 2 pt 7 title '{/Symbol h} = 0.7' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.8 - 100 épocas.txt' using ($2):($3) with linespoints lc 5 dt 2 pt 8 title '{/Symbol h} = 0.8' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 0.9 - 100 épocas.txt' using ($2):($3) with linespoints lc 3 dt 2 pt 9 title '{/Symbol h} = 0.9' ,\
+'Teste (10,10,x,1) - taxa de aprendizagem 1.0 - 100 épocas.txt' using ($2):($3) with linespoints lc 4 dt 2 pt 10 title '{/Symbol h} = 1.0'
+
+
+#Teste (10,10,x,1) - taxa de aprendizagem 0.005 - 100 épocas.txt' using ($2):($3) with linespoints lc 1 pt 5 title '{/Symbol h} = 0.005' ,\
+

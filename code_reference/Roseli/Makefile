@@ -1,0 +1,26 @@
+CC=gcc
+
+all: simboltz CompPatternsEnergies test_clust_coef
+
+simboltz:
+	${CC} -g simboltz.c boltz_functs.c check_point_found_patterns.c random.c -o simboltz -lm
+
+test_clust_coef:
+	${CC} -g test_clust_coef.c -o test_clust_coef  -lm
+
+CompPatternsEnergies:
+	${CC} -g CompPatternsEnergies.c -o CompPatternsEnergies -lm
+
+
+cleancheck:
+	rm -rf temp_find_stored_patterns_parameters temp_frequency_visited_stored_pattern_BM temp_frequency_visited_stored_pattern_GSA temp_init_stored_patterns temp_init_stored_patterns_GSA *~
+
+
+cleancomppat:
+	rm -rf CompPatternsEnergies report_patterns_errors report_stored_patterns *~
+
+
+cleanbuild:
+	rm -rf test_clust_coef final_parameters init_stored_patterns init_stored_patterns_GSA minimum_energies neurotic_memory_configuration neurotic_memory_configuration2 new_memory_configurations new_memory_configurations2 new_stored_patterns simboltz_errors weights positions_declarative_memory positions_sensorial_memory simboltz positions_centers_sensorial_memory positions_centers_declarative_memory neighbors clustered_neighbors_in_memories long_range_neighbors_in_memories neighbors_among_memories synapses clustered_synapses_in_memory long_range_synapses_in_memory synapses_connecting_memories node_degree_distribution node_degree_distribution_Gaussian test_clust_coef test_clustering macroscopic_graph_information CompPatternsEnergies report_patterns_errors report_stored_patterns frequency_visited_stored_pattern_BM frequency_visited_stored_pattern_GSA *~
+
+clean: cleanbuild cleancomppat cleancheck

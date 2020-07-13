@@ -1,0 +1,12 @@
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/bin/Debug/netcoreapp3.1/James_McCaffrey.deps.json
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/bin/Debug/netcoreapp3.1/James_McCaffrey.runtimeconfig.json
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/bin/Debug/netcoreapp3.1/James_McCaffrey.runtimeconfig.dev.json
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/bin/Debug/netcoreapp3.1/James_McCaffrey.dll
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/bin/Debug/netcoreapp3.1/James_McCaffrey.pdb
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.csprojAssemblyReference.cache
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.AssemblyInfoInputs.cache
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.AssemblyInfo.cs
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.csproj.CoreCompileInputs.cache
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.dll
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.pdb
+/Users/brancaleone/Documents/Estudos/projetos/boltzmann/code_reference/James_McCaffrey/obj/Debug/netcoreapp3.1/James_McCaffrey.genruntimeconfig.cache
