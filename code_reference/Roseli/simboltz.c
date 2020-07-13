@@ -1287,7 +1287,7 @@ double	start_temperature, alpha;
 			i = generate_new_state(stored_state, state_changed, 
 				&sign, &new_state, 0, n_nodes-1);
 
-			trial_state[i] = ;
+			trial_state[i] = new_state;
 
 /*			delta_energy = 0.0;
 
