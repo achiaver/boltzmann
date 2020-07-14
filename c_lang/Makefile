@@ -6,10 +6,10 @@ OBJS = parameters.o matrix.o boltzmann.o dataset.o random_gen.o
 # CFLAGS = -g -Wall -Wpedantic --std=c2x
 
 # DEBUG
-CFLAGS = -g -Wall -Wpedantic
+# CFLAGS = -g -Wall -Wpedantic
 
 # OPTIMIZED
-CFLAGS = -O3 -Wall -Wpedantic
+CFLAGS = -O3 -Wall -Wpedantic -g
 LIBS = -lm -lgsl -lgslcblas
 CC = gcc
 
