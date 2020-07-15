@@ -85,11 +85,10 @@ struct layer *
 simulated_annealing (struct network * net, struct layer * input)
 {
     int crystalized = 0; // False
-//    int thermalize = 0; // False
+    double infinite_energy = (net->hidden.num_nodes + net->visible.num_nodes) * (net->hidden.num_nodes + net->visible.num_nodes) * 1.0E5;
+ 
     double last_mean_energy = 0.;
-    double last_temp_mean_energy = 0.;
-    double infinity_energy = (net->hidden.num_nodes + net->visible.num_nodes) * (net->hidden.num_nodes + net->visible.num_nodes) * 1.0E5;
-    
+ 
     struct layer * input_aux = layer_create(input->num_nodes);
     struct layer * hidden = layer_create(net->hidden.num_nodes);
     layer_copy_layer(input, input_aux);
@@ -100,8 +99,14 @@ simulated_annealing (struct network * net, struct layer * input)
     double T_end = 0.01;
     while ((!crystalized) && (T_start >= T_end))
     {
-        int interation = 0;
-
+        int iteration = 0;
+        int thermalized = 0; // False
+        double last_temp_mean_energy = infinite_energy;
+        
+        while ((!thermalized) && (iteration < net->hidden.num_nodes))// n_iterations))
+        {
+            continue;
+        }
 //     double mean_energy = 0.;
         
         printf("T - %0.2f\n", T_start);
