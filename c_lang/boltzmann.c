@@ -267,7 +267,7 @@ network_create (struct parameters * param)
         node_create(net->hidden.nodes, i);
     }
 
-
+    net->num_nodes_total = net->visible.num_nodes + net->hidden.num_nodes;
     net->weights = weight_create(net->visible.num_nodes, net->hidden.num_nodes);
 
     return net;

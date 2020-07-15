@@ -52,6 +52,7 @@ struct layer {
  */
 struct network {
     size_t num_layers;
+    size_t num_nodes_total;
     struct layer visible;
     struct layer hidden;
     struct matrix * weights;
