@@ -92,18 +92,19 @@ simulated_annealing (struct network * net, struct layer * input)
     layer_print(input_aux, 0);
     printf("\n");
 
-    double T = 100.0;
-    while (T >= 1)
+    double T_start = 100.0;
+    double T_end = 0.01;
+    while (T_start >= T_end)
     {
-        printf("T - %0.2f\n", T);
-        hidden = visible_to_hidden_s(input_aux, net, T);
+        printf("T - %0.2f\n", T_start);
+        hidden = visible_to_hidden_s(input_aux, net, T_start);
 //        layer_print(hidden, 0);
 //        printf("\n");
-        input_aux = hidden_to_visible_s(hidden, net, T); 
+        input_aux = hidden_to_visible_s(hidden, net, T_start); 
 //        layer_print(input_aux, 0);
 //        printf("\n");
 
-        T = T * 0.95;
+        T_start = T_start * 0.955;
     }
     layer_delete(hidden, 0);
     return input_aux;
