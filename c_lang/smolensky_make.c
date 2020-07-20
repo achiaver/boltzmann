@@ -60,8 +60,6 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
 } /* end visible_from_hidden */
 
 
-
-
 void
 layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
 {
@@ -80,6 +78,7 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
         }
     }
 }
+
 
 struct layer *
 simulated_annealing (struct network * net, struct layer * input)
