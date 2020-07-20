@@ -6,7 +6,7 @@
 
 double random_num        (void);
 double random_activation (unsigned long int n);
-#endif /* __RANDOM_GEN_H__*/
 
+#endif /* __RANDOM_GEN_H__*/
 
 
