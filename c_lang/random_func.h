@@ -1,12 +1,19 @@
-#ifndef __RANDOM_GEN_H__
-#define __RANDOM_GEN_H__
+#ifndef __RANDOM_FUNC_H__
+#define __RANDOM_FUNC_H__
 
-#include <gsl/gsl_rng.h>
-#include <sys/time.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <time.h>
+#include <math.h>
+#include "pcg_basic.h"
 
-double random_num        (void);
-double random_activation (unsigned long int n);
+void    random_seed         (bool   nondeterministic_seed);
+double  random_activation   (void);
+double  random_0to1  (void);
+double  random_in_range     (double min, 
+                             double max);
 
-#endif /* __RANDOM_GEN_H__*/
+
+#endif /* __RANDOM_FUNC_H__*/
 
 

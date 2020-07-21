@@ -1,45 +1,34 @@
-#include "random_gen.h"
+#include "random_func.h"
 
-double
-random_num (void)
+void
+random_seed (bool nondeterministic_seed)
 {
-    const gsl_rng_type * T;
-    gsl_rng * r;
-    gsl_rng_env_setup();
-
-    struct timeval tv;
-    gettimeofday(&tv, 0);
-
-    unsigned long my_seed = tv.tv_sec + tv.tv_usec;
-
-    T = gsl_rng_default;
-    r = gsl_rng_alloc(T);
-
-    gsl_rng_set(r, my_seed);
-    double u = gsl_rng_uniform(r);
-    gsl_rng_free(r);
-
-    return u;
+    int address_1 = 42;
+    int address_2 = 420;
+    if (nondeterministic_seed)
+    {
+        pcg32_srandom(time(NULL) ^ (intptr_t)&address_1, (intptr_t)&address_2);
+    } else
+    {
+        pcg32_srandom(42u, 54u);
+    }
 }
 
 double
-random_activation (unsigned long int n)
+random_activation (void)
 {
-    const gsl_rng_type * T;
-    gsl_rng * r;
-    gsl_rng_env_setup();
-
-    struct timeval tv;
-    gettimeofday(&tv, 0);
-
-    unsigned long my_seed = tv.tv_sec + tv.tv_usec;
-
-    T = gsl_rng_default;
-    r = gsl_rng_alloc(T);
-
-    gsl_rng_set(r, my_seed);
-    double u = (double)gsl_rng_uniform_int(r, n);
-    gsl_rng_free(r);
-
-    return u;
+    return (double)pcg32_boundedrand(2);
 }
+
+double
+random_0to1 (void)
+{
+    return ldexp(pcg32_random(), -32);
+}
+
+double
+random_in_range (double min, double max)
+{
+    return 0.;
+}
+
