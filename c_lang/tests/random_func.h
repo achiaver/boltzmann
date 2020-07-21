@@ -1,11 +1,19 @@
-#ifndef __RANDOM_FUNC__
-#define __RANDOM_FUNC__
+#ifndef __RANDOM_FUNC_H__
+#define __RANDOM_FUNC_H__
 
+#include <stdbool.h>
+#include <stdint.h>
 #include <time.h>
-#include "ran3.h"
+#include <math.h>
+#include "pcg_basic.h"
 
-void init_seed ();
+void    random_seed         (bool   nondeterministic_seed);
+double  random_activation   (void);
+double  random_zero_to_one  (void);
+double  random_in_range     (double min, 
+                             double max);
 
 
-#endif
+#endif /* __RANDOM_FUNC_H__*/
+
 
