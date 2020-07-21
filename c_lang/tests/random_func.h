@@ -9,7 +9,7 @@
 
 void    random_seed         (bool   nondeterministic_seed);
 double  random_activation   (void);
-double  random_zero_to_one  (void);
+double  random_0to1  (void);
 double  random_in_range     (double min, 
                              double max);
 

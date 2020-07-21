@@ -21,7 +21,7 @@ random_activation (void)
 }
 
 double
-random_zero_to_one (void)
+random_0to1 (void)
 {
     return ldexp(pcg32_random(), -32);
 }
