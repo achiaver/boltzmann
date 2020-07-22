@@ -29,6 +29,6 @@ random_0to1 (void)
 double
 random_in_range (double min, double max)
 {
-    return 0.;
+    double random = (double) pcg32_random()/ ((double)UINT32_MAX + 1);
+    return ((max - min) * random + min);
 }
-
