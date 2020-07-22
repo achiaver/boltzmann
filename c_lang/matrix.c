@@ -47,7 +47,7 @@ void
 matrix_randomize(struct matrix *m)
 {
     for (size_t e = 0; e < (m->rows * m->cols); e++)
-        m->elem[e] = random_num();
+        m->elem[e] = random_0to1();
 } /* end of matrix_randomize */
 
 

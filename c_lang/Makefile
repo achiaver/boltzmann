@@ -1,6 +1,6 @@
 .PHONY: all clean
 
-OBJS = parameters.o matrix.o boltzmann.o dataset.o random_gen.o
+OBJS = parameters.o matrix.o boltzmann.o dataset.o random_func.o pcg_basic.o
 
 # drand is deprecated
 # CFLAGS = -g -Wall -Wpedantic --std=c2x

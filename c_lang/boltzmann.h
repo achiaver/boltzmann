@@ -5,9 +5,8 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <time.h>
 #include <math.h>
-#include "random_gen.h"
+#include "random_func.h"
 #include "parameters.h"
 #include "matrix.h"
 
@@ -112,7 +111,6 @@ void             network_training   (struct network *       net,
 
 
 
-void initialize_seed(void);
 double func_sigmoid (double, double);
 
 #endif /* __BOLTZMANN_H__ */

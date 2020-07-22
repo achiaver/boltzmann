@@ -48,7 +48,7 @@
 int
 main(int argc, char *argv[])
 {
-    initialize_seed();
+    random_seed(true);
 
     printf("\nBegin Restricted Boltzmann Machine demo\n");
     printf("Films: Alien, Inception, Spy, Eurotrip, Gladiator, Spartacus\n\n");

@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "random_gen.h"
+#include "random_func.h"
 
 struct matrix {
     size_t rows;
