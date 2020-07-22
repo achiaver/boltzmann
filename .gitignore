@@ -1,6 +1,6 @@
 *.o
 *.tab
-tags
+tags*
 .Makefile.swp
 .*.swp
 james
