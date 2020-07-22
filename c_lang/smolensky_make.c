@@ -21,7 +21,7 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
         printf("P_hidden - %f\n", func_sigmoid(sum, T));
         printf("\n");
         node_set_nprob(hidden->nodes, h, func_sigmoid(sum, T));
-        if (node_get_nprob(hidden->nodes, h) > random_num())
+        if (node_get_nprob(hidden->nodes, h) > random_0to1())
         {
             node_set_activation(hidden->nodes, h, 1.);
         } else
@@ -48,7 +48,7 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
         printf("P_visible - %f\n", func_sigmoid(sum, T));
         printf("\n");
         node_set_nprob(visible->nodes, v, func_sigmoid(sum, T));
-        if (node_get_nprob(visible->nodes, v) > random_num())
+        if (node_get_nprob(visible->nodes, v) > random_0to1())
         {
             node_set_activation(visible->nodes, v, 1.);
         } else
@@ -67,7 +67,7 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
     {
         if (node_get_activation(lay_1->nodes, i) == 0.)
         {
-            double act = random_activation(2);
+            double act = random_activation();
             if (act == 1.)
                 node_set_activation(lay_2->nodes, i, 1.);
             else
@@ -94,8 +94,8 @@ simulated_annealing (struct network * net, struct layer * input)
     layer_print(input_aux, 0);
     printf("\n");
 
-    double T_start = 100.0;
-    double T_end = 0.01;
+    double T_start = 1.0;
+    double T_end = 1;
     while ((!crystalized) && (T_start >= T_end))
     {
         int iteration = 0;
@@ -104,7 +104,7 @@ simulated_annealing (struct network * net, struct layer * input)
         
         while ((!thermalized) && (iteration < net->hidden.num_nodes))// n_iterations))
         {
-            continue;
+            break;
         }
 //     double mean_energy = 0.;
         
@@ -126,7 +126,7 @@ simulated_annealing (struct network * net, struct layer * input)
 int
 main(int argc, char *argv[])
 {
-    initialize_seed();
+    random_seed(true);
 
 //    if (argc < 4)
 //    {
@@ -172,8 +172,8 @@ main(int argc, char *argv[])
     network_dump(net, 0, 1, 0);
 
     printf("- SIMULATED ANNEALING -\n");
- // Select a test example, where activation as -1 means that these unit will be randomly initialized.
-    double test_example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};
+ // Select a test example, where activation as 0 means that these unit will be randomly initialized.
+    double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1, 0, 1,-1}};
     struct matrix * test_m = dataset_example(1, 9, test_example);
     struct layer * test_l = layer_create(net->visible.num_nodes);
     layer_copy_from_array(test_l, test_m, 0);
