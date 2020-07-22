@@ -10,6 +10,8 @@ main (int argc, char * argv[])
     {
         printf("random_activation - %f\n", random_activation());
         printf("random_0to1 - %f\n", random_0to1());
+        printf("random in range - %f\n", random_in_range(5, 9));
+        printf("\n");
     }    
     return 0;
 }
