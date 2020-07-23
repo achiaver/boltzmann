@@ -6,7 +6,7 @@
 int
 main(int argc, char *argv[])
 {
-    initialize_seed();
+    random_seed(true);
 
     char * parameters_file = "in_parameters.dat";
     char * dataset_file = "dataset/training_dataset_2.csv";

@@ -17,9 +17,6 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
             sum += node_get_activation(visible->nodes, v) * matrix_get(net->weights, v, h);
         }
         sum -= 0.7;
-        printf("I_hidden - %f\n", sum);
-        printf("P_hidden - %f\n", func_sigmoid(sum, T));
-        printf("\n");
         node_set_nprob(hidden->nodes, h, func_sigmoid(sum, T));
         if (node_get_nprob(hidden->nodes, h) > random_0to1())
         {
@@ -44,9 +41,6 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
            sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
         }
         sum *= 2.;  
-        printf("I_visible - %f\n", sum);
-        printf("P_visible - %f\n", func_sigmoid(sum, T));
-        printf("\n");
         node_set_nprob(visible->nodes, v, func_sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > random_0to1())
         {
