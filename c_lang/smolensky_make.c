@@ -28,7 +28,7 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
     }
     return hidden;
 }
-    
+
 struct layer *
 hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
 {
@@ -40,7 +40,7 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
         {
            sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
         }
-        sum *= 2.;  
+        sum *= 2.;
         node_set_nprob(visible->nodes, v, func_sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > random_0to1())
         {
@@ -75,38 +75,43 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
 
 
 struct layer *
-simulated_annealing (struct network * net, struct layer * input)
+simulated_annealing (struct network * net, struct layer * input, struct parameters * param)
 {
     int crystalized = 0; // False
     double infinite_energy = (net->hidden.num_nodes + net->visible.num_nodes) * (net->hidden.num_nodes + net->visible.num_nodes) * 1.0E5;
- 
     double last_mean_energy = 0.;
- 
+
     struct layer * input_aux = layer_create(input->num_nodes);
     struct layer * hidden = layer_create(net->hidden.num_nodes);
     layer_copy_layer(input, input_aux);
-    layer_print(input_aux, 0);
-    printf("\n");
+//    layer_print(input_aux, 0);
+//    printf("\n");
 
-    double T_start = 1.0;
-    double T_end = 1;
+    double T_start = 100.;
+    double T_end = 0.01;
     while ((!crystalized) && (T_start >= T_end))
     {
         int iteration = 0;
         int thermalized = 0; // False
         double last_temp_mean_energy = infinite_energy;
-        
+
         while ((!thermalized) && (iteration < net->hidden.num_nodes))// n_iterations))
         {
+            double mean_energy = 0.;
+            // N_FLOP_TRIES_PER_NODE -> VEM do PARAM_FILE!
+            for (int i_mean = 0; i_mean < n_flop_tries_per_node; i_mean)
+            {
+                break;
+            }
             break;
         }
 //     double mean_energy = 0.;
-        
+
         printf("T - %0.2f\n", T_start);
         hidden = visible_to_hidden_s(input_aux, net, T_start);
 //        layer_print(hidden, 0);
 //        printf("\n");
-        input_aux = hidden_to_visible_s(hidden, net, T_start); 
+        input_aux = hidden_to_visible_s(hidden, net, T_start);
 //        layer_print(input_aux, 0);
 //        printf("\n");
 
@@ -176,7 +181,7 @@ main(int argc, char *argv[])
     printf("delete test_m\n");
     matrix_destroy(test_m);
 
-    struct layer * simu = simulated_annealing(net, test_l);
+    struct layer * simu = simulated_annealing(net, test_l, param);
     printf("\n");
     layer_print(simu, 0);
     printf("\n");
@@ -187,7 +192,7 @@ main(int argc, char *argv[])
 
     printf("delete test_l\n");
     layer_delete(test_l, 0);
- 
+
     printf("delete dataset\n");
     matrix_destroy(dataset);
 
