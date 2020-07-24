@@ -28,4 +28,4 @@ smolensky_make: smolensky_make.o $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 clean:
-	rm -rf main main.o james james.o smolensky_make smolensky_make.o $(OBJS) *.dsY
+	rm -rf main main.o james james.o smolensky_make smolensky_make.o $(OBJS) *.dsY *.o
