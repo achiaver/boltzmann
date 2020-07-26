@@ -28,6 +28,9 @@ struct parameters {
     char * dataset_file;
     size_t dataset_rows;    // Amount of examples the dataset have, each row is a pattern
     size_t dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
+    double temp_start;
+    double temp_end;
+    size_t tries_per_node;
     double epsilonw;        // Learning rate for weights
     double epsilonvb;       // Learning rate for biases of visible units (Hinton ref.)
     double epsilonhb;       // Learning rate for biases of hidden units (Hinton ref.)

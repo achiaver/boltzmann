@@ -87,9 +87,9 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
 //    layer_print(input_aux, 0);
 //    printf("\n");
 
-    double T_start = 100.;
-    double T_end = 0.01;
-    while ((!crystalized) && (T_start >= T_end))
+    double temp_current = param->temp_start;
+//    double temp_end = 0.01;
+    while ((!crystalized) && (temp_current >= param->temp_end))
     {
         int iteration = 0;
         int thermalized = 0; // False
@@ -99,7 +99,7 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
         {
             double mean_energy = 0.;
             // N_FLOP_TRIES_PER_NODE -> VEM do PARAM_FILE!
-            for (int i_mean = 0; i_mean < n_flop_tries_per_node; i_mean)
+            for (int i_mean = 0; i_mean < param->tries_per_node; i_mean)
             {
                 break;
             }
@@ -107,15 +107,15 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
         }
 //     double mean_energy = 0.;
 
-        printf("T - %0.2f\n", T_start);
-        hidden = visible_to_hidden_s(input_aux, net, T_start);
+        printf("T - %0.2f\n", temp_current);
+        hidden = visible_to_hidden_s(input_aux, net, temp_current);
 //        layer_print(hidden, 0);
 //        printf("\n");
-        input_aux = hidden_to_visible_s(hidden, net, T_start);
+        input_aux = hidden_to_visible_s(hidden, net, temp_current);
 //        layer_print(input_aux, 0);
 //        printf("\n");
 
-        T_start = T_start * 0.955;
+        temp_current = temp_current * 0.955;
     }
     layer_delete(hidden, 0);
     return input_aux;
@@ -158,6 +158,9 @@ main(int argc, char *argv[])
     dataset_dump(dataset);
 
     struct parameters * param = parameters_create();
+    param->temp_start = 100.;
+    param->temp_end = 0.01;
+    param->tries_per_node = 20;
     param->num_layers = 2;
     param->num_visible = 9;
     param->num_hidden = 4;

@@ -17,6 +17,8 @@ parameters_create ()
     param->dataset_file = "";
     param->dataset_rows = 0;
     param->dataset_cols = 0;
+    param->temp_start = 0.;
+    param->temp_end = 0.;
     param->epsilonw = 0.;
     param->epsilonvb = 0.;
     param->epsilonhb = 0.;
