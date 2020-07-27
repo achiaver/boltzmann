@@ -272,7 +272,7 @@ func_sigmoid (double expoent, double temp)
 
 
 double
-state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_2)
+func_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_2)
 {
     double energy = 0.;
     for (int i = 0; i < lay_1->num_nodes; i++)
@@ -293,13 +293,13 @@ state_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_
     }
 
     return energy;
-} /* end state_energy */
+} /* end func_energy */
 
 
 double
 network_energy (struct network * net)
 {
-    return state_energy(net->weights, &net->visible, &net->hidden);
+    return func_energy(net->weights, &net->visible, &net->hidden);
 } /* end network_energy */
 
 

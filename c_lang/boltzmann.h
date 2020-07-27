@@ -112,5 +112,8 @@ void             network_training   (struct network *       net,
 
 
 double func_sigmoid (double, double);
+double func_energy  (struct matrix * m, 
+                     struct layer * lay_1, 
+                     struct layer * lay_2);
 
 #endif /* __BOLTZMANN_H__ */
