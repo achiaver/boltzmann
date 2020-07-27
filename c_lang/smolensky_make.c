@@ -210,8 +210,9 @@ main(int argc, char *argv[])
     dataset_dump(dataset);
 
     struct parameters * param = parameters_create();
-    param->temp_start = 100.;
-    param->temp_end = 0.01;
+    param->temp_start = 5.995;
+    param->temp_end = 0.001;
+    param->temp_update = 0.95;
     param->tries_per_node = 20;
     param->num_layers = 2;
     param->num_visible = 9;
