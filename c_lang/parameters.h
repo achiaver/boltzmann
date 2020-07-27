@@ -30,6 +30,7 @@ struct parameters {
     size_t dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
     double temp_start;
     double temp_end;
+    double temp_update;
     size_t tries_per_node;
     double epsilonw;        // Learning rate for weights
     double epsilonvb;       // Learning rate for biases of visible units (Hinton ref.)

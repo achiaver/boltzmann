@@ -19,6 +19,7 @@ parameters_create ()
     param->dataset_cols = 0;
     param->temp_start = 0.;
     param->temp_end = 0.;
+    param->temp_update = 0.955;
     param->epsilonw = 0.;
     param->epsilonvb = 0.;
     param->epsilonhb = 0.;
