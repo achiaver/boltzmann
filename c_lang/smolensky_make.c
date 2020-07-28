@@ -104,6 +104,7 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
         {
             for (int i_mean = 0; i_mean < param->tries_per_node; i_mean++)
             {
+                
                 // Update hidden units
                 for (int h = 0; h < net->hidden.num_nodes; h++)
                 {
@@ -124,7 +125,6 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
                     }
                     mean_energy = mean_energy + func_energy(net->weights, &net->visible, &net->hidden);    
                 }
-                
                 // Update visible units
                 for (int v = 0; v < net->visible.num_nodes; v++)
                 {
@@ -156,6 +156,7 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
             {
                 last_mean_energy = mean_energy;
             }
+            iteration += 1;
         }
 
         if (mean_energy >= last_temp_mean_energy)
