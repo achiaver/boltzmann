@@ -14,6 +14,12 @@ random_seed (bool nondeterministic_seed)
     }
 }
 
+unsigned int
+random_int (void)
+{
+    return pcg32_random();
+}
+
 double
 random_activation (void)
 {

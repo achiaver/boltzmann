@@ -32,6 +32,7 @@ matrix_destroy(struct matrix *m)
     if(m) {
         free(m->elem);
         free(m);
+        m = NULL;
     }
 } /* end of matrix_destroy */
 

@@ -8,6 +8,8 @@ main (int argc, char * argv[])
 
     for (int i = 0; i < 5; i++)
     {
+        printf("pcg32_random - %d\n", pcg32_random());
+        printf("random_int - %d\n", random_int());
         printf("random_activation - %f\n", random_activation());
         printf("random_0to1 - %f\n", random_0to1());
         printf("random in range - %f\n", random_in_range(5, 9));

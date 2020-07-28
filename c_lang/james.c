@@ -146,13 +146,13 @@ main(int argc, char *argv[])
     matrix_destroy(dataset);
 
     printf("delete visible\n");
-    layer_delete(visible, 0);
+    layer_delete(visible);
 
     printf("delete hidden\n");
-    layer_delete(hidden, 0);
+    layer_delete(hidden);
 
     printf("delete visible_computed\n");
-    layer_delete(visible_computed, 0);
+    layer_delete(visible_computed);
 
     printf("detele network\n");
     network_delete(net);

@@ -7,11 +7,12 @@
 #include <math.h>
 #include "pcg_basic.h"
 
-void    random_seed         (bool   nondeterministic_seed);
-double  random_activation   (void);
-double  random_0to1  (void);
-double  random_in_range     (double min, 
-                             double max);
+void     random_seed         (bool   nondeterministic_seed);
+unsigned int random_int          (void);
+double   random_activation   (void);
+double   random_0to1         (void);
+double   random_in_range     (double min, 
+                              double max);
 
 
 #endif /* __RANDOM_FUNC_H__*/

@@ -57,9 +57,9 @@ main(int argc, char *argv[])
     printf("\n");
 
 
-    layer_delete(visible, 0);
-    layer_delete(hidden, 0);
-    layer_delete(visible_computed, 0);
+    layer_delete(visible);
+    layer_delete(hidden);
+    layer_delete(visible_computed);
     network_delete(net);
     dataset_destroy(dataset);
     parameters_delete(param);

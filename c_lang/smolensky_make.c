@@ -170,7 +170,7 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
 
         printf("T - %f\n", temp_current);
     }
-//    layer_delete(hidden, 0);
+//    layer_delete(hidden);
     return &net->visible;
 } /* end simulated_annealing*/
 
@@ -246,10 +246,10 @@ main(int argc, char *argv[])
 
     printf("\n\n\n");
     printf("delete simu\n");
-    layer_delete(simu, 1);
+    layer_delete(simu);
 
     printf("delete test_l\n");
-    layer_delete(test_l, 0);
+    layer_delete(test_l);
 
     printf("delete dataset\n");
     matrix_destroy(dataset);

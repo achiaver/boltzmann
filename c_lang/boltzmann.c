@@ -129,23 +129,15 @@ layer_create (size_t num_nodes)
 
 
 // layer_delete deletes the layer
-// option = 0 -> deletes all nodes
-// option = 1 -> deletes the layer
-
 void
-layer_delete (struct layer * l, int option)
+layer_delete (struct layer * l)
 {
     if (l->nodes)
     {
-        if (option == 0)
-        {
-            free(l->nodes);
-            free(l);
-        } else
-        {
-            free(l->nodes);
-        }
+        free(l->nodes);
+        l->nodes = NULL;
     }
+    l = NULL;
     printf("----> \t layer deleted...\n");
 } /* end layer_delete */
 
@@ -197,15 +189,16 @@ network_delete (struct network * net)
     {
         if (net->visible.nodes) 
         {
-            layer_delete(&net->visible, 1);
+            layer_delete(&net->visible);
         }
         if (net->hidden.nodes)
         {
-            layer_delete(&net->hidden, 1);
+            layer_delete(&net->hidden);
         }
         matrix_destroy(net->weights);
         printf("----> \t weights deleted...\n");
         free(net);
+        net = NULL;
     }
     printf("----> \t network deleted!\n\n");
 } /* end network_delete */
@@ -315,11 +308,12 @@ swap (int *a, int *b)
 
 
 void
-shuffle(int arr[], int n)
+shuffle (int arr[], int n)
 {
     for (int i = n-1; i > 0; i--)
     {
-        int j = rand() % (i+1);
+        int j = random_bounded(i+1); // Pick a random index from 0 to i
+//        printf("j - %d\n", j);
         swap(&arr[i], &arr[j]);
     }
 } /* end shuffle */
@@ -341,7 +335,7 @@ outerproduct (struct layer * lay_1, struct layer * lay_2)
 
 
 void
-network_training(struct network * net, struct parameters * param, struct matrix * data)
+network_training (struct network * net, struct parameters * param, struct matrix * data)
 {
     double learning_rate = param->epsilonw;
     int *indices = malloc(sizeof (int) * param->dataset_rows);
@@ -444,28 +438,20 @@ network_training(struct network * net, struct parameters * param, struct matrix 
             {
                 for (int col = 0; col < net->hidden.num_nodes; col++)
                 {
-                    matrix_set(net->weights, row, col, \
-                            (matrix_get(net->weights, row, col) + \
-                             learning_rate * (matrix_get(positive_grad, row, col) - matrix_get(negative_grad, row, col))));
+                    matrix_set(net->weights, row, col, (matrix_get(net->weights, row, col) + learning_rate * (matrix_get(positive_grad, row, col) - matrix_get(negative_grad, row, col))));
                 }
             }
 
             // update visible biases
             for (int v = 0; v < net->visible.num_nodes; v++)
             {
-                node_set_bias(net->visible.nodes, v, \
-                        (node_get_bias(net->visible.nodes, v) + \
-                         learning_rate * (node_get_activation(net->visible.nodes, v) - \
-                             node_get_activation(visible_prime->nodes, v))));
+                node_set_bias(net->visible.nodes, v, (node_get_bias(net->visible.nodes, v) + learning_rate * (node_get_activation(net->visible.nodes, v) - node_get_activation(visible_prime->nodes, v))));
             }
 
             //update hidden biases
             for (int h = 0; h < net->hidden.num_nodes; h++)
             {
-                node_set_bias(net->hidden.nodes, h, \
-                        (node_get_bias(net->hidden.nodes, h) + \
-                         learning_rate * (node_get_activation(net->hidden.nodes, h) - \
-                             node_get_activation(hidden_prime->nodes, h))));
+                node_set_bias(net->hidden.nodes, h, (node_get_bias(net->hidden.nodes, h) + learning_rate * (node_get_activation(net->hidden.nodes, h) - node_get_activation(hidden_prime->nodes, h))));
             }
 
         } // end for idx

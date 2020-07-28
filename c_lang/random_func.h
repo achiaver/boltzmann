@@ -8,8 +8,9 @@
 #include "pcg_basic.h"
 
 void    random_seed         (bool   nondeterministic_seed);
+int     random_bounded      (int);
 double  random_activation   (void);
-double  random_0to1  (void);
+double  random_0to1         (void);
 double  random_in_range     (double min, 
                              double max);
 
