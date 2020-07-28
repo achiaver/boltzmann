@@ -168,7 +168,7 @@ simulated_annealing (struct network * net, struct layer * input, struct paramete
             temp_current = param->temp_update * temp_current;
         }
 
-        printf("T - %0.2f\n", temp_current);
+        printf("T - %f\n", temp_current);
     }
 //    layer_delete(hidden, 0);
     return &net->visible;
@@ -211,6 +211,7 @@ main(int argc, char *argv[])
     dataset_dump(dataset);
 
     struct parameters * param = parameters_create();
+    param->dataset_file = "no_file";
     param->temp_start = 5.995;
     param->temp_end = 0.001;
     param->temp_update = 0.95;
