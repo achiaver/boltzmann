@@ -5,7 +5,7 @@
 #define PERCENT_ERROR_ENERGY 1.E-10
 
 struct layer *
-visible_to_hidden_s (struct layer * visible, struct network * net, double T)
+visible_to_hidden_j (struct layer * visible, struct network * net, double T)
 {
     struct layer * hidden = layer_create(net->hidden.num_nodes);
     for (int h = 0 ; h < hidden->num_nodes; h++)
@@ -29,7 +29,7 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
 }
 
 struct layer *
-hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
+hidden_to_visible_j (struct layer * hidden, struct network * net, double T)
 {
     struct layer * visible = layer_create(net->visible.num_nodes);
     for (int v = 0; v < visible->num_nodes; v++)
