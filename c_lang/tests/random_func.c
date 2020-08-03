@@ -14,11 +14,12 @@ random_seed (bool nondeterministic_seed)
     }
 }
 
-unsigned int
-random_int (void)
+int
+random_bounded (int bound)
 {
-    return pcg32_random();
+    return pcg32_boundedrand(bound);
 }
+
 
 double
 random_activation (void)
@@ -26,11 +27,13 @@ random_activation (void)
     return (double)pcg32_boundedrand(2);
 }
 
+
 double
 random_0to1 (void)
 {
     return ldexp(pcg32_random(), -32);
 }
+
 
 double
 random_in_range (double min, double max)
