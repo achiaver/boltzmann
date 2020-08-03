@@ -4,8 +4,6 @@
 #define DEBUG 1
 #define PERCENT_ERROR_ENERGY 1.E-10
 
-typedef double welem_t;
-
 struct layer *
 visible_to_hidden_s (struct layer * visible, struct network * net, double T)
 {
