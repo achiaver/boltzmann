@@ -3,67 +3,82 @@
 #include <string.h>
 #include "random_func.h"
 
+
+struct random_sample
+{
+    double bounded;
+    double activation;
+    double zero_to_one;
+    double in_range;
+};
+
+
 int
 main (int argc, char * argv[])
 {
-    if (argc < 3)
+    if (argc < 5)
     {
-        fprintf(stdout, "Usage: %s FILENAME_OUT NUMBER_OF_ITERATIONS\n", argv[0]);
-        fprintf(stdout, "Example: %s random_numbers.dat 30000000\n", argv[0]);
+        fprintf(stdout, "Usage: %s FILENAME ITERATIONS PRINT_OPTION READ_OPTION\n", argv[0]);
+        fprintf(stdout, "Example: %s random_numbers.bin 30000000 1 1\n", argv[0]);
         return 1;
     }
 
     char filename[256];
     strncpy(filename, argv[1], 255);
     size_t iterations = atoi(argv[2]);
+    size_t print_option = atoi(argv[3]);
+    size_t read_option = atoi(argv[4]);
 
+    printf("filename - %s\n", filename);
     printf("iterations - %zu\n", iterations);
+
+    struct random_sample sample_out;
+    struct random_sample sample_in;
     
-    double * random_numbers = malloc(sizeof (double) * (iterations * 4));
-    if (!random_numbers) 
+    FILE *file_out = fopen(filename, "ab+");
+    if (!file_out)
     {
-        fprintf(stderr, "malloc random_test: %s %d\n", __FILE__, __LINE__);
-        exit(2);
+        fprintf(stderr, "Could not open file to write\n");
+        exit(1);
     }
 
     random_seed(true);
     
     for (int i = 0; i < iterations; i++)
     {
-        random_numbers[(i * 4) + 0] = random_bounded(5);
-        random_numbers[(i * 4) + 1] = random_activation();
-        random_numbers[(i * 4) + 2] = random_0to1();
-        random_numbers[(i * 4) + 3] = random_in_range(1., 10.);
-    }
-    
-    printf("Criamos o dados\n");
-    for (int i = 0; i < iterations; i++)
-    {
-        for (int j = 0; j < 4; j++)
+        sample_out.bounded = random_bounded(5);
+        sample_out.activation = random_activation();
+        sample_out.zero_to_one = random_0to1();
+        sample_out.in_range = random_in_range(3, 11);
+        if (print_option == 1)
         {
-            printf("\t%f", random_numbers[(i * 4) + j]);
+            fprintf(stdout, "\t%f \t%f \t%f \t%f\n", sample_out.bounded, sample_out.activation, sample_out.zero_to_one, sample_out.in_range);
         }
-        printf("\n");
+        fwrite(&sample_out, sizeof(struct random_sample), 1, file_out);
+    }
+    fprintf(stdout, "Done with file\n");
+
+    fclose(file_out);
+    
+    FILE *file_in = fopen(filename, "rb");
+    if(!file_in)
+    {
+        fprintf(stderr, "CANNOT READ file %s\n", filename);
+        exit(1);
     }
 
-    size_t data_size = sizeof(double) * (iterations * 4);//sizeof(random_numbers);
-    size_t elem_size = sizeof(random_numbers[0]);
-    size_t num_elem = data_size/elem_size;
-
-    printf("\t%zu \t%zu \t%zu\n", data_size, elem_size, num_elem);
-
-    FILE *dados = fopen(filename, "wb");
-    if (dados)
+//    for (int i = 0; i < iterations; i++)
+//    {
+//        fread(&sample_in, sizeof(struct random_sample), 1, file_in);
+//        fprintf(stdout, "\t%f \t%f \t%f \t%f\n", sample_in.bounded, sample_in.activation, sample_in.zero_to_one, sample_in.in_range);
+//    }
+    if (read_option == 1)
     {
-        fwrite(random_numbers, elem_size, num_elem, dados);
-        fclose(dados);
-        dados = NULL;
-    } else
-    {
-        fprintf(stderr, "Could not open file to write\n");
-        dados = NULL;
+        while(fread(&sample_in, sizeof(struct random_sample), 1, file_in))
+        {
+            fprintf(stdout, "\t%f \t%f \t%f \t%f\n", sample_in.bounded, sample_in.activation, sample_in.zero_to_one, sample_in.in_range);
+        }
+        fclose(file_in);
     }
-
-    free(random_numbers);
     return 0;
 }
