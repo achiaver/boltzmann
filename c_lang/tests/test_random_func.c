@@ -19,7 +19,7 @@ main (int argc, char * argv[])
 
     printf("iterations - %zu\n", iterations);
     
-    double * random_numbers = malloc(sizeof (*random_numbers) * (iterations * 4));
+    double * random_numbers = malloc(sizeof (double) * (iterations * 4));
     if (!random_numbers) 
     {
         fprintf(stderr, "malloc random_test: %s %d\n", __FILE__, __LINE__);
@@ -39,10 +39,14 @@ main (int argc, char * argv[])
     printf("Criamos o dados\n");
     for (int i = 0; i < iterations; i++)
     {
-        printf("\t%f \t%f \t%f \t%f\n", random_numbers[(i * 4) + 0], random_numbers[(i * 4) + 1],random_numbers[(i * 4) + 2],random_numbers[(i * 4) + 3]);
+        for (int j = 0; j < 4; j++)
+        {
+            printf("\t%f", random_numbers[(i * 4) + j]);
+        }
+        printf("\n");
     }
-    
-    size_t data_size = iterations * 4;
+
+    size_t data_size = sizeof(double) * (iterations * 4);//sizeof(random_numbers);
     size_t elem_size = sizeof(random_numbers[0]);
     size_t num_elem = data_size/elem_size;
 
