@@ -205,10 +205,10 @@ main(int argc, char *argv[])
                             {  0.,   0., 0.25,-0.25},
                             {  0.,   0.,-0.25,-0.25}};
 
-    struct matrix * dataset = dataset_example(1, 9, example);
+    struct matrix *dataset = dataset_example(1, 9, example);
     dataset_dump(dataset);
 
-    struct parameters * param = parameters_create();
+    struct parameters *param = parameters_create();
     param->dataset_file = "no_file";
     param->temp_start = 5.995;
     param->temp_end = 0.001;
@@ -218,8 +218,8 @@ main(int argc, char *argv[])
     param->num_visible = 9;
     param->num_hidden = 4;
 
-    struct network * net = network_create(param);
-    struct matrix * weights_m = dataset_example(9, 4, weights);
+    struct network *net = network_create(param);
+    struct matrix *weights_m = dataset_example(9, 4, weights);
     printf("\n");
     matrix_copy(weights_m, net->weights);
     matrix_destroy(weights_m);
@@ -229,15 +229,17 @@ main(int argc, char *argv[])
     printf("- SIMULATED ANNEALING -\n");
  // Select a test example, where activation as 0 means that these unit will be randomly initialized.
     double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1, 0, 1,-1}};
-    struct matrix * test_m = dataset_example(1, 9, test_example);
-    struct layer * test_l = layer_create(net->visible.num_nodes);
+
+//  COLOCAR COMENTARIOS, dataset_example -> array_to_matrix
+    struct matrix *test_m = dataset_example(1, 9, test_example);
+    struct layer *test_l = layer_create(net->visible.num_nodes);
     layer_copy_from_array(test_l, test_m, 0);
     layer_print(test_l, 0);
     printf("\n");
     printf("delete test_m\n");
     matrix_destroy(test_m);
 
-    struct layer * simu = simulated_annealing(net, test_l, param);
+    struct layer *simu = simulated_annealing(net, test_l, param);
     printf("\n");
     layer_print(simu, 0);
     printf("\n");
