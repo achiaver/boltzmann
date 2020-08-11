@@ -1,3 +1,9 @@
+/*
+ * From PCG RANDOM
+ * www.pcg-random.org
+ *
+ * */
+
 #ifndef __RANDOM_FUNC_H__
 #define __RANDOM_FUNC_H__
 
