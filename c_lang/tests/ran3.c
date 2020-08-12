@@ -16,7 +16,7 @@
 #define MZ 0
 #define FAC (1.0/MBIG)
 
-double ran3 (int * idum)
+double ran3 (int *idum)
 {
     static int inext, inextp;
     static long ma[56];
