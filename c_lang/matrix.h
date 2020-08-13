@@ -7,26 +7,40 @@
 #include <string.h>
 #include "random_func.h"
 
-struct matrix {
-    size_t rows;
-    size_t cols;
-    double * elem;
-};
+typedef struct MATRIX {
+    size_t  rows;
+    size_t  cols;
+    double *elem;
+} matrix;
 
-struct matrix * matrix_create         (size_t, size_t);
-void            matrix_destroy        (struct matrix*);
-void            matrix_zero           (struct matrix*);
-void            matrix_randomize      (struct matrix*);
-void            matrix_print          (struct matrix*, int);
-void            matrix_print_line     (struct matrix*, int);
-void            matrix_shape          (struct matrix*);
-void            matrix_set            (struct matrix*, size_t, size_t, double);
-double          matrix_get            (struct matrix*, size_t, size_t);
-struct matrix * matrix_read_data      (char *, size_t, size_t);
-struct matrix * matrix_sum            (struct matrix*, struct matrix*);
-struct matrix * matrix_product        (struct matrix*, struct matrix*);
-struct matrix * matrix_product_scalar (struct matrix*, double);
-void            matrix_copy           (struct matrix*, struct matrix*);
+matrix *matrix_create         (size_t,
+                               size_t);
+void    matrix_destroy        (matrix *);
+void    matrix_zero           (matrix *);
+void    matrix_randomize      (matrix *);
+void    matrix_print          (matrix *, 
+                               int);
+void    matrix_print_line     (matrix *,
+                               int);
+void    matrix_shape          (matrix *);
+void    matrix_set            (matrix *,
+                               size_t,
+                               size_t,
+                               double);
+double  matrix_get            (matrix *,
+                               size_t,
+                               size_t);
+matrix *matrix_read_data      (char *,
+                               size_t,
+                               size_t);
+matrix *matrix_sum            (matrix *,
+                               matrix *);
+matrix *matrix_product        (matrix *,
+                               matrix *);
+matrix *matrix_product_scalar (matrix *,
+                               double);
+void    matrix_copy           (matrix *,
+                               matrix *);
 
 #endif /* __MATRIX_H__ */
 

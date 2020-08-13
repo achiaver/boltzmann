@@ -1,10 +1,10 @@
 #include "matrix.h"
 
 
-struct matrix *
+matrix *
 matrix_create(size_t rows, size_t cols)
 {
-    struct matrix * m = malloc (sizeof (*m));
+    matrix *m = malloc (sizeof (*m));
     if(!m)
     {
         fprintf(stderr, "malloc: %s %d", __FILE__, __LINE__);
@@ -27,7 +27,7 @@ matrix_create(size_t rows, size_t cols)
 
 
 void
-matrix_destroy(struct matrix *m)
+matrix_destroy(matrix *m)
 {
     if(m) {
         free(m->elem);
@@ -38,14 +38,14 @@ matrix_destroy(struct matrix *m)
 
 
 void
-matrix_zero(struct matrix *m)
+matrix_zero(matrix *m)
 {
     for (size_t e = 0; e < (m->rows * m->cols); e++)
         m->elem[e] = 0.;
 } /* end of matrix_zero */
 
 void
-matrix_randomize(struct matrix *m)
+matrix_randomize(matrix *m)
 {
     for (size_t e = 0; e < (m->rows * m->cols); e++)
         m->elem[e] = random_0to1();
@@ -53,7 +53,7 @@ matrix_randomize(struct matrix *m)
 
 
 void
-matrix_print(struct matrix *m, int option)
+matrix_print(matrix *m, int option)
 {
     for (size_t row = 0; row < m->rows; row++)
     {
@@ -73,7 +73,7 @@ matrix_print(struct matrix *m, int option)
 
 
 void
-matrix_print_line(struct matrix *m, int option)
+matrix_print_line(matrix *m, int option)
 {
     for (size_t row = 0; row < m->rows; row++)
     {
@@ -91,35 +91,35 @@ matrix_print_line(struct matrix *m, int option)
 
 
 void
-matrix_shape(struct matrix *m)
+matrix_shape(matrix *m)
 {
     printf("[%zu, %zu]\n", m->rows, m->cols);
 } /* end of matrix_shape */
 
 
 void
-matrix_set(struct matrix *m, size_t row, size_t col, double value)
+matrix_set(matrix *m, size_t row, size_t col, double value)
 {
     m->elem[(row*m->cols) + col] = value;
 } /* enf of matrix_set */
 
 
 double
-matrix_get(struct matrix *m, size_t row, size_t col)
+matrix_get(matrix *m, size_t row, size_t col)
 {
     return m->elem[(row*m->cols) + col];
 } /* end of matrix_get */
 
 
-struct matrix *
-matrix_read_data(char * filename, size_t rows, size_t cols)
+matrix *
+matrix_read_data(char *filename, size_t rows, size_t cols)
 {
-    struct matrix * m_data = matrix_create(rows, cols);
+    matrix *m_data = matrix_create(rows, cols);
 
     char buffer[1024];
     int row = 0, col = 0;
 
-    FILE * fp = fopen(filename, "r");
+    FILE *fp = fopen(filename, "r");
 
     if (!fp)
     {
@@ -144,8 +144,8 @@ matrix_read_data(char * filename, size_t rows, size_t cols)
 } /* end of matrix_read_data */
 
 
-struct matrix *
-matrix_sum(struct matrix * A, struct matrix * B)
+matrix *
+matrix_sum(matrix *A, matrix *B)
 {
     if ((A->rows != B->rows) || (A->cols != B->cols))
     {
@@ -153,7 +153,7 @@ matrix_sum(struct matrix * A, struct matrix * B)
         exit(1);
     }
 
-    struct matrix * m_sum = matrix_create(A->rows, A->cols);
+    matrix * m_sum = matrix_create(A->rows, A->cols);
 
     for (int row = 0; row < A->rows; row++)
     {
@@ -167,8 +167,8 @@ matrix_sum(struct matrix * A, struct matrix * B)
 } /* end of matrix_sum */
 
 
-struct matrix *
-matrix_product(struct matrix * A, struct matrix * B)
+matrix *
+matrix_product(matrix *A, matrix *B)
 {
     if ((A->cols != B->rows))
     {
@@ -176,7 +176,7 @@ matrix_product(struct matrix * A, struct matrix * B)
         exit(1);
     }
 
-    struct matrix * m_product = matrix_create(A->rows, B->cols);
+    matrix *m_product = matrix_create(A->rows, B->cols);
     matrix_zero(m_product);
 
     double elem1 = 0., elem2 = 0.;
@@ -193,15 +193,14 @@ matrix_product(struct matrix * A, struct matrix * B)
             }
         }
     }
-
     return m_product;
 } /* end of matrix_product */
 
 
-struct matrix *
-matrix_product_scalar(struct matrix * A, double scalar)
+matrix *
+matrix_product_scalar(matrix *A, double scalar)
 {
-    struct matrix * m_prod_scalar = matrix_create(A->rows, A->cols);
+    matrix * m_prod_scalar = matrix_create(A->rows, A->cols);
 
     for (int row = 0; row < A->rows; row++)
     {
@@ -214,8 +213,9 @@ matrix_product_scalar(struct matrix * A, double scalar)
     return m_prod_scalar;
 } /* end matrix_product_scalar */
 
+
 void
-matrix_copy (struct matrix * m1, struct matrix * m2)
+matrix_copy (matrix *m1, matrix *m2)
 {
     if (m1->rows != m2->rows || m1->cols != m2->cols)
     {

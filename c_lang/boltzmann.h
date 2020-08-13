@@ -18,11 +18,11 @@
     nprob - weighted sum of the information each node is receiving from other nodes connected to it;
     =================================================
  */
-struct node {
+typedef struct NODE {
     double activation;
     double bias;
     double nprob;
-};
+} node;
 
 
 /*  =================================================
@@ -32,10 +32,10 @@ struct node {
     nodes - weighted sum of the information each node is receiving from other nodes connected to it;
     =================================================
  */
-struct layer {
-    size_t num_nodes;
-    struct node * nodes;
-};
+typedef struct LAYER {
+    size_t  num_nodes;
+    node   *nodes;
+} layer;
 
 
 /*  =================================================
@@ -48,71 +48,86 @@ struct layer {
     weights - pointer to weights between two adjacent layers;
     =================================================
  */
-struct network {
-    size_t num_layers;
-    size_t num_nodes_total;
-    struct layer visible;
-    struct layer hidden;
-    struct matrix * weights;
-};
+typedef struct NETWORK {
+    size_t  num_layers;
+    size_t  num_nodes_total;
+    layer   visible;
+    layer   hidden;
+    matrix *weights;
+} network;
 
 
 /*  =================================================
     Function Related to Node structure.
     =================================================
  */
-void          node_set_activation   (struct node *, int, double);
-void          node_set_bias         (struct node *, int, double);
-void          node_set_nprob        (struct node *, int, double);
-void          node_randomize_bias   (struct node *, int);
-double        node_get_activation   (struct node *, int);
-double        node_get_bias         (struct node *, int);
-double        node_get_nprob        (struct node *, int);
-void          node_print            (struct node *, int, int);
-void          node_copy             (struct node *, struct node *);
-void          node_create           (struct node *, int);
+void         node_set_activation    (node *,
+                                     int,
+                                     double);
+void         node_set_bias          (node *,
+                                     int,
+                                     double);
+void         node_set_nprob         (node *,
+                                     int,
+                                     double);
+void         node_randomize_bias    (node *,
+                                     int);
+double       node_get_activation    (node *,
+                                     int);
+double       node_get_bias          (node *,
+                                     int);
+double       node_get_nprob         (node *,
+                                     int);
+void         node_print             (node *,
+                                     int,
+                                     int);
+void         node_copy              (node *,
+                                     node *);
+void         node_create            (node *,
+                                     int);
 
 
 /*  =================================================
     Function Related to Layer structure.
     =================================================
  */
-struct layer * layer_create (size_t);
-void           layer_delete (struct layer *);
-void           layer_print  (struct layer *, int);
-void           layer_copy_from_array   (struct layer *     layer,
-                                         struct matrix *    matrix, 
-                                         int                row);
+layer       *layer_create           (size_t);
+void         layer_delete           (layer *);
+void         layer_print            (layer *, int);
+void         layer_copy_from_array  (layer *,
+                                     matrix *, 
+                                     int);
 
-struct layer *  hidden_from_visible (struct network * net,
-                                     struct layer   * visible,
-                                     double           T);
-struct layer *  visible_from_hidden (struct network * net,
-                                     struct layer   * hidden,
-                                     double           T);
+layer       *hidden_from_visible    (network *net,
+                                     layer   *visible,
+                                     double   T);
+layer       *visible_from_hidden    (network *net,
+                                     layer   *hidden,
+                                     double   T);
 
 
 /*  =================================================
     Function Related to Network structure.
     =================================================
  */
-struct network * network_create     (struct parameters *    param);
-void             network_delete     (struct network *       net);
-void             network_print      (struct network *       net,
-                                     int                    to_prototype_is_to_document_check_the_difference);
-void             network_dump       (struct network *       net,
-                                     int                    show_values,
-                                     int                    show_weights, 
-                                     int                    show_biases);
-void             network_training   (struct network *       net,
-                                     struct parameters *    param,
-                                     struct matrix *        data);
+network     *network_create         (parameters *param);
+void         network_delete         (network    *net);
+void         network_print          (network    *net,
+                                     int         to_prototype_is_to_document_check_the_difference);
+void         network_dump           (network    *net,
+                                     int         show_values,
+                                     int         show_weights, 
+                                     int         show_biases);
+void         network_training       (network    *net,
+                                     parameters *param,
+                                     matrix     *data);
 
 
 
-double func_sigmoid (double, double);
-double func_energy  (struct matrix * m, 
-                     struct layer * lay_1, 
-                     struct layer * lay_2);
+double       func_sigmoid           (double,
+                                     double);
+double       func_energy            (matrix *, 
+                                     layer *, 
+                                     layer *);
 
 #endif /* __BOLTZMANN_H__ */

@@ -1,13 +1,13 @@
 #include "boltzmann.h"
 
 /* =============================================================================
- * struct node functions
+ * node functions
  */
 
 // node_set_activation assign the given value to the activation of the given node
 
 void
-node_set_activation (struct node * n, int node, double value)
+node_set_activation (node *n, int node, double value)
 {
     n[node].activation = value;
 } /* end node_set_activation */
@@ -16,7 +16,7 @@ node_set_activation (struct node * n, int node, double value)
 // node_set_bias assign the given value to the bias of the given node
 
 void
-node_set_bias (struct node * n, int node, double value)
+node_set_bias (node *n, int node, double value)
 {
     n[node].bias = value;
 } /* end node_set_bias */
@@ -26,7 +26,7 @@ node_set_bias (struct node * n, int node, double value)
 // nprob refers to the probability value of the node.
 
 void
-node_set_nprob (struct node * n, int node, double value)
+node_set_nprob (node *n, int node, double value)
 {
     n[node].nprob = value;
 } /* end node_set_nprob */
@@ -35,7 +35,7 @@ node_set_nprob (struct node * n, int node, double value)
 // node_randomize_bias assigns a random value to bias of give node
 
 void
-node_randomize_bias (struct node * n, int node)
+node_randomize_bias (node *n, int node)
 {
     n[node].bias = random_0to1();
 } /* end node_randomize_bias */
@@ -43,7 +43,7 @@ node_randomize_bias (struct node * n, int node)
 // node_get_activation retrieves the activation value of the given node
 
 double
-node_get_activation (struct node * n, int node)
+node_get_activation (node *n, int node)
 {
     return n[node].activation;
 } /* end node_get_activation */
@@ -52,7 +52,7 @@ node_get_activation (struct node * n, int node)
 // node_get_bias retrieves the bias value of the given node
 
 double
-node_get_bias (struct node * n, int node)
+node_get_bias (node *n, int node)
 {
     return n[node].bias;
 } /* end node_get_bias */
@@ -61,14 +61,14 @@ node_get_bias (struct node * n, int node)
 // node_get_nprob retrieves the nprob value of the given node
 
 double
-node_get_nprob (struct node * n, int node)
+node_get_nprob (node *n, int node)
 {
     return n[node].nprob;
 } /* end node_get_nprob */
 
 
 void
-node_print(struct node * n, int node, int option)
+node_print(node *n, int node, int option)
 {
     if (option == 0) // print all node status
     {
@@ -89,14 +89,14 @@ node_print(struct node * n, int node, int option)
 
 
 void
-node_copy (struct node * n1, struct node * n2)
+node_copy (node *n1, node *n2)
 {
     *n2 = *n1;
 } /* end node_copy */
 
 
 void
-node_create (struct node * n, int node)
+node_create (node *n, int node)
 {
     node_set_activation(n, node, 0.);
     node_set_bias(n, node, 0.);
@@ -105,15 +105,15 @@ node_create (struct node * n, int node)
 
 
 /* =============================================================================
- * struct layer functions
+ * layer functions
  * */
 
-// layer_create creates a struct layer variable
+// layer_create creates a layer variable
 
-struct layer *
+layer *
 layer_create (size_t num_nodes)
 {
-    struct layer * l = malloc(sizeof (*l));
+    layer *l = malloc(sizeof (*l));
     if (!l) {
         printf("layer_create: malloc: layer: %s \n", strerror(errno));
         exit(2);
@@ -130,7 +130,7 @@ layer_create (size_t num_nodes)
 
 // layer_delete deletes the layer
 void
-layer_delete (struct layer * l)
+layer_delete (layer *l)
 {
     if (l->nodes)
     {
@@ -143,7 +143,7 @@ layer_delete (struct layer * l)
 
 
 void
-layer_print (struct layer * l, int option)
+layer_print (layer *l, int option)
 {
     for (int i = 0; i < l->num_nodes; i++)
     {
@@ -157,11 +157,11 @@ layer_print (struct layer * l, int option)
 
 
 /* =============================================================================
- * struct network functions
+ * network functions
  * */
 
 void
-network_print (struct network * net, int option)
+network_print (network *net, int option)
 {
     printf("---- NETWORK STATUS ----\n");
     for (int i = 0; i < net->num_layers; i++)
@@ -183,7 +183,7 @@ network_print (struct network * net, int option)
 
 
 void
-network_delete (struct network * net)
+network_delete (network *net)
 {
     if (net)
     {
@@ -204,19 +204,19 @@ network_delete (struct network * net)
 } /* end network_delete */
 
 
-struct matrix *
+matrix *
 weight_create(size_t visible, size_t hidden)
 {
-    struct matrix * weight = matrix_create(visible, hidden);
+    matrix *weight = matrix_create(visible, hidden);
     matrix_randomize(weight);
     return weight;
 } /* end weight_create */
 
 
-struct network *
-network_create (struct parameters * param)
+network *
+network_create (parameters *param)
 {
-    struct network * net = malloc(sizeof (*net));
+    network *net = malloc(sizeof (*net));
     if (!net) {
         printf("network_create: malloc: network: %s \n", strerror(errno));
         exit(2);
@@ -265,7 +265,7 @@ func_sigmoid (double expoent, double temp)
 
 
 double
-func_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_2)
+func_energy (matrix *weights, layer *lay_1, layer *lay_2)
 {
     double energy = 0.;
     for (int i = 0; i < lay_1->num_nodes; i++)
@@ -290,7 +290,7 @@ func_energy (struct matrix * weights, struct layer * lay_1, struct layer * lay_2
 
 
 double
-network_energy (struct network * net)
+network_energy (network *net)
 {
     return func_energy(net->weights, &net->visible, &net->hidden);
 } /* end network_energy */
@@ -319,10 +319,10 @@ shuffle (int arr[], int n)
 } /* end shuffle */
 
 
-struct matrix *
-outerproduct (struct layer * lay_1, struct layer * lay_2)
+matrix *
+outerproduct (layer *lay_1, layer *lay_2)
 {
-    struct matrix * outerprod = matrix_create(lay_1->num_nodes, lay_2->num_nodes);
+    matrix *outerprod = matrix_create(lay_1->num_nodes, lay_2->num_nodes);
     for (int i = 0; i < lay_1->num_nodes; i++)
     {
         for (int j = 0; j < lay_2->num_nodes; j++)
@@ -335,7 +335,7 @@ outerproduct (struct layer * lay_1, struct layer * lay_2)
 
 
 void
-network_training (struct network * net, struct parameters * param, struct matrix * data)
+network_training (network *net, parameters *param, matrix *data)
 {
     double learning_rate = param->epsilonw;
     int *indices = malloc(sizeof (int) * param->dataset_rows);
@@ -386,10 +386,10 @@ network_training (struct network * net, struct parameters * param, struct matrix
             } // end for compute hidden (1)
 
             // Compute positive gradiente -> outer product of v and h.
-            struct matrix * positive_grad = outerproduct(&net->visible, &net->hidden);
+            matrix *positive_grad = outerproduct(&net->visible, &net->hidden);
 
             // Reconstruct visible v' from h
-            struct layer * visible_prime = layer_create(net->visible.num_nodes);
+            layer *visible_prime = layer_create(net->visible.num_nodes);
             for (int v = 0; v < visible_prime->num_nodes; v++)
             {
                 double sum = 0.;
@@ -410,7 +410,7 @@ network_training (struct network * net, struct parameters * param, struct matrix
             }
 
             // Reconstruct hidden h' from v'
-            struct layer * hidden_prime = layer_create(net->hidden.num_nodes);
+            layer *hidden_prime = layer_create(net->hidden.num_nodes);
             for (int h = 0; h < hidden_prime->num_nodes; h++)
             {
                 double sum = 0.;
@@ -431,7 +431,7 @@ network_training (struct network * net, struct parameters * param, struct matrix
             }
 
             // Compute negative gradiente -> outer product of v' and h'
-            struct matrix * negative_grad = outerproduct(visible_prime, hidden_prime);
+            matrix *negative_grad = outerproduct(visible_prime, hidden_prime);
 
             // update weights
             for (int row = 0; row < net->visible.num_nodes; row++)
@@ -461,7 +461,7 @@ network_training (struct network * net, struct parameters * param, struct matrix
 
 
 void
-network_dump (struct network * net, int show_values, int show_weights, int show_biases)
+network_dump (network *net, int show_values, int show_weights, int show_biases)
 {
     if (show_values == 1)
     {
@@ -503,10 +503,10 @@ network_dump (struct network * net, int show_values, int show_weights, int show_
 } /* end network_dump */
 
 
-struct layer *
-visible_from_hidden (struct network * net, struct layer * hidden, double T)
+layer *
+visible_from_hidden (network *net, layer *hidden, double T)
 {
-    struct layer * visible = layer_create(net->visible.num_nodes);
+    layer *visible = layer_create(net->visible.num_nodes);
     for (int v = 0; v < visible->num_nodes; v++)
     {
         double sum = 0.;
@@ -529,10 +529,10 @@ visible_from_hidden (struct network * net, struct layer * hidden, double T)
 } /* end visible_from_hidden */
 
 
-struct layer *
-hidden_from_visible (struct network * net, struct layer * visible, double T)
+layer *
+hidden_from_visible (network *net, layer *visible, double T)
 {
-    struct layer * hidden = layer_create(net->hidden.num_nodes);
+    layer *hidden = layer_create(net->hidden.num_nodes);
     for (int h = 0; h < hidden->num_nodes; h++)
     {
         double sum = 0.;
@@ -556,7 +556,7 @@ hidden_from_visible (struct network * net, struct layer * visible, double T)
 
 
 void
-layer_copy_from_array (struct layer * l, struct matrix * m, int row)
+layer_copy_from_array (layer *l, matrix *m, int row)
 {
     for (int i = 0; i < l->num_nodes; i++)
     {

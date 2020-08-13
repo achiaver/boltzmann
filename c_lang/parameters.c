@@ -4,10 +4,10 @@
 #include "parameters.h"
 
 
-struct parameters *
+parameters *
 parameters_create ()
 {
-    struct parameters * param = malloc (sizeof (*param));
+    parameters *param = malloc (sizeof (*param));
     if (!param)
     {
         fprintf(stderr, "parameters_create: malloc: %s %d", __FILE__, __LINE__);
@@ -33,17 +33,17 @@ parameters_create ()
 
 
 void
-parameters_delete (struct parameters * param)
+parameters_delete (parameters *param)
 {
     free(param);
     printf("----> Parameters deleted! \n");
 } /* end parameters_delete */
 
 
-struct parameters *
-parameters_input (char * parameters_file, char * data_file)
+parameters *
+parameters_input (char *parameters_file, char *data_file)
 {
-    FILE * fp = fopen(parameters_file, "r");
+    FILE *fp = fopen(parameters_file, "r");
 
     if (!fp)
     {
@@ -51,7 +51,7 @@ parameters_input (char * parameters_file, char * data_file)
         exit(2);
     }
 
-    struct parameters * param = parameters_create();
+    parameters *param = parameters_create();
 
     param->dataset_file = data_file;
     fscanf(fp, "%*s%zu%*s \
@@ -91,7 +91,7 @@ parameters_input (char * parameters_file, char * data_file)
 
 
 void
-parameters_print (struct parameters * param)
+parameters_print (parameters *param)
 {
     printf("---- IN PARAMETERS ----\n");
     printf("\n \
