@@ -8,19 +8,19 @@ main(int argc, char *argv[])
 {
     random_seed(true);
 
-    char * parameters_file = "in_parameters.dat";
-    char * dataset_file = "dataset/training_dataset_2.csv";
-    struct parameters * param = parameters_input(parameters_file, dataset_file);
+    char *parameters_file = "in_parameters.dat";
+    char *dataset_file = "dataset/training_dataset_2.csv";
+    parameters *param = parameters_input(parameters_file, dataset_file);
     parameters_print(param);
 
-    struct matrix * dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
+    matrix *dataset = dataset_allocate(param->dataset_file, param->dataset_rows, param->dataset_cols);
 
 #if DEBUG
     printf("\n\nInput dataset display\n\n");
     matrix_print(dataset, 0);
 #endif
 
-    struct network * net = network_create(param);
+    network *net = network_create(param);
 
 #if DEBUG
     printf("\n\nNetwork dump display\n\n");
@@ -39,17 +39,17 @@ main(int argc, char *argv[])
 
     printf("\nUsing trained machine... \n");
 
-    struct layer * visible = layer_create(net->visible.num_nodes);
+    layer *visible = layer_create(net->visible.num_nodes);
     layer_copy_from_array(visible, dataset, 0);
     printf("visible = ");
     layer_print(visible, 0);
 
-    struct layer * hidden = hidden_from_visible(net, visible, 1);
+    layer *hidden = hidden_from_visible(net, visible, 1);
     printf(" -> ");
     layer_print(hidden, 1);
 
 
-    struct layer * visible_computed = visible_from_hidden(net, hidden, 1);
+    layer *visible_computed = visible_from_hidden(net, hidden, 1);
     printf("hidden = ");
     layer_print(hidden, 0);
     printf(" -> ");

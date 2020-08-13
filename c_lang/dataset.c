@@ -3,12 +3,12 @@
  * dataset.c - 
  * contains functions related to dataset management.
  * 
- * dataset is stored into struct matrix:
+ * dataset is stored into matrix:
  *  -> rows = set of inputs, each row is an occurrence of the observed phenomenon
  *  -> cols = set of dimensions, each col is one input to a single 
  *            node (cols = number of visible nodes)
  *
- * struct matrix definitions can be found on matrix.h
+ * matrix definitions can be found on matrix.h
  * 
  *
  * =============================================================================
@@ -20,12 +20,12 @@
 // dataset_example is used only for james, as a ready to use example;
 // this example is based on James McCaffrey tutorial about RBMs.
 // dataset_example converts the fixed obvserved data in example[12][6] to a 
-// struct matrix.
+// matrix.
 
-struct matrix *
+matrix *
 dataset_example (size_t rows, size_t cols, double example[rows][cols])
 {
-    struct matrix * data = matrix_create(rows, cols);
+    matrix *data = matrix_create(rows, cols);
 
     for (int row = 0; row < rows; row++)
     {
@@ -39,19 +39,19 @@ dataset_example (size_t rows, size_t cols, double example[rows][cols])
 
 
 // dataset_allocate read in the dataset from a txt (.csv) file and store the data
-// on a struct matrix.
+// on a matrix.
 // rows and cols information comes from parameter variable.
 
-struct matrix *
-dataset_allocate (char * filename, size_t rows, size_t cols)
+matrix *
+dataset_allocate (char *filename, size_t rows, size_t cols)
 {
-    struct matrix * data = matrix_read_data(filename, rows, cols);
+    matrix *data = matrix_read_data(filename, rows, cols);
     return data;
 } /* end dataset_allocate */
 
 
 void
-dataset_destroy (struct matrix * m)
+dataset_destroy (matrix *m)
 {
     matrix_destroy(m);
     printf("----> \t DATASET DELETED\n\n");
@@ -61,7 +61,7 @@ dataset_destroy (struct matrix * m)
 // dataset_dump display the whole dataset matrix in the prompt.
 
 void
-dataset_dump(struct matrix * m)
+dataset_dump(matrix *m)
 {
     for (int row = 0; row < m->rows; row++)
     {

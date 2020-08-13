@@ -4,10 +4,10 @@
 #define DEBUG 1
 #define PERCENT_ERROR_ENERGY 1.E-10
 
-struct layer *
-visible_to_hidden_s (struct layer * visible, struct network * net, double T)
+layer *
+visible_to_hidden_s (layer *visible, network *net, double T)
 {
-    struct layer * hidden = layer_create(net->hidden.num_nodes);
+    layer *hidden = layer_create(net->hidden.num_nodes);
     for (int h = 0 ; h < hidden->num_nodes; h++)
     {
         double sum = 0.;
@@ -28,10 +28,10 @@ visible_to_hidden_s (struct layer * visible, struct network * net, double T)
     return hidden;
 }
 
-struct layer *
-hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
+layer *
+hidden_to_visible_s (layer *hidden, network *net, double T)
 {
-    struct layer * visible = layer_create(net->visible.num_nodes);
+    layer *visible = layer_create(net->visible.num_nodes);
     for (int v = 0; v < visible->num_nodes; v++)
     {
         double sum = 0.;
@@ -54,7 +54,7 @@ hidden_to_visible_s (struct layer * hidden, struct network * net, double T)
 
 
 void
-layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
+layer_copy_layer (layer *lay_1, layer *lay_2)
 {
     for (int i = 0; i < lay_1->num_nodes; i++)
     {
@@ -73,15 +73,15 @@ layer_copy_layer (struct layer * lay_1, struct layer * lay_2)
 }
 
 
-struct layer *
-simulated_annealing (struct network * net, struct layer * input, struct parameters * param)
+layer *
+simulated_annealing (network *net, layer *input, parameters *param)
 {
     int crystalized = 0; // False
     double infinite_energy = (net->hidden.num_nodes + net->visible.num_nodes) * (net->hidden.num_nodes + net->visible.num_nodes) * 1.0E5;
     double last_mean_energy = 0.;
 
-//    struct layer * input_aux = layer_create(input->num_nodes);
-//    struct layer * hidden = layer_create(net->hidden.num_nodes);
+//    layer *input_aux = layer_create(input->num_nodes);
+//    layer *hidden = layer_create(net->hidden.num_nodes);
 //    layer_copy_layer(input, input_aux);
     layer_copy_layer(input, &net->visible);
 //    layer_print(input_aux, 0);
@@ -205,10 +205,10 @@ main(int argc, char *argv[])
                             {  0.,   0., 0.25,-0.25},
                             {  0.,   0.,-0.25,-0.25}};
 
-    struct matrix *dataset = dataset_example(1, 9, example);
+    matrix *dataset = dataset_example(1, 9, example);
     dataset_dump(dataset);
 
-    struct parameters *param = parameters_create();
+    parameters *param = parameters_create();
     param->dataset_file = "no_file";
     param->temp_start = 5.995;
     param->temp_end = 0.001;
@@ -218,8 +218,8 @@ main(int argc, char *argv[])
     param->num_visible = 9;
     param->num_hidden = 4;
 
-    struct network *net = network_create(param);
-    struct matrix *weights_m = dataset_example(9, 4, weights);
+    network *net = network_create(param);
+    matrix *weights_m = dataset_example(9, 4, weights);
     printf("\n");
     matrix_copy(weights_m, net->weights);
     matrix_destroy(weights_m);
@@ -231,15 +231,15 @@ main(int argc, char *argv[])
     double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1, 0, 1,-1}};
 
 //  COLOCAR COMENTARIOS, dataset_example -> array_to_matrix
-    struct matrix *test_m = dataset_example(1, 9, test_example);
-    struct layer *test_l = layer_create(net->visible.num_nodes);
+    matrix *test_m = dataset_example(1, 9, test_example);
+    layer *test_l = layer_create(net->visible.num_nodes);
     layer_copy_from_array(test_l, test_m, 0);
     layer_print(test_l, 0);
     printf("\n");
     printf("delete test_m\n");
     matrix_destroy(test_m);
 
-    struct layer *simu = simulated_annealing(net, test_l, param);
+    layer *simu = simulated_annealing(net, test_l, param);
     printf("\n");
     layer_print(simu, 0);
     printf("\n");

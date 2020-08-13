@@ -4,10 +4,10 @@
 #define DEBUG 1
 #define PERCENT_ERROR_ENERGY 1.E-10
 
-//struct layer *
-//visible_to_hidden_j (struct layer * visible, struct network * net, double T)
+//layer *
+//visible_to_hidden_j (layer *visible, network *net, double T)
 //{
-//    struct layer * hidden = layer_create(net->hidden.num_nodes);
+//    layer *hidden = layer_create(net->hidden.num_nodes);
 //    for (int h = 0 ; h < hidden->num_nodes; h++)
 //    {
 //        double sum = 0.;
@@ -28,10 +28,10 @@
 //    return hidden;
 //}
 //
-//struct layer *
-//hidden_to_visible_j (struct layer * hidden, struct network * net, double T)
+//layer *
+//hidden_to_visible_j (layer *hidden, network *net, double T)
 //{
-//    struct layer * visible = layer_create(net->visible.num_nodes);
+//    layer *visible = layer_create(net->visible.num_nodes);
 //    for (int v = 0; v < visible->num_nodes; v++)
 //    {
 //        double sum = 0.;
@@ -54,7 +54,7 @@
 
 
 void
-layer_copy_layer_j (struct layer * lay_1, struct layer * lay_2)
+layer_copy_layer_j (layer *lay_1, layer *lay_2)
 {
     for (int i = 0; i < lay_1->num_nodes; i++)
     {
@@ -73,8 +73,8 @@ layer_copy_layer_j (struct layer * lay_1, struct layer * lay_2)
 }
 
 
-struct layer *
-simulated_annealing_j (struct network * net, struct layer * input, struct parameters * param)
+layer *
+simulated_annealing_j (network *net, layer *input, parameters *param)
 {
     int crystalized = 0; // False
     double infinite_energy = (net->hidden.num_nodes + net->visible.num_nodes) * (net->hidden.num_nodes + net->visible.num_nodes) * 1.0E5;
@@ -191,12 +191,12 @@ main(int argc, char *argv[])
                              { 0, 0, 1, 0, 1, 1 }};  // noisy C
 
 
-    struct matrix * dataset = dataset_example(12, 6, example);
+    matrix *dataset = dataset_example(12, 6, example);
 
     printf("Film like-dislike data is: \n");
     dataset_dump(dataset);
 
-    struct parameters * param = parameters_create();
+    parameters *param = parameters_create();
     if (param)
     {
         param->temp_start = 5.995;
@@ -217,7 +217,7 @@ main(int argc, char *argv[])
     printf("Setting number of visible nodes = %zu \n", param->num_visible);
     printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
 
-    struct network * net = network_create(param);
+    network *net = network_create(param);
 
 
     printf("Training RBM using CD1 algorithm \n");
@@ -233,17 +233,17 @@ main(int argc, char *argv[])
     printf("\n- Using the network -\n");
     printf("- NOT Simulated Annealing -\n");
 
-    struct layer * visible = layer_create(net->visible.num_nodes);
+    layer *visible = layer_create(net->visible.num_nodes);
     layer_copy_from_array(visible, dataset, 0);
     printf("visible = ");
     layer_print(visible, 0);
 
-    struct layer * hidden = hidden_from_visible(net, visible, 1);
+    layer *hidden = hidden_from_visible(net, visible, 1);
     printf(" -> ");
     layer_print(hidden, 1);
 
 
-    struct layer * visible_computed = visible_from_hidden(net, hidden, 1);
+    layer *visible_computed = visible_from_hidden(net, hidden, 1);
     printf("hidden = ");
     layer_print(hidden, 0);
     printf(" -> ");
@@ -253,15 +253,15 @@ main(int argc, char *argv[])
     printf("- SIMULATED ANNEALING TEST -\n");
     // Select a test example, where activation as -1 means that these unit will be randomly initialized.
 //    double test_example[1][6] = {{1,-1,0,-1,0,0}};
-//    struct matrix * test_m = dataset_example(1, 6, test_example);
-    struct layer * test_l = layer_create(net->visible.num_nodes);
+//    matrix *test_m = dataset_example(1, 6, test_example);
+    layer *test_l = layer_create(net->visible.num_nodes);
     layer_copy_from_array(test_l, dataset, 1);
     layer_print(test_l, 0);
     printf("\n");
 //    printf("delete test_m\n");
 //    matrix_destroy(test_m);
 
-    struct layer * simu = simulated_annealing_j(net, test_l, param);
+    layer *simu = simulated_annealing_j(net, test_l, param);
     printf("\n");
     layer_print(simu, 0);
     printf("\n");
