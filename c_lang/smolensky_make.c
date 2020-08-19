@@ -26,7 +26,8 @@ visible_to_hidden_s (layer *visible, network *net, double T)
         }
     }
     return hidden;
-}
+} /* end visible_to_hidden_s */
+
 
 layer *
 hidden_to_visible_s (layer *hidden, network *net, double T)
@@ -50,7 +51,7 @@ hidden_to_visible_s (layer *hidden, network *net, double T)
         }
     }
     return visible;
-} /* end visible_from_hidden */
+} /* end hidden_to_visible_s */
 
 
 void
@@ -102,7 +103,6 @@ simulated_annealing (network *net, layer *input, parameters *param)
         {
             for (int i_mean = 0; i_mean < param->tries_per_node; i_mean++)
             {
-                
                 // Update hidden units
                 for (int h = 0; h < net->hidden.num_nodes; h++)
                 {
@@ -176,22 +176,9 @@ simulated_annealing (network *net, layer *input, parameters *param)
 int
 main(int argc, char *argv[])
 {
-    random_seed(true);
-
-//    if (argc < 4)
-//    {
-//        fprintf(stdout, "Usage:   %s FILENAME COLS ROWS\n", argv[0]);
-//        fprintf(stdout, "Example: %s dados.bin 4 9\n", argv[0]);
-//        return 1;
-//    }
-//
-//    char filename_weights[256];
-//    strncpy(filename_weights, argv[1], 255);
-//    size_t weight_cols = atoi(argv[2]);
-//    size_t weight_rows = atoi(argv[3]);
-//
-//    printf("weight columns size - %zu\n", weight_cols);
-//    printf("weight rows size - %zu\n", weight_rows);
+    // true => seed is not fixed!
+    // false => seed is fixed!
+    random_seed(false);
 
     double example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};    // MAKE
 

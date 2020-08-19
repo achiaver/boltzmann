@@ -10,7 +10,7 @@ random_seed (bool nondeterministic_seed)
         pcg32_srandom(time(NULL) ^ (intptr_t)&address_1, (intptr_t)&address_2);
     } else
     {
-        pcg32_srandom(42u, 54u);
+        pcg32_srandom(42u, 420u);
     }
 }
 
