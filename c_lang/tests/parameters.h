@@ -25,7 +25,9 @@
                       of nodes in each layer is stored.
  */
 typedef struct PARAMETERS {
-    char   *dataset_file;
+    char   *dataset_filename;
+    char   *dataset_weights;
+    char   *dataset_bias;
     size_t  dataset_rows;    // Amount of examples the dataset have, each row is a pattern
     size_t  dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
     double  temp_start;

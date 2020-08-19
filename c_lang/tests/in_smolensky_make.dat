@@ -1,5 +1,8 @@
-dataset_rows_dimension_(dataset_rows)               93           <integer>
-dataset_cols_dimension_(dataset_cols)                9           <integer>
+dataset_path_name_(dataset_filename_<string>)
+
+
+dataset_rows_dimension_(dataset_rows_<size_t>)      93           <integer>
+dataset_cols_dimension_(dataset_cols_<size_t>)       9           <integer>
 learning_rate_weights_(epsilonw)                    0.01         <double>
 learning_rate_visible_units_biases_(epsilonvb)      0.01         <double>
 learning_rate_hidden_units_biases_(epsilonhb)       0.01         <double>
