@@ -26,20 +26,24 @@
  */
 typedef struct PARAMETERS {
     char   *dataset_filename;
-    char   *dataset_weights;
-    char   *dataset_bias;
-    size_t  dataset_rows;    // Amount of examples the dataset have, each row is a pattern
-    size_t  dataset_cols;    // Dimension of dataset (number of features), must be equal to number of nodes in first layer
+    size_t  dataset_rows;
+    size_t  dataset_cols;
+    char   *weights_filename;
+    size_t  weights_rows;
+    size_t  weights_cols;
+    char   *biases_filename;
+    size_t  biases_rows;
+    size_t  biases_cols;
     double  temp_start;
     double  temp_end;
-    double  temp_update;
+    double  temp_step;
     size_t  tries_per_node;
     double  epsilonw;        // Learning rate for weights
     double  epsilonvb;       // Learning rate for biases of visible units (Hinton ref.)
     double  epsilonhb;       // Learning rate for biases of hidden units (Hinton ref.)
     int     maxepochs;       // Maximum number of epochs
     size_t  num_layers;      // Number of layers
-    size_t *node_per_layer;  // Array, each entry is the number of nodes of the layer 
+    size_t *nodes_per_layer;  // Array, each entry is the number of nodes of the layer 
 //    size_t  num_visible;
 //    size_t  num_hidden;
 } parameters;
@@ -48,8 +52,7 @@ typedef struct PARAMETERS {
 
 parameters *parameters_create (void);
 void        parameters_delete (parameters *);
-parameters *parameters_input  (char *,
-                               char *);
+parameters *parameters_input  (char *);
 void        parameters_print  (parameters *);
 
 #endif /* __PARAMETERS_H__ */
