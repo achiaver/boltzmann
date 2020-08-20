@@ -34,14 +34,14 @@ typedef struct PARAMETERS {
     char   *biases_filename;
     size_t  biases_rows;
     size_t  biases_cols;
+    size_t  tries_per_node;
     double  temp_start;
     double  temp_end;
     double  temp_step;
-    size_t  tries_per_node;
     double  epsilonw;        // Learning rate for weights
     double  epsilonvb;       // Learning rate for biases of visible units (Hinton ref.)
     double  epsilonhb;       // Learning rate for biases of hidden units (Hinton ref.)
-    int     maxepochs;       // Maximum number of epochs
+    size_t  maxepochs;       // Maximum number of epochs
     size_t  num_layers;      // Number of layers
     size_t *nodes_per_layer;  // Array, each entry is the number of nodes of the layer 
 //    size_t  num_visible;

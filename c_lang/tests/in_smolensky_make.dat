@@ -7,6 +7,7 @@ weights_cols_dimension_(weights_cols_<size_t>)      4
 biases_path_name_(biases_filename_<string>)         biases.dat
 biases_rows_dimension_(biases_rows_<size_t>)        9
 biases_cols_dimension_(biases_cols_<size_t>)        4
+number_of_upd_per_node_(tries_per_node_<size_t>)    1000
 temperature_start_(temp_start_<double>)             5.995
 temperature_end_(temp_end_<double>)                 0.01
 temperature_step(temp_step_<double>)                0.95
@@ -15,5 +16,5 @@ learning_rate_visible_bias_(epsilonvb_<double>)     0.01
 learning_rate_hidden_bias_(epsilonhb_<double>)      0.01
 maximum_number_of_epochs_(maxepochs_<integer>)      1000
 num_of_layers_(num_layers_<size_t>)                 2
-num_units_visible_layer_(num_visible_<size_t>)      9 
+num_units_visible_layer_(num_visible_<size_t>)      9
 num_units_hidden_layer_(num_hidden_<size_t>)        4
