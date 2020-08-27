@@ -14,8 +14,8 @@ main (int argc, char *argv[])
 //    char *parameters_filename = "in_smolensky_make.dat";
     fprintf(stdout, "parameters filename : %s\n", argv[1]);
 
-    parameters *param = parameters_create();
-//    parameters *param = parameters_input(argv[1]);
+//    parameters *param = parameters_create();
+    parameters *param = parameters_input(argv[1]);
     parameters_print(param);
 
     parameters_delete(param);
