@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <string.h>
 #include "parameters.h"
 
 
@@ -15,13 +16,10 @@ parameters_create ()
     }
 
     // Initializing variables of parameters to empty or zero
-    param->dataset_filename = "";
     param->dataset_rows = 0;
     param->dataset_cols = 0;
-    param->weights_filename = "";
     param->weights_rows = 0;
     param->weights_cols = 0;
-    param->biases_filename = "";
     param->biases_rows = 0;
     param->biases_cols = 0;
     param->temp_start = 0.;
@@ -74,25 +72,25 @@ parameters_input (char *parameters_file)
     }
 
     parameters *param = parameters_create();
-
-    fscanf(fp, "%*52s %s %*[^\n]  \
-                %*52s %zu %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %s %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %s %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %lf %*[^\n] \
-                %*52s %lf %*[^\n] \
-                %*52s %lf %*[^\n] \
-                %*52s %lf %*[^\n] \
-                %*52s %lf %*[^\n] \
-                %*52s %lf %*[^\n] \
-                %*52s %zu %*[^\n] \
-                %*52s %zu %*[^\n] ",
+   
+    fscanf(fp, "%*s%s  \
+                %*s%zu \
+                %*s%zu \
+                %*s%s  \
+                %*s%zu \
+                %*s%zu \
+                %*s%s  \
+                %*s%zu \
+                %*s%zu \
+                %*s%zu \
+                %*s%lf \
+                %*s%lf \
+                %*s%lf \
+                %*s%lf \
+                %*s%lf \
+                %*s%lf \
+                %*s%zu \
+                %*s%zu ",
                 param->dataset_filename,
                 &param->dataset_rows,
                 &param->dataset_cols,
@@ -114,7 +112,7 @@ parameters_input (char *parameters_file)
 
     for (int i = 0; i < param->num_layers; i++)
     {
-        fscanf(fp, "%*52s %zu %*[^\n]", &param->nodes_per_layer[i]);
+        fscanf(fp, "%*s%zu", &param->nodes_per_layer[i]);
     }
     fclose(fp);
 

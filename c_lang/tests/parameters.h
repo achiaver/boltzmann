@@ -25,13 +25,13 @@
                       of nodes in each layer is stored.
  */
 typedef struct PARAMETERS {
-    char   *dataset_filename;
+    char   dataset_filename[256];
     size_t  dataset_rows;
     size_t  dataset_cols;
-    char   *weights_filename;
+    char   weights_filename[256];
     size_t  weights_rows;
     size_t  weights_cols;
-    char   *biases_filename;
+    char   biases_filename[256];
     size_t  biases_rows;
     size_t  biases_cols;
     size_t  tries_per_node;
