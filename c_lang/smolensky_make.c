@@ -81,12 +81,8 @@ simulated_annealing (network *net, layer *input, parameters *param)
     double infinite_energy = (net->hidden.num_nodes + net->visible.num_nodes) * (net->hidden.num_nodes + net->visible.num_nodes) * 1.0E5;
     double last_mean_energy = 0.;
 
-//    layer *input_aux = layer_create(input->num_nodes);
-//    layer *hidden = layer_create(net->hidden.num_nodes);
-//    layer_copy_layer(input, input_aux);
     layer_copy_layer(input, &net->visible);
-//    layer_print(input_aux, 0);
-//    printf("\n");
+    
     double n_iterations_mean_energy = param->tries_per_node * net->num_nodes_total;
     double convergence_error = 0.;
 
@@ -180,7 +176,7 @@ main(int argc, char *argv[])
     // false => seed is fixed!
     random_seed(false);
 
-    double example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};    // MAKE
+//    double example[1][9] = {{ 1,-1,-1, 1,-1, 1,-1, 1,-1}};    // MAKE
 
     double weights[9][4] = {{ 0.2,   0.,   0.,  0.},
                             {-0.2,   0.,   0.,  0.},
@@ -192,18 +188,19 @@ main(int argc, char *argv[])
                             {  0.,   0., 0.25,-0.25},
                             {  0.,   0.,-0.25,-0.25}};
 
-    matrix *dataset = dataset_example(1, 9, example);
-    dataset_dump(dataset);
+//    matrix *dataset = dataset_example(1, 9, example);
+//    dataset_dump(dataset);
 
-    parameters *param = parameters_create();
-    param->dataset_file = "no_file";
-    param->temp_start = 5.995;
-    param->temp_end = 0.001;
-    param->temp_update = 0.95;
-    param->tries_per_node = 20;
-    param->num_layers = 2;
-    param->num_visible = 9;
-    param->num_hidden = 4;
+    parameters *param = parameters_input("in_smolensky_make.dat");
+//    parameters *param = parameters_create();
+//    param->dataset_file = "no_file";
+//    param->temp_start = 5.995;
+//    param->temp_end = 0.001;
+//    param->temp_update = 0.95;
+//    param->tries_per_node = 20;
+//    param->num_layers = 2;
+//    param->num_visible = 9;
+//    param->num_hidden = 4;
 
     network *net = network_create(param);
     matrix *weights_m = dataset_example(9, 4, weights);
@@ -238,8 +235,8 @@ main(int argc, char *argv[])
     printf("delete test_l\n");
     layer_delete(test_l);
 
-    printf("delete dataset\n");
-    matrix_destroy(dataset);
+//    printf("delete dataset\n");
+//    matrix_destroy(dataset);
 
     printf("detele network\n");
     network_delete(net);
