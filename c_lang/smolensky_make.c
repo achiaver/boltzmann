@@ -159,7 +159,7 @@ simulated_annealing (network *net, layer *input, parameters *param)
         } else
         {
             last_temp_mean_energy = mean_energy;
-            temp_current = param->temp_update * temp_current;
+            temp_current = param->temp_step * temp_current;
         }
 
         printf("T - %f\n", temp_current);
@@ -192,54 +192,46 @@ main(int argc, char *argv[])
 //    dataset_dump(dataset);
 
     parameters *param = parameters_input("in_smolensky_make.dat");
-//    parameters *param = parameters_create();
-//    param->dataset_file = "no_file";
-//    param->temp_start = 5.995;
-//    param->temp_end = 0.001;
-//    param->temp_update = 0.95;
-//    param->tries_per_node = 20;
-//    param->num_layers = 2;
-//    param->num_visible = 9;
-//    param->num_hidden = 4;
+    parameters_print(param);
 
-    network *net = network_create(param);
-    matrix *weights_m = dataset_example(9, 4, weights);
-    printf("\n");
-    matrix_copy(weights_m, net->weights);
-    matrix_destroy(weights_m);
-    printf("\n");
-    network_dump(net, 0, 1, 0);
-
-    printf("- SIMULATED ANNEALING -\n");
- // Select a test example, where activation as 0 means that these unit will be randomly initialized.
-    double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1, 0, 1,-1}};
-
-//  COLOCAR COMENTARIOS, dataset_example -> array_to_matrix
-    matrix *test_m = dataset_example(1, 9, test_example);
-    layer *test_l = layer_create(net->visible.num_nodes);
-    layer_copy_from_array(test_l, test_m, 0);
-    layer_print(test_l, 0);
-    printf("\n");
-    printf("delete test_m\n");
-    matrix_destroy(test_m);
-
-    layer *simu = simulated_annealing(net, test_l, param);
-    printf("\n");
-    layer_print(simu, 0);
-    printf("\n");
-
-    printf("\n\n\n");
-    printf("delete simu\n");
-    layer_delete(simu);
-
-    printf("delete test_l\n");
-    layer_delete(test_l);
-
-//    printf("delete dataset\n");
-//    matrix_destroy(dataset);
-
-    printf("detele network\n");
-    network_delete(net);
+//    network *net = network_create(param);
+//    matrix *weights_m = dataset_example(9, 4, weights);
+//    printf("\n");
+//    matrix_copy(weights_m, net->weights);
+//    matrix_destroy(weights_m);
+//    printf("\n");
+//    network_dump(net, 0, 1, 0);
+//
+//    printf("- SIMULATED ANNEALING -\n");
+// // Select a test example, where activation as 0 means that these unit will be randomly initialized.
+//    double test_example[1][9] = {{ 1,-1,-1, 0,-1, 1, 0, 1,-1}};
+//
+////  COLOCAR COMENTARIOS, dataset_example -> array_to_matrix
+//    matrix *test_m = dataset_example(1, 9, test_example);
+//    layer *test_l = layer_create(net->visible.num_nodes);
+//    layer_copy_from_array(test_l, test_m, 0);
+//    layer_print(test_l, 0);
+//    printf("\n");
+//    printf("delete test_m\n");
+//    matrix_destroy(test_m);
+//
+//    layer *simu = simulated_annealing(net, test_l, param);
+//    printf("\n");
+//    layer_print(simu, 0);
+//    printf("\n");
+//
+//    printf("\n\n\n");
+//    printf("delete simu\n");
+//    layer_delete(simu);
+//
+//    printf("delete test_l\n");
+//    layer_delete(test_l);
+//
+////    printf("delete dataset\n");
+////    matrix_destroy(dataset);
+//
+//    printf("detele network\n");
+//    network_delete(net);
 
     printf("delete paramenters\n");
     parameters_delete(param);

@@ -224,7 +224,8 @@ network_create (parameters *param)
 
     net->num_layers = param->num_layers;
 
-    net->visible.num_nodes = param->num_visible;
+//    net->visible.num_nodes = param->num_visible;
+    net->visible.num_nodes = param->nodes_per_layer[0];
     net->visible.nodes = malloc(sizeof (*net->visible.nodes) * (net->visible.num_nodes));
     if (!net->visible.nodes)
     {
@@ -237,8 +238,8 @@ network_create (parameters *param)
         node_set_bias(net->visible.nodes, i, random_0to1());
     }
 
-
-    net->hidden.num_nodes = param->num_hidden;
+//    net->hidden.num_nodes = param->nodes_per_layer[1];
+    net->hidden.num_nodes = param->nodes_per_layer[1];
     net->hidden.nodes = malloc(sizeof (*net->hidden.nodes) * (net->hidden.num_nodes));
     if (!net->hidden.nodes)
     {
