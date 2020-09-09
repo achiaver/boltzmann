@@ -15,11 +15,11 @@ node_set_activation (node *n, int node, double value)
 
 // node_set_bias assign the given value to the bias of the given node
 
-void
-node_set_bias (node *n, int node, double value)
-{
-    n[node].bias = value;
-} /* end node_set_bias */
+//void
+//node_set_bias (node *n, int node, double value)
+//{
+//    n[node].bias = value;
+//} /* end node_set_bias */
 
 
 // node_set_nprob assign the given value to the nprob of the given node
@@ -34,11 +34,11 @@ node_set_nprob (node *n, int node, double value)
 
 // node_randomize_bias assigns a random value to bias of give node
 
-void
-node_randomize_bias (node *n, int node)
-{
-    n[node].bias = random_0to1();
-} /* end node_randomize_bias */
+//void
+//node_randomize_bias (node *n, int node)
+//{
+//    n[node].bias = random_0to1();
+//} /* end node_randomize_bias */
 
 // node_get_activation retrieves the activation value of the given node
 
@@ -51,11 +51,11 @@ node_get_activation (node *n, int node)
 
 // node_get_bias retrieves the bias value of the given node
 
-double
-node_get_bias (node *n, int node)
-{
-    return n[node].bias;
-} /* end node_get_bias */
+//double
+//node_get_bias (node *n, int node)
+//{
+//    return n[node].bias;
+//} /* end node_get_bias */
 
 
 // node_get_nprob retrieves the nprob value of the given node
@@ -73,7 +73,7 @@ node_print(node *n, int node, int option)
     if (option == 0) // print all node status
     {
         printf("\t- activation \t %f \n", node_get_activation(n, node));
-        printf("\t- bias \t %f \n", node_get_bias(n, node));
+ //       printf("\t- bias \t %f \n", node_get_bias(n, node));
         printf("\t- nprob \t %f \n", node_get_nprob(n, node));
         printf("\n");
     } else if (option == 1) // print only node activation
@@ -99,7 +99,7 @@ void
 node_create (node *n, int node)
 {
     node_set_activation(n, node, 0.);
-    node_set_bias(n, node, 0.);
+//    node_set_bias(n, node, 0.);
     node_set_nprob(n, node, 0.);
 } /* end node_create */
 
@@ -187,7 +187,7 @@ network_delete (network *net)
 {
     if (net)
     {
-        if (net->visible.nodes) 
+        if (net->visible.nodes)
         {
             layer_delete(&net->visible);
         }
@@ -205,12 +205,21 @@ network_delete (network *net)
 
 
 matrix *
-weight_create(size_t visible, size_t hidden)
+weight_create (size_t visible, size_t hidden)
 {
     matrix *weight = matrix_create(visible, hidden);
     matrix_randomize(weight);
     return weight;
 } /* end weight_create */
+
+
+matrix *
+biases_create (size_t visible, size_t hidden)
+{
+    matrix *biases = matrix_create(visible, hidden);
+    matrix_randomize(biases);
+    return biases;
+} /* end biases_create */
 
 
 network *
@@ -235,7 +244,7 @@ network_create (parameters *param)
     for (int i = 0; i < net->visible.num_nodes; i++)
     {
         node_create(net->visible.nodes, i);
-        node_set_bias(net->visible.nodes, i, random_0to1());
+//        node_set_bias(net->visible.nodes, i, random_0to1());
     }
 
 //    net->hidden.num_nodes = param->nodes_per_layer[1];
@@ -253,6 +262,7 @@ network_create (parameters *param)
 
     net->num_nodes_total = net->visible.num_nodes + net->hidden.num_nodes;
     net->weights = weight_create(net->visible.num_nodes, net->hidden.num_nodes);
+    net->biases = biases_create(net->visible.num_nodes, net->hidden.num_nodes);
 
     return net;
 } /* end network_create */
@@ -266,7 +276,7 @@ func_sigmoid (double expoent, double temp)
 
 
 double
-func_energy (matrix *weights, layer *lay_1, layer *lay_2)
+func_energy (matrix *weights, matrix *biases, layer *lay_1, layer *lay_2)
 {
     double energy = 0.;
     for (int i = 0; i < lay_1->num_nodes; i++)
@@ -278,12 +288,14 @@ func_energy (matrix *weights, layer *lay_1, layer *lay_2)
                       node_get_activation(lay_2->nodes, j);
         }
         energy -= node_get_activation(lay_1->nodes, i) * \
-                  node_get_bias(lay_1->nodes, i);
+//                  node_get_bias(lay_1->nodes, i);
+                  matrix_get(biases, i, 0);
     }
     for (int j = 0; j < lay_2->num_nodes; j++)
     {
         energy -= node_get_activation(lay_2->nodes, j) * \
-                  node_get_bias(lay_2->nodes, j);
+//                  node_get_bias(lay_2->nodes, j);
+                  matrix_get(biases, j, 1);
     }
 
     return energy;
@@ -293,7 +305,7 @@ func_energy (matrix *weights, layer *lay_1, layer *lay_2)
 double
 network_energy (network *net)
 {
-    return func_energy(net->weights, &net->visible, &net->hidden);
+    return func_energy(net->weights, net->biases, &net->visible, &net->hidden);
 } /* end network_energy */
 
 
@@ -374,7 +386,8 @@ network_training (network *net, parameters *param, matrix *data)
                 {
                     sum += node_get_activation(net->visible.nodes, v) * matrix_get(net->weights, v, h);
                 }
-                sum += node_get_bias(net->hidden.nodes, h);
+//                sum += node_get_bias(net->hidden.nodes, h);
+                sum += matrix_get(net->biases, h, 1);
 
                 node_set_nprob(net->hidden.nodes, h, func_sigmoid(sum, 1));
                 if (node_get_nprob(net->hidden.nodes, h) > random_0to1())
@@ -398,7 +411,8 @@ network_training (network *net, parameters *param, matrix *data)
                 {
                     sum += node_get_activation(net->hidden.nodes, h) * matrix_get(net->weights, v, h);
                 }
-                sum += node_get_bias(net->visible.nodes, v);
+//                sum += node_get_bias(net->visible.nodes, v);
+                sum += matrix_get(net->biases, v, 0);
 
                 node_set_nprob(visible_prime->nodes, v, func_sigmoid(sum, 1));
                 if (node_get_nprob(visible_prime->nodes, v) > random_0to1())
@@ -419,7 +433,8 @@ network_training (network *net, parameters *param, matrix *data)
                 {
                     sum += node_get_activation(visible_prime->nodes, v) * matrix_get(net->weights, v, h);
                 }
-                sum += node_get_bias(net->hidden.nodes, h);
+//                sum += node_get_bias(net->hidden.nodes, h);
+                sum += matrix_get(net->biases, h, 1);
 
                 node_set_nprob(hidden_prime->nodes, h, func_sigmoid(sum, 1));
                 if (node_get_nprob(hidden_prime->nodes, h) > random_0to1())
@@ -446,13 +461,19 @@ network_training (network *net, parameters *param, matrix *data)
             // update visible biases
             for (int v = 0; v < net->visible.num_nodes; v++)
             {
-                node_set_bias(net->visible.nodes, v, (node_get_bias(net->visible.nodes, v) + learning_rate * (node_get_activation(net->visible.nodes, v) - node_get_activation(visible_prime->nodes, v))));
+//                node_set_bias(net->visible.nodes, v, (node_get_bias(net->visible.nodes, v) + learning_rate * (node_get_activation(net->visible.nodes, v) - node_get_activation(visible_prime->nodes, v))));
+                matrix_set(net->biases, v, 0, \
+                        (matrix_get(net->biases, v, 0) + \
+                         learning_rate * (node_get_activation(net->visible.nodes, v) - node_get_activation(visible_prime->nodes, v))));
             }
 
             //update hidden biases
             for (int h = 0; h < net->hidden.num_nodes; h++)
             {
-                node_set_bias(net->hidden.nodes, h, (node_get_bias(net->hidden.nodes, h) + learning_rate * (node_get_activation(net->hidden.nodes, h) - node_get_activation(hidden_prime->nodes, h))));
+//                node_set_bias(net->hidden.nodes, h, (node_get_bias(net->hidden.nodes, h) + learning_rate * (node_get_activation(net->hidden.nodes, h) - node_get_activation(hidden_prime->nodes, h))));
+                matrix_set(net->biases, h, 1, \
+                        (matrix_get(net->biases, h, 1) + \
+                         learning_rate * (node_get_activation(net->hidden.nodes, h) - node_get_activation(hidden_prime->nodes, h))));
             }
 
         } // end for idx
@@ -491,13 +512,13 @@ network_dump (network *net, int show_values, int show_weights, int show_biases)
     {
         for (int i = 0; i < net->visible.num_nodes; i++)
         {
-            printf("visible bias [%4d] value = %f \n", i, node_get_bias(net->visible.nodes, i));
+            printf("visible bias [%4d] value = %f \n", i, matrix_get(net->biases, i, 0));
         }
         printf("\n");
 
         for (int j = 0; j < net->hidden.num_nodes; j++)
         {
-            printf("hidden bias [%4d] value = %f \n", j, node_get_bias(net->hidden.nodes, j));
+            printf("hidden bias [%4d] value = %f \n", j, matrix_get(net->biases, j, 1));
         }
         printf("\n");
     }
@@ -515,7 +536,8 @@ visible_from_hidden (network *net, layer *hidden, double T)
         {
             sum += node_get_activation(hidden->nodes, h) * matrix_get(net->weights, v, h);
         }
-        sum += node_get_bias(net->visible.nodes, v);
+//        sum += node_get_bias(net->visible.nodes, v);
+        sum += matrix_get(net->biases, v, 0);
 
         node_set_nprob(visible->nodes, v, func_sigmoid(sum, T));
         if (node_get_nprob(visible->nodes, v) > random_0to1())
@@ -541,7 +563,8 @@ hidden_from_visible (network *net, layer *visible, double T)
         {
             sum += node_get_activation(visible->nodes, v) * matrix_get(net->weights, v, h);
         }
-        sum += node_get_bias(net->hidden.nodes, h);
+//        sum += node_get_bias(net->hidden.nodes, h);
+        sum += matrix_get(net->biases, h, 1);
 
         node_set_nprob(hidden->nodes, h, func_sigmoid(sum, T));
         if (node_get_nprob(hidden->nodes, h) > random_0to1())

@@ -20,7 +20,7 @@
  */
 typedef struct NODE {
     double activation;
-    double bias;
+//    double bias;
     double nprob;
 } node;
 
@@ -54,6 +54,7 @@ typedef struct NETWORK {
     layer   visible;
     layer   hidden;
     matrix *weights;
+    matrix *biases;
 } network;
 
 
@@ -126,7 +127,8 @@ void         network_training       (network    *net,
 
 double       func_sigmoid           (double,
                                      double);
-double       func_energy            (matrix *, 
+double       func_energy            (matrix *,
+                                     matrix *,
                                      layer *, 
                                      layer *);
 

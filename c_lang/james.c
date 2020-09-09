@@ -107,8 +107,9 @@ simulated_annealing_j (network *net, layer *input, parameters *param)
                     {
                         delta_energy = delta_energy + node_get_activation(net->visible.nodes, v) * matrix_get(net->weights, v, h);
                     }
-                    delta_energy = delta_energy + node_get_bias(net->hidden.nodes, h);
-
+//                    delta_energy = delta_energy + node_get_bias(net->hidden.nodes, h);
+                    delta_energy = delta_energy + matrix_get(net->biases, h, 1);
+                    
                     node_set_nprob(net->hidden.nodes, h, func_sigmoid(delta_energy, temp_current));
                     if (node_get_nprob(net->hidden.nodes, h) >= random_0to1())
                     {
@@ -117,7 +118,7 @@ simulated_annealing_j (network *net, layer *input, parameters *param)
                     {
                         node_set_activation(net->hidden.nodes, h, 0.);
                     }
-                    mean_energy = mean_energy + func_energy(net->weights, &net->visible, &net->hidden);
+                    mean_energy = mean_energy + func_energy(net->weights, net->biases, &net->visible, &net->hidden);
                 }
                 // Update visible units
                 for (int v = 0; v < net->visible.num_nodes; v++)
@@ -127,7 +128,8 @@ simulated_annealing_j (network *net, layer *input, parameters *param)
                     {
                         delta_energy = delta_energy + node_get_activation(net->hidden.nodes, h) * matrix_get(net->weights, v, h);
                     }
-                    delta_energy = delta_energy + node_get_bias(net->visible.nodes,v);
+//                    delta_energy = delta_energy + node_get_bias(net->visible.nodes,v);
+                    delta_energy = delta_energy + matrix_get(net->biases, v, 0);
 
                     node_set_nprob(net->visible.nodes, v, func_sigmoid(delta_energy, temp_current));
                     if (node_get_nprob(net->visible.nodes, v) >= random_0to1())
@@ -137,7 +139,7 @@ simulated_annealing_j (network *net, layer *input, parameters *param)
                     {
                         node_set_activation(net->visible.nodes, v, 0.);
                     }
-                    mean_energy = mean_energy + func_energy(net->weights, &net->visible, &net->hidden);
+                    mean_energy = mean_energy + func_energy(net->weights, net->biases, &net->visible, &net->hidden);
                 }
             }
             mean_energy = mean_energy / n_iterations_mean_energy;
@@ -159,7 +161,7 @@ simulated_annealing_j (network *net, layer *input, parameters *param)
         } else
         {
             last_temp_mean_energy = mean_energy;
-            temp_current = param->temp_update * temp_current;
+            temp_current = param->temp_step * temp_current;
         }
 
  //       printf("T - %f\n", temp_current);
@@ -201,11 +203,13 @@ main(int argc, char *argv[])
     {
         param->temp_start = 5.995;
         param->temp_end = 0.001;
-        param->temp_update = 0.95;
+        param->temp_step = 0.95;
         param->tries_per_node = 20;
         param->num_layers = 2;
-        param->num_visible = 6;
-        param->num_hidden = 3;
+//        param->num_visible = 6;
+//        param->num_hidden = 3;
+        param->nodes_per_layer[0] = 6;
+        param->nodes_per_layer[1] = 3;
         param->dataset_rows = 12;
         param->dataset_cols = 6;
         param->epsilonw = 0.01;
@@ -214,15 +218,15 @@ main(int argc, char *argv[])
         param->maxepochs = 1000;
     }
     printf("Creating a RBM ... \n");
-    printf("Setting number of visible nodes = %zu \n", param->num_visible);
-    printf("Setting number of hidden nodes = %zu \n\n", param->num_hidden);
+    printf("Setting number of visible nodes = %zu \n", param->nodes_per_layer[0]);
+    printf("Setting number of hidden nodes = %zu \n\n", param->nodes_per_layer[1]);
 
     network *net = network_create(param);
 
 
     printf("Training RBM using CD1 algorithm \n");
     printf("Setting learning rate (weights and biases) = %f \n", param->epsilonw);
-    printf("Setting maximum amount of epochs = %d \n\n", param->maxepochs);
+    printf("Setting maximum amount of epochs = %zu \n\n", param->maxepochs);
 
     network_training(net, param, dataset);
     printf("Training complete. \n");
