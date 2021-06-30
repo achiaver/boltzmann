@@ -15,6 +15,11 @@ pycache/
 *.so
 *.pyc
 *.bin
+tests
+*.icloud
+*.cache
+*.pdb
+code_reference
 
 test_random_func
 writepatterns
